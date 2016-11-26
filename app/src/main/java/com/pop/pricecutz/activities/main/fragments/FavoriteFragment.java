@@ -1,4 +1,4 @@
-package com.pop.pricecutz.fragments;
+package com.pop.pricecutz.activities.main.fragments;
 
 /**
  * Created by Pop H2 on 8/25/2016.
@@ -19,10 +19,9 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pop.pricecutz.Company;
-import com.pop.pricecutz.Discount;
 import com.pop.pricecutz.R;
 import com.pop.pricecutz.Randomizer;
-import com.pop.pricecutz.activities.CompanyActivity;
+import com.pop.pricecutz.activities.company.CompanyActivity;
 import com.pop.pricecutz.adapters.CompanyListAdapter;
 
 import java.lang.reflect.Type;

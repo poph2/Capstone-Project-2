@@ -1,4 +1,4 @@
-package com.pop.pricecutz.fragments;
+package com.pop.pricecutz.activities.main.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,7 +13,7 @@ import com.pop.pricecutz.R;
  * Pop Inc
  * Lagos Nigeria
  */
-public class TransactionsFragment extends Fragment {
+public class InvetoryFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

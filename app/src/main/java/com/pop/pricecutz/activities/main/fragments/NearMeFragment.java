@@ -1,4 +1,4 @@
-package com.pop.pricecutz.fragments;
+package com.pop.pricecutz.activities.main.fragments;
 
 import android.Manifest;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.pop.pricecutz.fragments;
+package com.pop.pricecutz.activities.main.fragments;
 
 /**
  * Created by Pop H2 on 8/25/2016.
@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

@@ -1,4 +1,4 @@
-package com.pop.pricecutz.activities;
+package com.pop.pricecutz.activities.company;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
