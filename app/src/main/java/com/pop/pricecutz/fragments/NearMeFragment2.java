@@ -4,16 +4,21 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Api;
@@ -28,8 +33,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 import com.pop.pricecutz.R;
 
 import java.io.FileDescriptor;
@@ -40,17 +47,22 @@ import java.util.concurrent.TimeUnit;
  * Created by adeniyi.bello on 11/24/2016.
  */
 
-public class NearMeFragment2 extends SupportMapFragment
-        implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class NearMeFragment2 extends SupportMapFragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+
+    private static String[] PERMISSIONS_LOCATION = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+
+    private static final int REQUEST_LOCATION = 0;
 
     SupportMapFragment mSupportMapFragment;
 
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
+    Location mLastLocation;
 
     GoogleMap mMap;
 
     boolean mapReady = false;
+    boolean updateCamera = true;
 
     Context mContext;
 
@@ -82,6 +94,10 @@ public class NearMeFragment2 extends SupportMapFragment
             mSupportMapFragment = SupportMapFragment.newInstance();
             fragmentTransaction.replace(R.id.mapwhere, mSupportMapFragment).commit();
         }
+
+        if (mSupportMapFragment != null) {
+            mSupportMapFragment.getMapAsync(this);
+        }
     }
 
     @Override
@@ -92,7 +108,9 @@ public class NearMeFragment2 extends SupportMapFragment
 
     @Override
     public void onStop() {
-        mGoogleApiClient.disconnect();
+        if(mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
         super.onStop();
     }
 
@@ -101,13 +119,7 @@ public class NearMeFragment2 extends SupportMapFragment
         mapReady = true;
         mMap = googleMap;
 
-        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(5), 5000, null);
-            mMap.getUiSettings().setZoomControlsEnabled(false);
-            mMap.getUiSettings().setCompassEnabled(false);
-            mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            mMap.setMyLocationEnabled(true);
-        }
+        updateCamera();
     }
 
     @Override
@@ -118,11 +130,15 @@ public class NearMeFragment2 extends SupportMapFragment
         mLocationRequest.setInterval(5000);
 
 
-        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            //"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"
-
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        if (checkLocationPermission() != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermission();
         }
+        else {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        }
+
+        updateCamera();
 
     }
 
@@ -141,11 +157,47 @@ public class NearMeFragment2 extends SupportMapFragment
 
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-        mMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .title("")
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2))
-        );
+        //Log.d(LOG_TAG, "Location - " + location.getLatitude() + ", " + location.getLongitude());
 
+//        mMap.addMarker(new MarkerOptions()
+//                .position(latLng)
+//                .title("")
+//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2))
+//        );
+
+    }
+
+    private void updateCamera() {
+
+        if (checkLocationPermission() != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermission();
+        }
+        else {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if(mLastLocation != null) {
+
+                LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(latLng)      // Sets the center of the map to Mountain View
+                        .zoom(15)                   // Sets the zoom
+                        .build();                   // Creates a CameraPosition from the builder
+
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
+            }
+            mMap.getUiSettings().setZoomControlsEnabled(false);
+            mMap.getUiSettings().setCompassEnabled(false);
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            mMap.setMyLocationEnabled(true);
+        }
+    }
+
+
+    private int checkLocationPermission() {
+        return ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION);
+    }
+
+    private void requestLocationPermission() {
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
     }
 }
