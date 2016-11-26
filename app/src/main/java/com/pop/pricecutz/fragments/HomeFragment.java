@@ -18,10 +18,10 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.pop.pricecutz.Discount;
 import com.pop.pricecutz.R;
+import com.pop.pricecutz.Randomizer;
 import com.pop.pricecutz.adapters.DiscountListAdapter;
-import com.pop.pricecutz.entities.Discount;
-import com.pop.pricecutz.entities.Randomizer;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

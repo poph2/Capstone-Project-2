@@ -17,12 +17,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.pop.pricecutz.Company;
+import com.pop.pricecutz.Discount;
 import com.pop.pricecutz.R;
+import com.pop.pricecutz.Randomizer;
 import com.pop.pricecutz.activities.CompanyActivity;
 import com.pop.pricecutz.adapters.CompanyListAdapter;
-import com.pop.pricecutz.entities.Company;
-import com.pop.pricecutz.entities.Randomizer;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class FavoriteFragment extends Fragment implements AdapterView.OnItemClickListener {
@@ -34,10 +37,28 @@ public class FavoriteFragment extends Fragment implements AdapterView.OnItemClic
     Context mContext;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mContext = getContext();
+
+        if(savedInstanceState == null) {
+            mCompanyArrayList = Randomizer.getCompanies(10);
+        }
+        else {
+            Gson gson = new Gson();
+
+            String mCompanyArrayListJsonStr = savedInstanceState.getString("CompanyArrayList");
+
+            Type arrayType = new TypeToken<ArrayList<Company>>(){}.getType();
+            mCompanyArrayList = (ArrayList<Company>) gson.fromJson(mCompanyArrayListJsonStr, arrayType);
+        }
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_favorites, container, false);
-
-        mCompanyArrayList = Randomizer.getCompanies(10);
 
         mCompanyListAdapter = new CompanyListAdapter(
                 getActivity(),
@@ -53,10 +74,6 @@ public class FavoriteFragment extends Fragment implements AdapterView.OnItemClic
 
         listView.setOnItemClickListener(this);
 
-        mContext = getContext();
-
-//        Toast.makeText(mContext, Integer.toString(mCompanyArrayList.size()), Toast.LENGTH_LONG).show();
-
         return root;
     }
 
@@ -70,5 +87,12 @@ public class FavoriteFragment extends Fragment implements AdapterView.OnItemClic
         startActivity(intent);
 
 //        Toast.makeText(mContext, Integer.toString(i), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString("DiscountArrayList", new Gson().toJson(mCompanyArrayList));
     }
 }

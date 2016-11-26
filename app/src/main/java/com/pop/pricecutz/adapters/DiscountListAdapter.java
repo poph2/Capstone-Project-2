@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.pop.pricecutz.entities.Company;
-import com.pop.pricecutz.entities.Discount;
+import com.pop.pricecutz.Company;
+import com.pop.pricecutz.Discount;
 
 import java.util.ArrayList;
 
