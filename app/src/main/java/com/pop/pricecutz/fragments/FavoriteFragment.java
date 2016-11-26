@@ -17,11 +17,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
-import com.pop.pricecutz.Company;
 import com.pop.pricecutz.R;
-import com.pop.pricecutz.Randomizer;
 import com.pop.pricecutz.activities.CompanyActivity;
 import com.pop.pricecutz.adapters.CompanyListAdapter;
+import com.pop.pricecutz.entities.Company;
+import com.pop.pricecutz.entities.Randomizer;
 
 import java.util.ArrayList;
 

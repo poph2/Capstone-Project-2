@@ -14,12 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.pop.pricecutz.Discount;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.pop.pricecutz.R;
-import com.pop.pricecutz.Randomizer;
 import com.pop.pricecutz.adapters.DiscountListAdapter;
+import com.pop.pricecutz.entities.Discount;
+import com.pop.pricecutz.entities.Randomizer;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements AdapterView.OnItemClickListener {
@@ -31,14 +35,32 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
     Context mContext;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mContext = getContext();
+
+        if(savedInstanceState == null) {
+            mDiscountArrayList = Randomizer.getDiscounts(20);
+        }
+        else {
+            Gson gson = new Gson();
+
+            String mDiscountArrayListJsonStr = savedInstanceState.getString("DiscountArrayList");
+
+            Type arrayType = new TypeToken<ArrayList<Discount>>(){}.getType();
+            mDiscountArrayList = (ArrayList<Discount>) gson.fromJson(mDiscountArrayListJsonStr, arrayType);
+        }
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        mDiscountArrayList = Randomizer.getDiscounts(7);
-
         mDiscountListAdapter = new DiscountListAdapter(
-                getActivity(),
+                mContext,
                 R.layout.fragment_home_list_items,
                 R.id.fragment_home_list_item_imageview,
                 R.id.fragment_home_list_item_textview,
@@ -52,8 +74,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 
         listView.setOnItemClickListener(this);
 
-        mContext = getContext();
-
 //        Toast.makeText(mContext, Integer.toString(mCompanyArrayList.size()), Toast.LENGTH_LONG).show();
 
         return root;
@@ -62,5 +82,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString("DiscountArrayList", new Gson().toJson(mDiscountArrayList));
     }
 }

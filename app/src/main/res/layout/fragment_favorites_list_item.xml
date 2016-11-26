@@ -5,8 +5,8 @@
     android:padding="10dp">
 
     <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:id="@+id/fragment_favorites_list_item_imageview"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"

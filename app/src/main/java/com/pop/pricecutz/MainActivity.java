@@ -1,14 +1,11 @@
 package com.pop.pricecutz;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -21,7 +18,6 @@ import android.view.MenuItem;
 import com.pop.pricecutz.fragments.FavoriteFragment;
 import com.pop.pricecutz.fragments.HomeFragment;
 import com.pop.pricecutz.fragments.NearMeFragment;
-import com.pop.pricecutz.fragments.NearMeFragment2;
 import com.pop.pricecutz.fragments.TransactionsFragment;
 
 import java.util.ArrayList;
@@ -137,7 +133,7 @@ public class MainActivity extends AppCompatActivity
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         adapter.addFragment(new HomeFragment(), "");
-        adapter.addFragment(new NearMeFragment2(), "");
+        adapter.addFragment(new NearMeFragment(), "");
         adapter.addFragment(new FavoriteFragment(), "");
         adapter.addFragment(new TransactionsFragment(), "");
 
@@ -184,5 +180,6 @@ public class MainActivity extends AppCompatActivity
             return null;
         }
     }
+
 
 }

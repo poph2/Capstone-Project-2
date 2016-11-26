@@ -1,6 +1,4 @@
-package com.pop.pricecutz;
-
-import com.pop.pricecutz.Data;
+package com.pop.pricecutz.entities;
 
 /**
  * Created by Pop H2 on 9/6/2016.

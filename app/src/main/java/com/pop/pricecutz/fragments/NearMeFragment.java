@@ -4,87 +4,77 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.Gson;
-import com.pop.pricecutz.Outlet;
 import com.pop.pricecutz.R;
-import com.pop.pricecutz.Randomizer;
-import com.pop.pricecutz.map.GPSPoint;
-
-import java.util.ArrayList;
 
 /**
- * Created by Pop H2 on 8/25/2016.
- * Pop Inc
- * Lagos Nigeria
+ * Created by adeniyi.bello on 11/24/2016.
  */
-public class NearMeFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, LocationListener {
 
-    public String TAG = NearMeFragment.class.getSimpleName();
+public class NearMeFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+
+    private static String[] PERMISSIONS_LOCATION = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+
+    private static final int REQUEST_LOCATION = 0;
 
     SupportMapFragment mSupportMapFragment;
+
+    GoogleApiClient mGoogleApiClient;
+    LocationRequest mLocationRequest;
+    Location mLastLocation;
+
     GoogleMap mMap;
 
-    ArrayList<Outlet> mOutletArrayList;
+    boolean mapReady = false;
+    boolean initialZoom = true;
 
-    private Context mContext;
+    Context mContext;
 
-    // flag for GPS status
-    boolean isGPSEnabled = false;
+    int buildVersion;
 
-    // flag for network status
-    boolean isNetworkEnabled = false;
+    private final String LOG_TAG = NearMeFragment.class.getSimpleName();
 
-    boolean canGetLocation = false;
-
-//    String mProviderString;
-
-    // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
-
-    // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60; // 1 minute
-
-    // Declaring a Location Manager
-    protected LocationManager mLocationManager;
-
-    private final int ACCESS_FINE_LOCATION_REQUEST = 1;
-
-    public NearMeFragment() {
-        super();
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_near_me, null, false);
 
-        //initilizeMap();
+        buildVersion = Build.VERSION.SDK_INT;
 
-        this.mContext = getContext();
+        mContext = getContext();
 
-        //initLocationManager();
+        mGoogleApiClient = new GoogleApiClient.Builder(mContext)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
 
-        //getOutlets();
+        initilizeMap();
 
         return root;
     }
@@ -98,220 +88,119 @@ public class NearMeFragment extends SupportMapFragment implements OnMapReadyCall
             mSupportMapFragment = SupportMapFragment.newInstance();
             fragmentTransaction.replace(R.id.mapwhere, mSupportMapFragment).commit();
         }
-        if (mSupportMapFragment != null)
-        {
+
+        if (mSupportMapFragment != null) {
             mSupportMapFragment.getMapAsync(this);
-//            if (mMap != null)
-//                mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener()
-//                {
-//                    @Override
-//                    public void onMapClick(LatLng point)
-//                    {
-//                        //TODO: your onclick stuffs
-//                    }
-//                });
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onStop() {
+        if(mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+        super.onStop();
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        mapReady = true;
         mMap = googleMap;
 
-        mMap.setOnMapClickListener(this);
-
-        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//            mMap.animateCamera(CameraUpdateFactory.zoomTo(5), 5000, null);
-//            mMap.getUiSettings().setZoomControlsEnabled(false);
-//            mMap.getUiSettings().setCompassEnabled(false);
-//            mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            mMap.setMyLocationEnabled(true);
-        }
-
-        //addMarkers();
-
-        Location location = getLocation();
-
-        if(location != null) {
-
-            Log.d(TAG, new Gson().toJson(location));
-
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-            mMap.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .title("")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2))
-            );
-
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-
-//            CameraPosition cameraPosition = new CameraPosition.Builder()
-//                    .target(latLng)              // Sets the center of the map to Mountain View
-//                    .zoom(20)                   // Sets the zoom
-//                    .bearing(0)                 // Sets the orientation of the camera to east
-//                    .tilt(0)                    // Sets the tilt of the camera to 30 degrees
-//                    .build();                   // Creates a CameraPosition from the builder
-//            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-//
-//            // Zoom in, animating the camera.
-//            mMap.animateCamera(CameraUpdateFactory.zoomIn());
+        if(initialZoom) {
+            updateInitialCamera();
         }
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        try {
-            mLocationManager.removeUpdates(this);
+    public void onConnected(@Nullable Bundle bundle) {
+
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(5000);
+
+
+        if (checkLocationPermission() != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermission();
         }
-        catch(SecurityException se) {}
+        else {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        }
+
+        if(initialZoom) {
+            updateInitialCamera();
+        }
+
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onConnectionSuspended(int i) {
 
-        try {
-            requestLocationUpdates();
-        }
-        catch(SecurityException se) {}
-    }
-
-    public void initLocationManager() {
-        mLocationManager = null;
-        try {
-
-            mLocationManager = (LocationManager)mContext.getSystemService(Context.LOCATION_SERVICE);
-
-//            Criteria criteria = new Criteria();
-//            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-//            criteria.setAltitudeRequired(false);
-//            criteria.setBearingRequired(false);
-
-//            mProviderString = mLocationManager.getBestProvider(criteria, false);
-
-            requestLocationUpdates();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Location getLocation() {
-        Location location = null;
-        try {
-
-            if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                if (mLocationManager != null) {
-                    if(location == null) {
-                        location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    }
-                    if(location == null) {
-                        location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    }
-                    if(location == null) {
-                        location = mLocationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e(TAG, "Error in getting location");
-        }
-
-        Toast.makeText(mContext, new Gson().toJson(location), Toast.LENGTH_LONG).show();
-
-        return location;
-    }
-
-    public void requestLocationUpdates() {
-        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if (mLocationManager != null) {
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1, this);
-                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 400, 1, this);
-                mLocationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 400, 1, this);
-            }
-        }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch(requestCode) {
-            case ACCESS_FINE_LOCATION_REQUEST:
-                Log.e("checkForPermission", "checkForPermission");
-                getLocation();
-                break;
-        }
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        zoomToMyLocation(location);
-    }
 
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-    }
+        //Log.d(LOG_TAG, "Location - " + location.getLatitude() + ", " + location.getLongitude());
 
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
-    }
-
-    public void zoomToMyLocation(Location location) {
-//        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-//        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLng);
-//        mMap.animateCamera(cameraUpdate);
-    }
-
-    AsyncTask<Void, Void, Void> zoomTask = new AsyncTask<Void, Void, Void>() {
-        @Override
-        protected Void doInBackground(Void... params) {
-//            try {
-//                //Thread.sleep(5000);
-//            } catch (InterruptedException e) { }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-
-        }
-    };
-
-    public void addMarkers() {
-
-        for(int i = 0; i < mOutletArrayList.size(); i++) {
-            Outlet outlet = mOutletArrayList.get(i);
-            GPSPoint gpsPoint = outlet.getGpsPoint();
-            LatLng latLng = new LatLng(gpsPoint.getLatitude(), gpsPoint.getLongitude());
-            mMap.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-            );
-        }
-    }
-
-    @Override
-    public void onMapClick(LatLng latLng) {
 //        mMap.addMarker(new MarkerOptions()
 //                .position(latLng)
-//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+//                .title("")
+//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker2))
 //        );
-//        Log.d(TAG, latLng.latitude + ", " + latLng.longitude);
+
+    }
+
+    private void updateInitialCamera() {
+
+        if (checkLocationPermission() != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermission();
+        }
+        else {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if(mLastLocation != null) {
+                initialZoom = true;
+                LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(latLng)      // Sets the center of the map to Mountain View
+                        .zoom(15)                   // Sets the zoom
+                        .build();                   // Creates a CameraPosition from the builder
+
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
+            }
+            mMap.getUiSettings().setZoomControlsEnabled(false);
+            mMap.getUiSettings().setCompassEnabled(false);
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            mMap.setMyLocationEnabled(true);
+        }
     }
 
 
-    public void getOutlets() {
-        Location location = getLocation();
+    private int checkLocationPermission() {
+        if(buildVersion >= 21) {
+            return ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        else {
+            return PackageManager.PERMISSION_GRANTED;
+        }
+    }
 
-        GPSPoint gpsPoint = new GPSPoint(location.getLatitude(), location.getLongitude());
-
-        mOutletArrayList = Randomizer.getOutlets(100, gpsPoint, 0.02, 0.02);
+    private void requestLocationPermission() {
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
     }
 }

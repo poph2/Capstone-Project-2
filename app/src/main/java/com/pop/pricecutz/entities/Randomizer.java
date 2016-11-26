@@ -1,6 +1,5 @@
-package com.pop.pricecutz;
+package com.pop.pricecutz.entities;
 
-import com.pop.pricecutz.Company;
 import com.pop.pricecutz.map.GPSPoint;
 
 import java.util.ArrayList;
