@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="navigation_drawer_close">Cerrar el cajón de navegación</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="action_sign_in">Ingresa o Registro</string>
+    <string name="action_sign_in_short">Registrarse</string>
+    <string name="error_field_required">Este campo es requerido</string>
+    <string name="error_incorrect_password">Esta contraseña es incorrecta</string>
+    <string name="error_invalid_email">Esta dirección de correo electrónico no es válida.</string>
+    <string name="error_invalid_password">Esta contraseña es demasiado corta</string>
+    <string name="navigation_drawer_open">Abrir el cajón de navegación</string>
+    <string name="permission_rationale">Se necesitan permisos de contactos para proporcionar terminaciones de correo electrónico</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Contraseña (opcional)</string>
+</resources>

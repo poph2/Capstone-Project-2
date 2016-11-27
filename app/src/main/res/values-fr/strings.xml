@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="navigation_drawer_close">Fermer le tiroir de navigation</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="action_sign_in">Connectez-vous ou enregistrez-vous</string>
+    <string name="action_sign_in_short">Se connecter</string>
+    <string name="error_field_required">Ce champ est requis</string>
+    <string name="error_incorrect_password">Ce mot de passe est incorrect</string>
+    <string name="error_invalid_email">Cette adresse mail est incorrecte</string>
+    <string name="error_invalid_password">Ce mot de passe est trop court</string>
+    <string name="navigation_drawer_open">Ouvrir le tiroir de navigation</string>
+    <string name="permission_rationale">Les autorisations relatives aux contacts sont nécessaires pour fournir les complétions d\'e-mails</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Mot de passe (facultatif)</string>
+</resources>
