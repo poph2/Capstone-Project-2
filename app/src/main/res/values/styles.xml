@@ -17,4 +17,12 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="CustomFbButton">
+        <!--item name="android:background">THE IMAGE OF FB BUTTON</item-->
+        <item name="android:layout_height">300dp</item>
+        <item name="android:layout_width">65dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_gravity">center_horizontal</item> </style>
+
 </resources>
