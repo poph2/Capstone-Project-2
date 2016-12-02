@@ -28,34 +28,32 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"/>
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_login"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Facebook"
-                android:background="@color/colorPrimaryDark"
-                android:textColor="@color/white"/>
-
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/login_button"
                 android:layout_width="match_parent"
                 android:layout_gravity="center_horizontal"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:layout_weight="0.55"
                 android:paddingTop="15sp"
                 android:paddingBottom="15sp"
-                style="@style/CustomFbButton"/>
+                style="@style/CustomFbButton"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp" />
 
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/btn_sign_in"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="56dp" />
 
             <com.twitter.sdk.android.core.identity.TwitterLoginButton
                 android:id="@+id/twitter_login_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"/>
+                android:layout_centerInParent="true"
+                android:layout_height="48dp"
+                android:layout_margin="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp" />
 
             <TextView android:id="@+id/link_signup"
                 android:layout_width="fill_parent"

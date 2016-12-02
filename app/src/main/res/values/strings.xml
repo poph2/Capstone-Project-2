@@ -13,6 +13,9 @@
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="title_activity_login" translatable="false">@string/action_sign_in_short</string>
 
+    <!--Content Provider -->
+    <string name="content_authority" translatable="false">com.pop.pricecuts.app</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>

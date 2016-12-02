@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.login.LoginActivity"
+            android:name=".activities.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -47,11 +47,11 @@
             android:name="io.fabric.ApiKey"
             android:value="4afc2e3929533a22139db81dbe65088b0bb43e13" />
 
-        <activity
+        <!--activity
             android:name=".activities.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+        </activity-->
         <!--activity
             android:name=".activities.main.MainActivity"
             android:label="@string/app_name"
@@ -65,6 +65,12 @@
             android:name=".activities.login.LoginActivity"
             android:label="@string/title_activity_login">
         </activity-->
+
+        <provider
+            android:name=".data.PriceCutzProvider"
+            android:authorities="@string/content_authority"
+            android:exported="false"
+            android:syncable="true" />
 
     </application>
 

@@ -33,6 +33,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 
     Context mContext;
 
+    public HomeFragment() {
+        mDiscountArrayList = Randomizer.getDiscounts(20);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

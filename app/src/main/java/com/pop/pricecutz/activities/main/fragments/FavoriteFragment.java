@@ -35,6 +35,10 @@ public class FavoriteFragment extends Fragment implements AdapterView.OnItemClic
 
     Context mContext;
 
+    public FavoriteFragment() {
+        mCompanyArrayList = Randomizer.getCompanies(10);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,5 +1,8 @@
 package com.pop.pricecutz.activities.main;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -15,12 +18,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.pop.pricecutz.Company;
 import com.pop.pricecutz.R;
 import com.pop.pricecutz.activities.main.fragments.CategoryFragment;
 import com.pop.pricecutz.activities.main.fragments.FavoriteFragment;
 import com.pop.pricecutz.activities.main.fragments.HomeFragment;
 import com.pop.pricecutz.activities.main.fragments.NearMeFragment;
 import com.pop.pricecutz.activities.main.fragments.InvetoryFragment;
+import com.pop.pricecutz.data.entries.CompanyEntry;
+import com.pop.pricecutz.data.entries.Data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +69,9 @@ public class MainActivity extends AppCompatActivity
 
         setupTabIcons();
 
-        viewPager.setCurrentItem(3);
+        viewPager.setCurrentItem(0);
+
+        addToDatabase();
     }
 
     @Override
@@ -175,6 +183,26 @@ public class MainActivity extends AppCompatActivity
 //            return mFragmentTitleList.get(position);
             return null;
         }
+    }
+
+    public void addToDatabase() {
+        ContentValues contentValues = new ContentValues();
+
+        int i = 1;
+
+        contentValues.put(CompanyEntry.COLUMN_COY_ID,   Integer.toString(i));
+        contentValues.put(CompanyEntry.COLUMN_NAME,     Data.name[i]);
+        contentValues.put(CompanyEntry.COLUMN_INDUSTRY, Data.industry[i]);
+        contentValues.put(CompanyEntry.COLUMN_IMAGE_URL, Data.image_url[i]);
+
+        Cursor c = getContentResolver().query(CompanyEntry.CONTENT_URI, null, CompanyEntry.COLUMN_COY_ID + " = " + Integer.toString(i), null, null);
+        if(c.getCount() == 0) {
+            Uri uri = getContentResolver().insert(CompanyEntry.CONTENT_URI, contentValues);
+        }
+
+//        Uri uri = getContentResolver().insert(CompanyEntry.CONTENT_URI, contentValues);
+//        Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+//        refreshValuesFromContentProvider();
     }
 
 
