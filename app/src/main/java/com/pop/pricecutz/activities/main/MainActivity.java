@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.pop.pricecutz.Company;
 import com.pop.pricecutz.R;
@@ -30,6 +31,7 @@ import com.pop.pricecutz.data.entries.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity
 
         viewPager.setCurrentItem(0);
 
-        addToDatabase();
+        //addToDatabase();
     }
 
     @Override
@@ -190,18 +192,20 @@ public class MainActivity extends AppCompatActivity
 
         int i = 1;
 
-        contentValues.put(CompanyEntry.COLUMN_COY_ID,   Integer.toString(i));
+        int rand = new Random().nextInt();
+
+        contentValues.put(CompanyEntry.COLUMN_COY_ID,   Integer.toString(rand));
         contentValues.put(CompanyEntry.COLUMN_NAME,     Data.name[i]);
         contentValues.put(CompanyEntry.COLUMN_INDUSTRY, Data.industry[i]);
         contentValues.put(CompanyEntry.COLUMN_IMAGE_URL, Data.image_url[i]);
 
-        Cursor c = getContentResolver().query(CompanyEntry.CONTENT_URI, null, CompanyEntry.COLUMN_COY_ID + " = " + Integer.toString(i), null, null);
-        if(c.getCount() == 0) {
+        //Cursor c = getContentResolver().query(CompanyEntry.CONTENT_URI, null, CompanyEntry.COLUMN_COY_ID + " = " + Integer.toString(i), null, null);
+        //if(c.getCount() == 0) {
             Uri uri = getContentResolver().insert(CompanyEntry.CONTENT_URI, contentValues);
-        }
+        //}
 
 //        Uri uri = getContentResolver().insert(CompanyEntry.CONTENT_URI, contentValues);
-//        Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
 //        refreshValuesFromContentProvider();
     }
 
