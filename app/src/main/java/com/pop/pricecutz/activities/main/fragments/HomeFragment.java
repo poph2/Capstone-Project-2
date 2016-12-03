@@ -37,9 +37,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 
     DiscountListAdapter mDiscountListAdapter;
 
-//    private CompanyListAdapter2 adapter;
+    private CompanyListAdapter2 adapter;
 
-    SimpleCursorAdapter mAdapter;
+//    SimpleCursorAdapter mAdapter;
 
     ArrayList<Discount> mDiscountArrayList;
 
@@ -82,18 +82,13 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
                 R.id.fragment_home_list_item_textview2,
                 mDiscountArrayList);
 
-        CursorLoader cursorLoader = new CursorLoader(mContext, CompanyEntry.CONTENT_URI,
-                null, null, null, null);
-        Cursor c = cursorLoader.loadInBackground();
-
-//        adapter = new CompanyListAdapter2(getContext(),
-//                R.layout.fragment_home,
-//                c,
-//                new String[] {CompanyEntry.COLUMN_NAME, CompanyEntry.COLUMN_INDUSTRY},
-//                new int[] { R.id.fragment_home_list_item_textview , R.id.fragment_home_list_item_textview2 },
-//                0,
-//                R.id.fragment_home_list_item_imageview,
-//                R.id.fragment_home_list_item_textview);
+        adapter = new CompanyListAdapter2(mContext,
+                R.layout.fragment_home_list_items,
+                null,
+                new String[] {CompanyEntry.COLUMN_NAME, CompanyEntry.COLUMN_INDUSTRY},
+                new int[] { R.id.fragment_home_list_item_textview , R.id.fragment_home_list_item_textview2 },
+                0,
+                R.id.fragment_home_list_item_imageview);
 
 //        adapter = new SimpleCursorAdapter(getContext(),
 //                R.layout.fragment_home,
@@ -101,18 +96,19 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 //                new String[] { CompanyEntry.COLUMN_NAME, CompanyEntry.COLUMN_INDUSTRY},
 //                new int[] { R.id.fragment_home_list_item_textview , R.id.fragment_home_list_item_textview2 }, 0);
 
-        mAdapter = new SimpleCursorAdapter(mContext,
-                R.layout.fragment_home_list_items,
-                null,
-                new String[]{CompanyEntry.COLUMN_NAME, CompanyEntry.COLUMN_INDUSTRY},
-                new int[]{R.id.fragment_home_list_item_textview, R.id.fragment_home_list_item_textview2}, 0);
+//        mAdapter = new SimpleCursorAdapter(mContext,
+//                R.layout.fragment_home_list_items,
+//                null,
+//                new String[]{CompanyEntry.COLUMN_NAME, CompanyEntry.COLUMN_INDUSTRY},
+//                new int[]{R.id.fragment_home_list_item_textview, R.id.fragment_home_list_item_textview2}, 0);
         //setListAdapter(mAdapter);
 
         //mCompanyListAdapter = new CompanyListAdapter(getContext(), R.layout.fragment_favorites_list_item, mCompanyArrayList);
 
         ListView listView = (ListView) root.findViewById(R.id.fragment_home_listview);
 //        listView.setAdapter(mDiscountListAdapter);
-        listView.setAdapter(mAdapter);
+//        listView.setAdapter(mAdapter);
+        listView.setAdapter(adapter);
 //        refreshValuesFromContentProvider();
 
         listView.setOnItemClickListener(this);
@@ -145,12 +141,14 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mAdapter.swapCursor(data);
+        //mAdapter.swapCursor(data);
+        adapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
+        //mAdapter.swapCursor(null);
+        adapter.swapCursor(null);
     }
 
 //    private void refreshValuesFromContentProvider() {
