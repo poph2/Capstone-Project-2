@@ -8,24 +8,26 @@ package com.pop.pricecutz.activities.main.fragments;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.pop.pricecutz.Company;
 import com.pop.pricecutz.Discount;
 import com.pop.pricecutz.R;
 import com.pop.pricecutz.Randomizer;
+import com.pop.pricecutz.adapters.CompanyListAdapter;
 import com.pop.pricecutz.adapters.CompanyListAdapter2;
 import com.pop.pricecutz.adapters.DiscountListAdapter;
 import com.pop.pricecutz.data.entries.CompanyEntry;
@@ -35,18 +37,20 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
-//    DiscountListAdapter mDiscountListAdapter;
+    CompanyListAdapter mCompanyListAdapter;
 
     private CompanyListAdapter2 adapter;
 
 //    SimpleCursorAdapter mAdapter;
 
-    ArrayList<Discount> mDiscountArrayList;
+    ArrayList<Company> mCompanyArrayList;
+
+    ListView listView;
 
     Context mContext;
 
     public HomeFragment() {
-        mDiscountArrayList = Randomizer.getDiscounts(20);
+        //mCompanyArrayList = Randomizer.getCompanies(20);
     }
 
     @Override
@@ -55,17 +59,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 
         mContext = getContext();
 
-        if (savedInstanceState == null) {
-            mDiscountArrayList = Randomizer.getDiscounts(20);
-        } else {
-            Gson gson = new Gson();
 
-            String mDiscountArrayListJsonStr = savedInstanceState.getString("DiscountArrayList");
-
-            Type arrayType = new TypeToken<ArrayList<Discount>>() {
-            }.getType();
-            mDiscountArrayList = (ArrayList<Discount>) gson.fromJson(mDiscountArrayListJsonStr, arrayType);
-        }
 
     }
 
@@ -74,49 +68,41 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-//        mDiscountListAdapter = new DiscountListAdapter(
-//                mContext,
-//                R.layout.fragment_home_list_items,
-//                R.id.fragment_home_list_item_imageview,
-//                R.id.fragment_home_list_item_textview,
-//                R.id.fragment_home_list_item_textview2,
-//                mDiscountArrayList);
+        listView = (ListView) root.findViewById(R.id.fragment_home_listview);
 
-        adapter = new CompanyListAdapter2(mContext,
-                R.layout.fragment_home_list_items,
-                null,
-                new String[] { CompanyEntry.COLUMN_NAME },//, CompanyEntry.COLUMN_IMAGE_URL },
-                new int[] { R.id.fragment_home_list_item_textview},// , R.id.fragment_home_list_item_textview2 },
-                0,
-                R.id.fragment_home_list_item_imageview,
-                R.id.fragment_home_list_item_textview2);
+        if(savedInstanceState == null) {
 
-//        adapter = new SimpleCursorAdapter(getContext(),
-//                R.layout.fragment_home,
-//                c,
-//                new String[] { CompanyEntry.COLUMN_NAME, CompanyEntry.COLUMN_INDUSTRY},
-//                new int[] { R.id.fragment_home_list_item_textview , R.id.fragment_home_list_item_textview2 }, 0);
+            mCompanyListAdapter = new CompanyListAdapter(
+                    mContext,
+                    R.layout.fragment_home_list_items,
+                    R.id.fragment_home_list_item_imageview,
+                    R.id.fragment_home_list_item_textview,
+                    mCompanyArrayList);
 
-//        mAdapter = new SimpleCursorAdapter(mContext,
-//                R.layout.fragment_home_list_items,
-//                null,
-//                new String[]{CompanyEntry.COLUMN_NAME, CompanyEntry.COLUMN_INDUSTRY},
-//                new int[]{R.id.fragment_home_list_item_textview, R.id.fragment_home_list_item_textview2}, 0);
-        //setListAdapter(mAdapter);
 
-        //mCompanyListAdapter = new CompanyListAdapter(getContext(), R.layout.fragment_favorites_list_item, mCompanyArrayList);
 
-        ListView listView = (ListView) root.findViewById(R.id.fragment_home_listview);
-//        listView.setAdapter(mDiscountListAdapter);
-//        listView.setAdapter(mAdapter);
-        listView.setAdapter(adapter);
-//        refreshValuesFromContentProvider();
+            getLoaderManager().initLoader(0, null, this);
+        }
+        else {
+            Gson gson = new Gson();
+
+            String mCompanyArrayListJsonStr = savedInstanceState.getString("CompanyArrayList");
+
+            Type arrayType = new TypeToken<ArrayList<Company>>() {
+            }.getType();
+            mCompanyArrayList = (ArrayList<Company>) gson.fromJson(mCompanyArrayListJsonStr, arrayType);
+
+            mCompanyListAdapter = new CompanyListAdapter(
+                    mContext,
+                    R.layout.fragment_home_list_items,
+                    R.id.fragment_home_list_item_imageview,
+                    R.id.fragment_home_list_item_textview,
+                    mCompanyArrayList);
+
+            listView.setAdapter(mCompanyListAdapter);
+        }
 
         listView.setOnItemClickListener(this);
-
-//        Toast.makeText(mContext, Integer.toString(mCompanyArrayList.size()), Toast.LENGTH_LONG).show();
-
-        getLoaderManager().initLoader(0, null, this);
 
         return root;
     }
@@ -130,7 +116,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        //outState.putString("DiscountArrayList", new Gson().toJson(mDiscountArrayList));
+        outState.putString("CompanyArrayList", new Gson().toJson(mCompanyArrayList));
     }
 
     @Override
@@ -143,13 +129,36 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         //mAdapter.swapCursor(data);
-        adapter.swapCursor(data);
+        mCompanyArrayList = new ArrayList();
+        while (data.moveToNext()) {
+
+            int id          = data.getInt(data.getColumnIndex(CompanyEntry.COLUMN_COY_ID));
+            String name     = data.getString(data.getColumnIndex(CompanyEntry.COLUMN_NAME));
+            String industry = data.getString(data.getColumnIndex(CompanyEntry.COLUMN_INDUSTRY));
+            String imageURL = data.getString(data.getColumnIndex(CompanyEntry.COLUMN_IMAGE_URL));
+
+            Company company = new Company(id, name, industry, imageURL);
+            mCompanyArrayList.add(company);
+
+            Log.d("HOMEFRAGMENT", new Gson().toJson(company));
+        }
+
+        Toast.makeText(mContext, "Cursor row count - " + data.getCount(), Toast.LENGTH_LONG).show();
+
+        mCompanyListAdapter = new CompanyListAdapter(
+                mContext,
+                R.layout.fragment_home_list_items,
+                R.id.fragment_home_list_item_imageview,
+                R.id.fragment_home_list_item_textview,
+                mCompanyArrayList);
+
+        listView.setAdapter(mCompanyListAdapter);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         //mAdapter.swapCursor(null);
-        adapter.swapCursor(null);
+        //adapter.swapCursor(null);
     }
 
 //    private void refreshValuesFromContentProvider() {

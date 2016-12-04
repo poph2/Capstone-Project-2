@@ -23,6 +23,15 @@ public class Company {
 
     }
 
+    public Company(int id, String name, String industry, String imageURL) {
+
+        this.id         = id;
+        this.name       = name;
+        this.industry   = industry;
+        this.imageURL   = imageURL;
+
+    }
+
     public String getName() {
         return name;
     }

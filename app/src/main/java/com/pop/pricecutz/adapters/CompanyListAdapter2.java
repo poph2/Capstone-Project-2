@@ -13,7 +13,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.pop.pricecutz.Company;
+import com.pop.pricecutz.R;
 import com.pop.pricecutz.data.entries.CompanyEntry;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -59,7 +61,12 @@ public class CompanyListAdapter2 extends SimpleCursorAdapter {
 
         //viewHolder.textView.getText();
         //viewHolder.textView.setText(c.getColumnIndex(CompanyEntry.COLUMN_IMAGE_URL));
-        Glide.with(mContext).load(c.getString(c.getColumnIndex(CompanyEntry.COLUMN_IMAGE_URL))).into(viewHolder.imageView);
+//        Glide.with(mContext).load(c.getString(c.getColumnIndex(CompanyEntry.COLUMN_IMAGE_URL))).into(viewHolder.imageView);
+        Picasso.with(mContext)
+                .load(c.getString(c.getColumnIndex(CompanyEntry.COLUMN_IMAGE_URL)))
+                .placeholder(R.drawable.ic_my_location_black_24dp)
+                .into(viewHolder.imageView);
+
         viewHolder.textView.setText(c.getString(c.getColumnIndex(CompanyEntry.COLUMN_IMAGE_URL)));
 
         return v;

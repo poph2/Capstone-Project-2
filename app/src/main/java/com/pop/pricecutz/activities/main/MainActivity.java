@@ -4,7 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -84,6 +86,8 @@ public class MainActivity extends AppCompatActivity
         setupTabIcons();
 
         viewPager.setCurrentItem(0);
+
+        //new InitialDataAsyncTask().execute("");
 
         //addToDatabase();
         //readFromDatabase();
@@ -234,6 +238,68 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void readFromDatabase() {
+
+    }
+
+
+
+
+    private class InitialDataAsyncTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+                for (int i = 0; i < Data.name.length; i++) {
+                    //showToast(getBaseContext(), "i = " + i);
+                    addToDatabase(getBaseContext(), i);
+                    //Toast.makeText(getBaseContext(), "i = " + i, Toast.LENGTH_LONG).show();
+                    Thread.sleep(1000);
+                }
+            }
+            catch (Exception e) {
+                Log.e(LOG_TAG, e.getMessage());
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            //Toast.makeText(getBaseContext(), result, Toast.LENGTH_LONG).show();
+            //etResponse.setText(result);
+        }
+
+        public void addToDatabase(Context context, int i) {
+            ContentValues contentValues = new ContentValues();
+
+
+            contentValues = new ContentValues();
+
+            contentValues.put(CompanyEntry.COLUMN_COY_ID, Integer.toString(i));
+            contentValues.put(CompanyEntry.COLUMN_NAME, Data.name[i]);
+            contentValues.put(CompanyEntry.COLUMN_INDUSTRY, Data.industry[i]);
+            contentValues.put(CompanyEntry.COLUMN_IMAGE_URL, Data.image_url[i]);
+
+            //Cursor c = getContentResolver().query(CompanyEntry.CONTENT_URI, null, CompanyEntry.COLUMN_COY_ID + " = " + Integer.toString(i), null, null);
+            //if(c.getCount() == 0) {
+                Uri uri = getContentResolver().insert(CompanyEntry.CONTENT_URI, contentValues);
+
+                Log.d(LOG_TAG, i + ": \t" + Data.name[i] + "\t" + Data.image_url[i]);
+
+                showToast(context, Data.name[i] + "\t" + Data.image_url[i]);
+            //}
+        }
+
+        private void showToast(Context context, String str) {
+            final String str2 = str;
+            Handler handler =  new Handler(context.getMainLooper());
+            handler.post( new Runnable(){
+                public void run(){
+                    Toast.makeText(getBaseContext(), str2, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
 
     }
 
