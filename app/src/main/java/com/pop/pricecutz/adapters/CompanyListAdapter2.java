@@ -32,8 +32,9 @@ public class CompanyListAdapter2 extends SimpleCursorAdapter {
 
     final int layoutID;
     final int imageViewID;
+    final int textViewID;
 
-    public CompanyListAdapter2(Context context, int layoutID, Cursor c, String[] from, int[] to, int flags, int imageViewID) {
+    public CompanyListAdapter2(Context context, int layoutID, Cursor c, String[] from, int[] to, int flags, int imageViewID, int textViewID) {
 
         super(context, layoutID, c, from, to, flags);
 
@@ -41,6 +42,7 @@ public class CompanyListAdapter2 extends SimpleCursorAdapter {
         this.mInflater = LayoutInflater.from(context);
         this.layoutID = layoutID;
         this.imageViewID = imageViewID;
+        this.textViewID = textViewID;
     }
 
     @Override
@@ -50,48 +52,26 @@ public class CompanyListAdapter2 extends SimpleCursorAdapter {
 
         final LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(layoutID, parent, false);
+        v.setTag(imageViewID, v.findViewById(imageViewID));
+        v.setTag(textViewID, v.findViewById(textViewID));
 
-        ViewHolder viewHolder = new ViewHolder(v, imageViewID);
+        ViewHolder viewHolder = new ViewHolder(v, imageViewID, textViewID);
 
+        //viewHolder.textView.getText();
+        //viewHolder.textView.setText(c.getColumnIndex(CompanyEntry.COLUMN_IMAGE_URL));
         Glide.with(mContext).load(c.getString(c.getColumnIndex(CompanyEntry.COLUMN_IMAGE_URL))).into(viewHolder.imageView);
+        viewHolder.textView.setText(c.getString(c.getColumnIndex(CompanyEntry.COLUMN_IMAGE_URL)));
 
         return v;
     }
 
-//    @Override
-//    public View getView(int i, View view, ViewGroup viewGroup) {
-//        View v = view;
-//
-//        if (v == null) {
-//            v = mInflater.inflate(layoutID, viewGroup, false);
-//            v.setTag(imageViewID, v.findViewById(imageViewID));
-//            //v.setTag(textViewID, v.findViewById(textViewID));
-//        }
-//
-//        Cursor c = getCursor();
-//        //Company company = getItem(i);
-//
-//        if(c != null) {
-//            ViewHolder viewHolder = new ViewHolder(v, imageViewID);
-//
-//            //Toast.makeText(mContext, "Col count - " + c.getColumnCount(), Toast.LENGTH_LONG).show();
-//            //Toast.makeText(mContext, "Col name - " + c.getColumnName(4), Toast.LENGTH_LONG).show();
-//            //Toast.makeText(mContext, "col index - " + c.getColumnIndex(CompanyEntry.COLUMN_IMAGE_URL), Toast.LENGTH_LONG).show();
-//            //Toast.makeText(mContext, "Val - " + c.getString(4), Toast.LENGTH_LONG).show();
-//
-//            Glide.with(mContext).load(c.getString(c.getColumnIndex(CompanyEntry.COLUMN_IMAGE_URL))).into(viewHolder.imageView);
-//            //viewHolder.textView.setText(company.getName());
-//        }
-//
-//        return v;
-//    }
-//
     static class ViewHolder {
         TextView textView;
         ImageView imageView;
 
-        public ViewHolder(View view, int imageViewID) {
+        public ViewHolder(View view, int imageViewID, int textViewID) {
             imageView   = (ImageView) view.findViewById(imageViewID);
+            textView   = (TextView) view.findViewById(textViewID);
         }
     }
 

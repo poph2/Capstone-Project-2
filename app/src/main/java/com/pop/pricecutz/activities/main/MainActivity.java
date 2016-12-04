@@ -1,6 +1,7 @@
 package com.pop.pricecutz.activities.main;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -36,8 +41,12 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static String LOG_TAG = MainActivity.class.getSimpleName();
+
     private TabLayout tabLayout;
     private ViewPager viewPager;
+
+    private Context mContext;
 
     private int[] tabIcons = {
             R.drawable.ic_home_white_24dp,
@@ -51,6 +60,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mContext = getBaseContext();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -74,6 +86,7 @@ public class MainActivity extends AppCompatActivity
         viewPager.setCurrentItem(0);
 
         //addToDatabase();
+        //readFromDatabase();
     }
 
     @Override
@@ -188,26 +201,40 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void addToDatabase() {
-        ContentValues contentValues = new ContentValues();
+        ContentValues[] contentValuesArr = new ContentValues[Data.name.length];
 
-        int i = 1;
+        //int i = 1;
 
-        int rand = new Random().nextInt();
+        for(int i = 0; i < Data.name.length; i++) {
+        //for(int i = 0; i <= 1; i++) {
 
-        contentValues.put(CompanyEntry.COLUMN_COY_ID,   Integer.toString(rand));
-        contentValues.put(CompanyEntry.COLUMN_NAME,     Data.name[i]);
-        contentValues.put(CompanyEntry.COLUMN_INDUSTRY, Data.industry[i]);
-        contentValues.put(CompanyEntry.COLUMN_IMAGE_URL, Data.image_url[i]);
+            contentValuesArr[i] = new ContentValues();
 
-        //Cursor c = getContentResolver().query(CompanyEntry.CONTENT_URI, null, CompanyEntry.COLUMN_COY_ID + " = " + Integer.toString(i), null, null);
-        //if(c.getCount() == 0) {
-            Uri uri = getContentResolver().insert(CompanyEntry.CONTENT_URI, contentValues);
-        //}
+            contentValuesArr[i].put(CompanyEntry.COLUMN_COY_ID, Integer.toString(i));
+            contentValuesArr[i].put(CompanyEntry.COLUMN_NAME, Data.name[i]);
+            contentValuesArr[i].put(CompanyEntry.COLUMN_INDUSTRY, Data.industry[i]);
+            contentValuesArr[i].put(CompanyEntry.COLUMN_IMAGE_URL, Data.image_url[i]);
+
+
+
+            //Cursor c = getContentResolver().query(CompanyEntry.CONTENT_URI, null, CompanyEntry.COLUMN_COY_ID + " = " + Integer.toString(i), null, null);
+            //if(c.getCount() == 0) {
+            //Uri uri = getContentResolver().insert(CompanyEntry.CONTENT_URI, contentValues);
+
+            Log.d(LOG_TAG, i + ": \t" + Data.name[i] + "\t" + Data.image_url[i]);
+            //}
 
 //        Uri uri = getContentResolver().insert(CompanyEntry.CONTENT_URI, contentValues);
-        Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
 //        refreshValuesFromContentProvider();
+        }
+
+        int response = getContentResolver().bulkInsert(CompanyEntry.CONTENT_URI, contentValuesArr);
+        Toast.makeText(getBaseContext(), "Bulk insert", Toast.LENGTH_LONG).show();
     }
 
+    public void readFromDatabase() {
+
+    }
 
 }

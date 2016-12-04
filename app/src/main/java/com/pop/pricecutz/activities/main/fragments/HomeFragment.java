@@ -35,7 +35,7 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
-    DiscountListAdapter mDiscountListAdapter;
+//    DiscountListAdapter mDiscountListAdapter;
 
     private CompanyListAdapter2 adapter;
 
@@ -74,21 +74,22 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        mDiscountListAdapter = new DiscountListAdapter(
-                mContext,
-                R.layout.fragment_home_list_items,
-                R.id.fragment_home_list_item_imageview,
-                R.id.fragment_home_list_item_textview,
-                R.id.fragment_home_list_item_textview2,
-                mDiscountArrayList);
+//        mDiscountListAdapter = new DiscountListAdapter(
+//                mContext,
+//                R.layout.fragment_home_list_items,
+//                R.id.fragment_home_list_item_imageview,
+//                R.id.fragment_home_list_item_textview,
+//                R.id.fragment_home_list_item_textview2,
+//                mDiscountArrayList);
 
         adapter = new CompanyListAdapter2(mContext,
                 R.layout.fragment_home_list_items,
                 null,
-                new String[] {CompanyEntry.COLUMN_NAME, CompanyEntry.COLUMN_INDUSTRY},
-                new int[] { R.id.fragment_home_list_item_textview , R.id.fragment_home_list_item_textview2 },
+                new String[] { CompanyEntry.COLUMN_NAME },//, CompanyEntry.COLUMN_IMAGE_URL },
+                new int[] { R.id.fragment_home_list_item_textview},// , R.id.fragment_home_list_item_textview2 },
                 0,
-                R.id.fragment_home_list_item_imageview);
+                R.id.fragment_home_list_item_imageview,
+                R.id.fragment_home_list_item_textview2);
 
 //        adapter = new SimpleCursorAdapter(getContext(),
 //                R.layout.fragment_home,
