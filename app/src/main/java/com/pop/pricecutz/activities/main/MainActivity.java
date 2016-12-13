@@ -2,6 +2,7 @@ package com.pop.pricecutz.activities.main;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -24,10 +25,18 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.google.gson.Gson;
+import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.pop.pricecutz.Company;
 import com.pop.pricecutz.R;
+import com.pop.pricecutz.activities.login.LoginActivity;
 import com.pop.pricecutz.activities.main.fragments.CategoryFragment;
 import com.pop.pricecutz.activities.main.fragments.FavoriteFragment;
 import com.pop.pricecutz.activities.main.fragments.HomeFragment;
@@ -35,6 +44,9 @@ import com.pop.pricecutz.activities.main.fragments.NearMeFragment;
 import com.pop.pricecutz.activities.main.fragments.InvetoryFragment;
 import com.pop.pricecutz.data.entries.CompanyEntry;
 import com.pop.pricecutz.data.entries.Data;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,11 +80,14 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+//        new DrawerBuilder().withActivity(this).build();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -91,6 +106,8 @@ public class MainActivity extends AppCompatActivity
 
         //addToDatabase();
         //readFromDatabase();
+
+        getUserData();
     }
 
     @Override
@@ -143,6 +160,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        } else if (id == R.id.nav_log_out) {
+            logOut();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -237,12 +256,12 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(getBaseContext(), "Bulk insert", Toast.LENGTH_LONG).show();
     }
 
-    public void readFromDatabase() {
-
+    public void logOut() {
+        LoginManager.getInstance().logOut();
+        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(i);
+        finish();
     }
-
-
-
 
     private class InitialDataAsyncTask extends AsyncTask<String, Void, String> {
         @Override
@@ -300,7 +319,24 @@ public class MainActivity extends AppCompatActivity
             });
         }
 
+    }
 
+    private void getUserData() {
+
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+        GraphRequest request = GraphRequest.newMeRequest(
+                accessToken,
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        Toast.makeText(getBaseContext(), new Gson().toJson(object), Toast.LENGTH_LONG).show();
+                    }
+                });
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "id,name,link,email,gender,birthday");
+//            request.setParameters(parameters);
+        request.executeAsync();
     }
 
 }

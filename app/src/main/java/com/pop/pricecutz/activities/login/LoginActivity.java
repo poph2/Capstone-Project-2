@@ -33,6 +33,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
@@ -44,6 +50,7 @@ import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.facebook.FacebookSdk;
@@ -70,67 +77,97 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private View mProgressView;
     private View mLoginFormView;
 
-    private TwitterLoginButton loginButton;
+//    private TwitterLoginButton loginButton;
 
-    private GoogleApiClient mGoogleApiClient;
+//    private GoogleApiClient mGoogleApiClient;
+
+    CallbackManager callbackManager;
+
+    LoginButton loginButtonFacebook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
-        Fabric.with(this, new Twitter(authConfig));
+//        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+//        Fabric.with(this, new Twitter(authConfig));
 
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-            setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login);
 
-        twitterLogin();
+        callbackManager = CallbackManager.Factory.create();
+        loginButtonFacebook = (LoginButton) findViewById(R.id.login_button_facebook);
+//        loginButtonFacebook.setReadPermissions("email");
+//        loginButtonFacebook.setReadPermissions();
 
-
-
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-    }
+        loginButtonFacebook.setReadPermissions(Arrays.asList("public_profile","user_friends","email"));
 
 
-    private void twitterLogin() {
-        loginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
-        loginButton.setCallback(new Callback<TwitterSession>() {
+        loginButtonFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void success(Result<TwitterSession> result) {
-                // The TwitterSession is also available through:
-                // Twitter.getInstance().core.getSessionManager().getActiveSession()
-                TwitterSession session = result.data;
-                // TODO: Remove toast and use the TwitterSession's userID
-                // with your app's user model
-                String msg = "@" + session.getUserName() + " logged in! (#" + session.getUserId() + ")";
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-
-                startActivity(MainActivity.class);
-
+            public void onSuccess(LoginResult loginResult) {
+                Toast.makeText(getBaseContext(), "Facebook Login Success", Toast.LENGTH_LONG).show();
+                checkFacebookLogin();
             }
+
             @Override
-            public void failure(TwitterException exception) {
-                Log.d("TwitterKit", "Login with Twitter failure", exception);
+            public void onCancel() {
+                Toast.makeText(getBaseContext(), "Facebook Login Cancelled", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(getBaseContext(), "Facebook Login Error", Toast.LENGTH_LONG).show();
             }
         });
+
+        checkFacebookLogin();
+
     }
+
+    private void checkFacebookLogin() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        if(accessToken != null) {
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(i);
+            finish();
+        }
+    }
+
+
+//    private void twitterLogin() {
+//        loginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
+//        loginButton.setCallback(new Callback<TwitterSession>() {
+//            @Override
+//            public void success(Result<TwitterSession> result) {
+//                // The TwitterSession is also available through:
+//                // Twitter.getInstance().core.getSessionManager().getActiveSession()
+//                TwitterSession session = result.data;
+//                // TODO: Remove toast and use the TwitterSession's userID
+//                // with your app's user model
+//                String msg = "@" + session.getUserName() + " logged in! (#" + session.getUserId() + ")";
+//                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+//
+//                startActivity(MainActivity.class);
+//
+//            }
+//            @Override
+//            public void failure(TwitterException exception) {
+//                Log.d("TwitterKit", "Login with Twitter failure", exception);
+//            }
+//        });
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+
         // Make sure that the loginButton hears the result from any
         // Activity that it triggered.
-        loginButton.onActivityResult(requestCode, resultCode, data);
+//        loginButton.onActivityResult(requestCode, resultCode, data);
     }
 
     public void startActivity(Class<?> cls) {

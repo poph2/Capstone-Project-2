@@ -76,7 +76,7 @@ public class PriceCutzProvider extends ContentProvider {
             case COMPANY: {
                 long _id = db.insert(CompanyEntry.TABLE_NAME, null, values);
                 if ( _id > 0 )
-                    returnUri = CompanyEntry.buildCompanyUri(_id);
+                    returnUri = CompanyEntry.buildUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;

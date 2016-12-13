@@ -1,5 +1,7 @@
 package com.pop.pricecutz;
 
+import java.util.Random;
+
 /**
  * Created by Pop H2 on 9/30/2016.
  * Pop Inc
@@ -13,6 +15,8 @@ public class Discount {
     String description;
     int company_id;
     int type;
+    int imageIndex;
+
 
     public static final int SALE_TYPE = 0;
     public static final int COUPON_TYPE = 1;
@@ -24,6 +28,9 @@ public class Discount {
         this.description = description;
         this.company_id = company_id;
         this.type = type;
+
+        Random r = new Random();
+        imageIndex = r.nextInt(99);
     }
 
     public Company getCompany() {
@@ -87,5 +94,13 @@ public class Discount {
             default:
                 return Integer.toString(type);
         }
+    }
+
+    public int getImageIndex() {
+        return imageIndex;
+    }
+
+    public void setImageIndex(int imageIndex) {
+        this.imageIndex = imageIndex;
     }
 }

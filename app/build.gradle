@@ -71,4 +71,10 @@ dependencies {
     compile('com.twitter.sdk.android:twitter:2.2.0@aar') {
         transitive = true;
     }
+
+    compile('com.mikepenz:materialdrawer:5.6.0@aar') {
+        transitive = true
+    }
+//    compile 'com.mikepenz:google-material-typeface:x.y.z@aar' //Google Material Icons
+//    compile 'com.mikepenz:fontawesome-typeface:x.y.z@aar'     //FontAwesome
 }
