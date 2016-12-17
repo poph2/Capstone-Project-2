@@ -81,7 +81,9 @@ public class Randomizer {
         int id = random.nextInt(Integer.MAX_VALUE);
         String code = "discount_" + id;
         String title = "Discount " + id;
-        String description = "This is a demo description for Discount " + id + ".";
+//        String description = "This is a demo description for Discount " + id + ".";
+
+        String description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
         int type = 1 + random.nextInt(1);
 
         Discount discount = new Discount(id, code, title, description, company_id, type);
@@ -97,7 +99,7 @@ public class Randomizer {
         GPSPoint gpsPoint = getGPSPoint(centralGPSPoint, latRange, longRange);
         Discount discount = getDiscount(company_id);
 
-        Outlet outlet = new Outlet(company_id, gpsPoint, discount);
+        Outlet outlet = new Outlet(random.nextInt(), company_id, "Outlet", gpsPoint.getLatitude(), gpsPoint.getLongitude());
 
         return outlet;
     }

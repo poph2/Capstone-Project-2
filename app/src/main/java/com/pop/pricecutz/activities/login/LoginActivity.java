@@ -44,6 +44,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.pop.pricecutz.activities.main.MainActivity;
+import com.pop.pricecutz.activities.other.PreferenceActivity;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -128,8 +129,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void checkFacebookLogin() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+        Intent i = null;
+
         if(accessToken != null) {
-            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            boolean preferenceIsSet = true;
+            if(preferenceIsSet) {
+                i = new Intent(getApplicationContext(), MainActivity.class);
+            }
+            else {
+                i = new Intent(getApplicationContext(), PreferenceActivity.class);
+            }
             startActivity(i);
             finish();
         }

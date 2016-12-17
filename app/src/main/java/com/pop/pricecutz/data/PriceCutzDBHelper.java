@@ -4,10 +4,15 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.pop.pricecutz.data.entries.CategoryEntry;
 import com.pop.pricecutz.data.entries.CompanyEntry;
+import com.pop.pricecutz.data.entries.DiscountEntry;
+import com.pop.pricecutz.data.entries.OutletEntry;
 
 /**
- * Created by adeniyi.bello on 12/1/2016.
+ * Created by Pop H2 on 12/1/2016.
+ * Pop Inc
+ * Lagos Nigeria
  */
 
 public class PriceCutzDBHelper extends SQLiteOpenHelper {
@@ -22,22 +27,18 @@ public class PriceCutzDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
-        final String SQL_CREATE_COY_TABLE = "CREATE TABLE " + CompanyEntry.TABLE_NAME + " (" +
-                CompanyEntry._ID                + " INTEGER PRIMARY KEY," +
-                CompanyEntry.COLUMN_COY_ID      + " INTEGER UNIQUE NOT NULL, " +
-                CompanyEntry.COLUMN_NAME        + " TEXT NOT NULL, " +
-                CompanyEntry.COLUMN_INDUSTRY    + " TEXT NOT NULL, " +
-                CompanyEntry.COLUMN_IMAGE_URL   + " TEXT NOT NULL " +
-                " );";
-
-        sqLiteDatabase.execSQL(SQL_CREATE_COY_TABLE);
-
+        sqLiteDatabase.execSQL(CategoryEntry.createTableSQL());
+        sqLiteDatabase.execSQL(CompanyEntry.createTableSQL());
+        sqLiteDatabase.execSQL(DiscountEntry.createTableSQL());
+        sqLiteDatabase.execSQL(OutletEntry.createTableSQL());
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + CompanyEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL(CategoryEntry.dropTableSQL());
+        sqLiteDatabase.execSQL(CompanyEntry.dropTableSQL());
+        sqLiteDatabase.execSQL(DiscountEntry.dropTableSQL());
+        sqLiteDatabase.execSQL(OutletEntry.dropTableSQL());
         onCreate(sqLiteDatabase);
     }
 }

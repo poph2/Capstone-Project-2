@@ -6,12 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.pop.pricecutz.Category;
 import com.pop.pricecutz.Company;
 import com.pop.pricecutz.R;
+import com.pop.pricecutz.utils.SquareImageView;
 
 import java.util.ArrayList;
 
@@ -27,14 +29,16 @@ public class CategoryGridAdapter extends ArrayAdapter<Category> {
 
     final int layoutID;
     final int imageViewID;
+    final int imageView2ID;
     final int textViewID;
 
-    public CategoryGridAdapter(Context context, int layoutResourceID, int imageResourceID, int textResourceID, ArrayList<Category> categoryArrayList) {
+    public CategoryGridAdapter(Context context, int layoutResourceID, int imageResourceID, int imageResource2ID, int textResourceID, ArrayList<Category> categoryArrayList) {
         super(context, layoutResourceID, textResourceID, categoryArrayList);
 
-        layoutID = layoutResourceID;
-        imageViewID = imageResourceID;
-        textViewID = textResourceID;
+        layoutID        = layoutResourceID;
+        imageViewID     = imageResourceID;
+        imageView2ID    = imageResource2ID;
+        textViewID      = textResourceID;
 
         mInflater = LayoutInflater.from(context);
         mCategoryArrayList = categoryArrayList;
@@ -59,25 +63,48 @@ public class CategoryGridAdapter extends ArrayAdapter<Category> {
         if (v == null) {
             v = mInflater.inflate(layoutID, viewGroup, false);
             v.setTag(imageViewID, v.findViewById(imageViewID));
+            v.setTag(imageView2ID, v.findViewById(imageView2ID));
             v.setTag(textViewID, v.findViewById(textViewID));
         }
 
         Category category = getItem(i);
 
-        CompanyListAdapter.ViewHolder viewHolder = new CompanyListAdapter.ViewHolder(v, imageViewID, textViewID);
+        ViewHolder viewHolder = new ViewHolder(v, imageViewID, imageView2ID, textViewID);
 
-        Glide.with(getContext()).load(R.drawable.common_google_signin_btn_icon_dark).into(viewHolder.imageView);
+        String imageName = "img_" + category.getImageIndex() + "_350_150";
+        int imageResID = getContext().getResources().getIdentifier(imageName, "drawable", getContext().getPackageName());
+
+        viewHolder.imageView.setImageResource(imageResID);
+        //viewHolder.imageView2.setImageResource(R.drawable.ic_check_circle_black_24dp);
+
+//        Glide.with(getContext()).load(imageResID).into(viewHolder.imageView2);
         viewHolder.textView.setText(category.getName());
+
+        if(category.isSelected()) {
+//            viewHolder.imageView.setImageResource(imageResID);
+            viewHolder.imageView2.setImageResource(R.drawable.ic_check_circle_black_24dp);
+//            Glide.with(getContext())
+//                    .load(R.drawable.ic_check_circle_black_24dp)
+//                    .override(50, 50)
+//                    .into(viewHolder.imageView2);
+        }
+        else {
+            //viewHolder.imageView2.set
+            //Glide.with(getContext()).load(null).into(viewHolder.imageView);
+        }
 
         return v;
     }
 
     static class ViewHolder {
         TextView textView;
-        ImageView imageView;
+        SquareImageView imageView;
+        SquareImageView imageView2;
+        RadioButton radioButton;
 
-        public ViewHolder(View view, int imageViewID, int textViewID) {
-            imageView   = (ImageView) view.findViewById(imageViewID);
+        public ViewHolder(View view, int imageViewID, int imageView2ID, int textViewID) {
+            imageView   = (SquareImageView) view.findViewById(imageViewID);
+            imageView2   = (SquareImageView) view.findViewById(imageView2ID);
             textView    = (TextView) view.findViewById(textViewID);
         }
     }

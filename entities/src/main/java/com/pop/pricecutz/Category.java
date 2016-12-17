@@ -1,5 +1,7 @@
 package com.pop.pricecutz;
 
+import java.util.Random;
+
 /**
  * Created by adeniyi.bello on 11/26/2016.
  */
@@ -10,10 +12,19 @@ public class Category {
 
     String name, imageName;
 
+    int imageIndex;
+
+    boolean selected;
+
     public Category(int id, String imageName, String name) {
         this.id = id;
         this.imageName = imageName;
         this.name = name;
+
+        Random r = new Random();
+        this.imageIndex = r.nextInt(99);
+
+        selected = false;
     }
 
     public int getId() {
@@ -38,5 +49,21 @@ public class Category {
 
     public void setImageName(String imageName) {
         this.imageName = imageName;
+    }
+
+    public int getImageIndex() {
+        return imageIndex;
+    }
+
+    public void setImageIndex(int imageIndex) {
+        this.imageIndex = imageIndex;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

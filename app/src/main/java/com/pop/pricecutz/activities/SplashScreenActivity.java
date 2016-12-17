@@ -11,6 +11,7 @@ import com.facebook.FacebookSdk;
 import com.pop.pricecutz.R;
 import com.pop.pricecutz.activities.login.LoginActivity;
 import com.pop.pricecutz.activities.main.MainActivity;
+import com.pop.pricecutz.activities.other.PreferenceActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -44,7 +45,16 @@ public class SplashScreenActivity extends AppCompatActivity {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         Intent i = null;
         if(accessToken != null) {
-            i = new Intent(mContext, MainActivity.class);
+            boolean preferenceIsSet = true;
+            if(preferenceIsSet) {
+                i = new Intent(getApplicationContext(), MainActivity.class);
+            }
+            else {
+                i = new Intent(getApplicationContext(), PreferenceActivity.class);
+            }
+            startActivity(i);
+            finish();
+
         }
         else {
             i = new Intent(mContext, LoginActivity.class);

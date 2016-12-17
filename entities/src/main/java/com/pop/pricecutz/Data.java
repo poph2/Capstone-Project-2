@@ -68,4 +68,6 @@ public class Data {
             {6.449677619993209, 3.5077594220638275},
 
     };
+
+    public static String categories[] = {"Training", "Food & Drink", "Events & Activities", "Domestic Services", "Medical & Health Services", "Salon & Beauty", "Spas", "Hotels & Travel", "Hotels", "Gyms & Fitness", "Real Estate", "Home Appliances", "Sports & Fitness", "Home Decor & Furnishings", "Kitchen & Dining", "Baby & Kids", "Books & Stationery", "Groceries", "Personal Care & Grooming", "Furniture", "Fun & Games", "Adult Games", "Board Games", "Women's Wear", "Kids Fashion", "Cosmetics & Accessories", "Men's Wear", "Men's Accessories", "Men's Shoes", "Women's Shoes", "Women's Accessories", "Watches", "Phones & Tablets", "Computers & Networking", "Generators & Power Supply", "Electronics", "Automobile & Industrial"};
 }

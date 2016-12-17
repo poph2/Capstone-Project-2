@@ -11,7 +11,10 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 
 import com.pop.pricecutz.Company;
+import com.pop.pricecutz.data.entries.CategoryEntry;
 import com.pop.pricecutz.data.entries.CompanyEntry;
+import com.pop.pricecutz.data.entries.DiscountEntry;
+import com.pop.pricecutz.data.entries.OutletEntry;
 
 /**
  * Created by adeniyi.bello on 12/1/2016.
@@ -22,7 +25,10 @@ public class PriceCutzProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private PriceCutzDBHelper mOpenHelper;
 
-    static final int COMPANY = 100;
+    static final int CATEGORY   = 1000;
+    static final int COMPANY    = 1100;
+    static final int DISCOUNT   = 1200;
+    static final int OUTLET     = 1300;
 
     @Override
     public boolean onCreate() {
@@ -32,26 +38,41 @@ public class PriceCutzProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Cursor retCursor;
-        switch (sUriMatcher.match(uri)) {
-            // "weather"
+        String tableName = getTableName(uri);
+
+        Cursor retCursor = mOpenHelper.getReadableDatabase().query(
+                tableName,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+
+        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return retCursor;
+    }
+
+    public String getTableName(Uri uri) {
+        final int match = sUriMatcher.match(uri);
+
+        switch (match) {
+            case CATEGORY: {
+                return CategoryEntry.TABLE_NAME;
+            }
             case COMPANY: {
-                retCursor = mOpenHelper.getReadableDatabase().query(
-                        CompanyEntry.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder
-                );
-                break;
+                return CompanyEntry.TABLE_NAME;
+            }
+            case DISCOUNT: {
+                return DiscountEntry.TABLE_NAME;
+            }
+            case OUTLET: {
+                return OutletEntry.TABLE_NAME;
             }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
-        return retCursor;
     }
 
     @Override
@@ -59,8 +80,14 @@ public class PriceCutzProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
 
         switch (match) {
+            case CATEGORY:
+                return CategoryEntry.CONTENT_TYPE;
             case COMPANY:
                 return CompanyEntry.CONTENT_TYPE;
+            case DISCOUNT:
+                return DiscountEntry.CONTENT_TYPE;
+            case OUTLET:
+                return OutletEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -68,17 +95,26 @@ public class PriceCutzProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
+
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         Uri returnUri;
 
         switch (match) {
+            case CATEGORY: {
+                returnUri = CategoryEntry.insert(db, values, uri);
+                break;
+            }
             case COMPANY: {
-                long _id = db.insert(CompanyEntry.TABLE_NAME, null, values);
-                if ( _id > 0 )
-                    returnUri = CompanyEntry.buildUri(_id);
-                else
-                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                returnUri = CompanyEntry.insert(db, values, uri);
+                break;
+            }
+            case DISCOUNT: {
+                returnUri = DiscountEntry.insert(db, values, uri);
+                break;
+            }
+            case OUTLET: {
+                returnUri = OutletEntry.insert(db, values, uri);
                 break;
             }
             default:
@@ -93,16 +129,12 @@ public class PriceCutzProvider extends ContentProvider {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         int rowsDeleted;
+
         // this makes delete all rows return the number of rows deleted
         if ( null == selection ) selection = "1";
-        switch (match) {
-            case COMPANY:
-                rowsDeleted = db.delete(
-                        CompanyEntry.TABLE_NAME, selection, selectionArgs);
-                break;
-            default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
-        }
+
+        rowsDeleted = db.delete(getTableName(uri), selection, selectionArgs);
+
         // Because a null deletes all rows
         if (rowsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -116,45 +148,38 @@ public class PriceCutzProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         int rowsUpdated;
 
-        switch (match) {
-            case COMPANY:
-                rowsUpdated = db.update(CompanyEntry.TABLE_NAME, values, selection,
-                        selectionArgs);
-                break;
-            default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
-        }
+        rowsUpdated = db.update(getTableName(uri), values, selection, selectionArgs);
+
         if (rowsUpdated != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
+
         return rowsUpdated;
     }
 
     @Override
-    public int bulkInsert(Uri uri, ContentValues[] values) {
+    public int bulkInsert(Uri uri, ContentValues[] valuesArr) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
+        int returnCount = 0;
         switch (match) {
+            case CATEGORY:
+                returnCount = CategoryEntry.bulkInsert(db, valuesArr);
+                break;
             case COMPANY:
-                db.beginTransaction();
-                int returnCount = 0;
-                try {
-                    for (ContentValues value : values) {
-
-                        long _id = db.insert(CompanyEntry.TABLE_NAME, null, value);
-                        if (_id != -1) {
-                            returnCount++;
-                        }
-                    }
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
-                getContext().getContentResolver().notifyChange(uri, null);
-                return returnCount;
+                returnCount = CompanyEntry.bulkInsert(db, valuesArr);
+                break;
+            case DISCOUNT:
+                returnCount = DiscountEntry.bulkInsert(db, valuesArr);
+                break;
+            case OUTLET:
+                returnCount = OutletEntry.bulkInsert(db, valuesArr);
+                break;
             default:
-                return super.bulkInsert(uri, values);
+                return super.bulkInsert(uri, valuesArr);
         }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return returnCount;
     }
 
     static UriMatcher buildUriMatcher() {

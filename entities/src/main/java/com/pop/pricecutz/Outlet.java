@@ -9,14 +9,26 @@ import com.pop.pricecutz.map.GPSPoint;
  */
 public class Outlet {
 
+    int id;
     int company_id;
-    GPSPoint gpsPoint;
-    Discount discount;
+    String name;
+    double latitude;
+    double longitude;
 
-    public Outlet(int company_id, GPSPoint gpsPoint, Discount discount) {
+    public Outlet(int id, int company_id, String name, double latitude, double longitude) {
+        this.id = id;
         this.company_id = company_id;
-        this.gpsPoint = gpsPoint;
-        this.discount = discount;
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getCompany_id() {
@@ -27,19 +39,27 @@ public class Outlet {
         this.company_id = company_id;
     }
 
-    public GPSPoint getGpsPoint() {
-        return gpsPoint;
+    public String getName() {
+        return name;
     }
 
-    public void setGpsPoint(GPSPoint gpsPoint) {
-        this.gpsPoint = gpsPoint;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Discount getDiscount() {
-        return discount;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setDiscount(Discount discount) {
-        this.discount = discount;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

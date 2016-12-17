@@ -7,6 +7,7 @@ package com.pop.pricecutz.activities.main.fragments;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,7 @@ import com.pop.pricecutz.Company;
 import com.pop.pricecutz.Discount;
 import com.pop.pricecutz.R;
 import com.pop.pricecutz.Randomizer;
+import com.pop.pricecutz.activities.other.DiscountActivity;
 import com.pop.pricecutz.adapters.CompanyListAdapter;
 import com.pop.pricecutz.adapters.CompanyListAdapter2;
 import com.pop.pricecutz.adapters.DiscountListAdapter;
@@ -35,7 +37,7 @@ import com.pop.pricecutz.data.entries.CompanyEntry;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     DiscountListAdapter mDiscountListAdapter;
 
@@ -81,6 +83,8 @@ public class HomeFragment extends Fragment {
 
         listView.setAdapter(mDiscountListAdapter);
 
+        listView.setOnItemClickListener(this);
+
 //        if(savedInstanceState == null) {
 //
 //            mCompanyArrayList = new ArrayList<>();
@@ -124,6 +128,12 @@ public class HomeFragment extends Fragment {
         super.onSaveInstanceState(outState);
 
 //        outState.putString("CompanyArrayList", new Gson().toJson(mCompanyArrayList));
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Intent intent = new Intent(getContext(), DiscountActivity.class);
+        startActivity(intent);
     }
 
 //    @Override

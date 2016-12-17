@@ -3,7 +3,6 @@ package com.pop.pricecutz.activities.main;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,9 +11,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,7 +21,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -33,8 +28,6 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.google.gson.Gson;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.pop.pricecutz.Company;
 import com.pop.pricecutz.R;
 import com.pop.pricecutz.activities.login.LoginActivity;
 import com.pop.pricecutz.activities.main.fragments.CategoryFragment;
@@ -43,14 +36,12 @@ import com.pop.pricecutz.activities.main.fragments.HomeFragment;
 import com.pop.pricecutz.activities.main.fragments.NearMeFragment;
 import com.pop.pricecutz.activities.main.fragments.InvetoryFragment;
 import com.pop.pricecutz.data.entries.CompanyEntry;
-import com.pop.pricecutz.data.entries.Data;
-import com.squareup.picasso.Picasso;
+import com.pop.pricecutz.data.entries.Data1;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -79,8 +70,6 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-//        new DrawerBuilder().withActivity(this).build();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -224,19 +213,19 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void addToDatabase() {
-        ContentValues[] contentValuesArr = new ContentValues[Data.name.length];
+        ContentValues[] contentValuesArr = new ContentValues[Data1.name.length];
 
         //int i = 1;
 
-        for(int i = 0; i < Data.name.length; i++) {
+        for(int i = 0; i < Data1.name.length; i++) {
         //for(int i = 0; i <= 1; i++) {
 
             contentValuesArr[i] = new ContentValues();
 
             contentValuesArr[i].put(CompanyEntry.COLUMN_COY_ID, Integer.toString(i));
-            contentValuesArr[i].put(CompanyEntry.COLUMN_NAME, Data.name[i]);
-            contentValuesArr[i].put(CompanyEntry.COLUMN_INDUSTRY, Data.industry[i]);
-            contentValuesArr[i].put(CompanyEntry.COLUMN_IMAGE_URL, Data.image_url[i]);
+            contentValuesArr[i].put(CompanyEntry.COLUMN_NAME, Data1.name[i]);
+            contentValuesArr[i].put(CompanyEntry.COLUMN_INDUSTRY, Data1.industry[i]);
+            contentValuesArr[i].put(CompanyEntry.COLUMN_IMAGE_URL, Data1.image_url[i]);
 
 
 
@@ -244,7 +233,7 @@ public class MainActivity extends AppCompatActivity
             //if(c.getCount() == 0) {
             //Uri uri = getContentResolver().insert(CompanyEntry.CONTENT_URI, contentValues);
 
-            Log.d(LOG_TAG, i + ": \t" + Data.name[i] + "\t" + Data.image_url[i]);
+            Log.d(LOG_TAG, i + ": \t" + Data1.name[i] + "\t" + Data1.image_url[i]);
             //}
 
 //        Uri uri = getContentResolver().insert(CompanyEntry.CONTENT_URI, contentValues);
@@ -267,7 +256,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected String doInBackground(String... urls) {
             try {
-                for (int i = 0; i < Data.name.length; i++) {
+                for (int i = 0; i < Data1.name.length; i++) {
                     //showToast(getBaseContext(), "i = " + i);
                     addToDatabase(getBaseContext(), i);
                     //Toast.makeText(getBaseContext(), "i = " + i, Toast.LENGTH_LONG).show();
@@ -295,17 +284,17 @@ public class MainActivity extends AppCompatActivity
             contentValues = new ContentValues();
 
             contentValues.put(CompanyEntry.COLUMN_COY_ID, Integer.toString(i));
-            contentValues.put(CompanyEntry.COLUMN_NAME, Data.name[i]);
-            contentValues.put(CompanyEntry.COLUMN_INDUSTRY, Data.industry[i]);
-            contentValues.put(CompanyEntry.COLUMN_IMAGE_URL, Data.image_url[i]);
+            contentValues.put(CompanyEntry.COLUMN_NAME, Data1.name[i]);
+            contentValues.put(CompanyEntry.COLUMN_INDUSTRY, Data1.industry[i]);
+            contentValues.put(CompanyEntry.COLUMN_IMAGE_URL, Data1.image_url[i]);
 
             //Cursor c = getContentResolver().query(CompanyEntry.CONTENT_URI, null, CompanyEntry.COLUMN_COY_ID + " = " + Integer.toString(i), null, null);
             //if(c.getCount() == 0) {
                 Uri uri = getContentResolver().insert(CompanyEntry.CONTENT_URI, contentValues);
 
-                Log.d(LOG_TAG, i + ": \t" + Data.name[i] + "\t" + Data.image_url[i]);
+                Log.d(LOG_TAG, i + ": \t" + Data1.name[i] + "\t" + Data1.image_url[i]);
 
-                showToast(context, Data.name[i] + "\t" + Data.image_url[i]);
+                showToast(context, Data1.name[i] + "\t" + Data1.image_url[i]);
             //}
         }
 

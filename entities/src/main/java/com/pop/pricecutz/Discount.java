@@ -17,6 +17,10 @@ public class Discount {
     int type;
     int imageIndex;
 
+    Company company;
+
+    boolean savedByUser;
+
 
     public static final int SALE_TYPE = 0;
     public static final int COUPON_TYPE = 1;
@@ -29,12 +33,16 @@ public class Discount {
         this.company_id = company_id;
         this.type = type;
 
+        company = new Company(company_id);
+
         Random r = new Random();
         imageIndex = r.nextInt(99);
+
+        savedByUser = true;
     }
 
     public Company getCompany() {
-        return new Company(company_id);
+        return company;
     }
 
     public int getId() {
@@ -102,5 +110,17 @@ public class Discount {
 
     public void setImageIndex(int imageIndex) {
         this.imageIndex = imageIndex;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public boolean isSavedByUser() {
+        return savedByUser;
+    }
+
+    public void setSavedByUser(boolean savedByUser) {
+        this.savedByUser = savedByUser;
     }
 }
