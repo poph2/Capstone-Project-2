@@ -27,19 +27,35 @@ import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.gson.Gson;
+import com.pop.pricecutz.Category;
+import com.pop.pricecutz.Company;
+import com.pop.pricecutz.Data;
+import com.pop.pricecutz.Discount;
 import com.pop.pricecutz.R;
+import com.pop.pricecutz.Randomizer;
 import com.pop.pricecutz.activities.login.LoginActivity;
 import com.pop.pricecutz.activities.main.fragments.CategoryFragment;
 import com.pop.pricecutz.activities.main.fragments.FavoriteFragment;
 import com.pop.pricecutz.activities.main.fragments.HomeFragment;
 import com.pop.pricecutz.activities.main.fragments.NearMeFragment;
 import com.pop.pricecutz.activities.main.fragments.InvetoryFragment;
+import com.pop.pricecutz.backend.categoryBeanApi.CategoryBeanApi;
+import com.pop.pricecutz.backend.categoryBeanApi.model.CategoryBean;
+import com.pop.pricecutz.backend.companyBeanApi.CompanyBeanApi;
+import com.pop.pricecutz.backend.companyBeanApi.model.CompanyBean;
+import com.pop.pricecutz.backend.discountBeanApi.DiscountBeanApi;
+import com.pop.pricecutz.backend.discountBeanApi.model.DiscountBean;
+import com.pop.pricecutz.backend.outletBeanApi.OutletBeanApi;
 import com.pop.pricecutz.data.entries.CompanyEntry;
 import com.pop.pricecutz.data.entries.Data1;
+import com.pop.pricecutz.utils.BeanEntityConverter;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,6 +111,10 @@ public class MainActivity extends AppCompatActivity
 
         //addToDatabase();
         //readFromDatabase();
+
+        Log.d("AsyncTask", "About to start");
+
+        new EndpointsAsyncTask().execute(1);
 
         getUserData();
     }
@@ -280,7 +300,6 @@ public class MainActivity extends AppCompatActivity
         public void addToDatabase(Context context, int i) {
             ContentValues contentValues = new ContentValues();
 
-
             contentValues = new ContentValues();
 
             contentValues.put(CompanyEntry.COLUMN_COY_ID, Integer.toString(i));
@@ -307,6 +326,115 @@ public class MainActivity extends AppCompatActivity
                 }
             });
         }
+
+    }
+
+    public class EndpointsAsyncTask extends AsyncTask<Integer, Void, String> {
+
+        private CategoryBeanApi categoryBeanApi = null;
+        private CompanyBeanApi companyBeanApi = null;
+        private DiscountBeanApi discountBeanApi = null;
+        private OutletBeanApi outletBeanApi = null;
+
+        private Integer index;
+
+        @Override
+        protected String doInBackground(Integer... params) {
+            index = params[0];
+
+//            loadInitialCategoryData();
+//            loadInitialCompanyData();
+//            loadInitialDiscountData();
+
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            //jokeGetterListener.jokeGotten(result);
+        }
+
+        private void loadInitialCategoryData() {
+            if (categoryBeanApi == null) {  // Only do this once
+                CategoryBeanApi.Builder builder = new CategoryBeanApi.Builder(AndroidHttp.newCompatibleTransport(),
+                        new AndroidJsonFactory(), null)
+                        .setRootUrl("https://price-cutz.appspot.com/_ah/api/");
+                // end options for devappserver
+
+                categoryBeanApi = builder.build();
+            }
+
+            for(int i = 1; i <= Data.categories.length; i++) {
+                try {
+                    Category c = new Category(i, "", Data.categories[i-1]);
+                    CategoryBean bean = BeanEntityConverter.convertToBean(c);
+                    Log.d("AsyncTask", "About to insert - " + i);
+                    categoryBeanApi.insert(bean).execute();
+                    Log.d("AsyncTask", "Insert performed - " + i);
+                }
+                catch(IOException e) {
+                    Log.e("AsyncTask", e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+
+            Log.d("AsyncTask", "Insert performed");
+        }
+
+        private void loadInitialCompanyData() {
+            if (companyBeanApi == null) {  // Only do this once
+                CompanyBeanApi.Builder builder = new CompanyBeanApi.Builder(AndroidHttp.newCompatibleTransport(),
+                        new AndroidJsonFactory(), null)
+                        .setRootUrl("https://price-cutz.appspot.com/_ah/api/");
+                // end options for devappserver
+
+                companyBeanApi = builder.build();
+            }
+
+            for(int i = 1; i <= Data.name.length; i++) {
+                try {
+                    Company c = new Company(i);
+                    CompanyBean cBean = BeanEntityConverter.convertToBean(c);
+                    Log.d("AsyncTask", "About to insert - " + i);
+                    companyBeanApi.insert(cBean).execute();
+                    Log.d("AsyncTask", "Insert performed - " + i);
+                }
+                catch(IOException e) {
+                    Log.e("AsyncTask", e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+
+            Log.d("AsyncTask", "Insert performed");
+        }
+
+        private void loadInitialDiscountData() {
+            if (discountBeanApi == null) {  // Only do this once
+                DiscountBeanApi.Builder builder = new DiscountBeanApi.Builder(AndroidHttp.newCompatibleTransport(),
+                        new AndroidJsonFactory(), null)
+                        .setRootUrl("https://price-cutz.appspot.com/_ah/api/");
+                // end options for devappserver
+
+                discountBeanApi = builder.build();
+            }
+
+            for(long i = 1; i <= 100; i++) {
+                try {
+                    Discount d = Randomizer.getDiscount(i);
+                    DiscountBean bean = BeanEntityConverter.convertToBean(d);
+                    Log.d("AsyncTask", "About to insert - " + i);
+                    discountBeanApi.insert(bean).execute();
+                    Log.d("AsyncTask", "Insert performed - " + i);
+                }
+                catch(IOException e) {
+                    Log.e("AsyncTask", e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+
+            Log.d("AsyncTask", "Insert performed");
+        }
+
 
     }
 

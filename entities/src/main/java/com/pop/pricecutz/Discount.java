@@ -9,15 +9,13 @@ import java.util.Random;
  */
 public class Discount {
 
-    int id;
+    long id;
     String code;
     String title;
     String description;
-    int company_id;
+    long company_id;
     int type;
     int imageIndex;
-
-    Company company;
 
     boolean savedByUser;
 
@@ -25,7 +23,9 @@ public class Discount {
     public static final int SALE_TYPE = 0;
     public static final int COUPON_TYPE = 1;
 
-    public Discount(int id, String code, String title, String description, int company_id, int type) {
+    public Discount() {}
+
+    public Discount(long id, String code, String title, String description, long company_id, int type) {
         this.id = id;
         this.code = code;
         this.title = title;
@@ -33,23 +33,17 @@ public class Discount {
         this.company_id = company_id;
         this.type = type;
 
-        company = new Company(company_id);
-
         Random r = new Random();
         imageIndex = r.nextInt(99);
 
         savedByUser = true;
     }
 
-    public Company getCompany() {
-        return company;
-    }
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -77,7 +71,7 @@ public class Discount {
         this.description = description;
     }
 
-    public int getCompany_id() {
+    public long getCompany_id() {
         return company_id;
     }
 
@@ -110,10 +104,6 @@ public class Discount {
 
     public void setImageIndex(int imageIndex) {
         this.imageIndex = imageIndex;
-    }
-
-    public void setCompany(Company company) {
-        this.company = company;
     }
 
     public boolean isSavedByUser() {

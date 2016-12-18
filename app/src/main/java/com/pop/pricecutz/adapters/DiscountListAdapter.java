@@ -75,11 +75,11 @@ public class DiscountListAdapter extends ArrayAdapter<Discount> {
         }
 
         Discount discount = getItem(i);
-        Company company = discount.getCompany();
+        //Company company = discount.getCompany();
 
         ViewHolder viewHolder = new ViewHolder(v, imageViewID, imageView2ID, textViewID, textView2ID);
 
-        Log.d("DiscountListAdapter", company.getImageURL());
+        //Log.d("DiscountListAdapter", company.getImageURL());
 
         String imageName = "img_" + discount.getImageIndex() + "_350_150";
 
@@ -87,8 +87,8 @@ public class DiscountListAdapter extends ArrayAdapter<Discount> {
 
         //Glide.with(getContext()).load(company.getImageURL()).into(viewHolder.imageView);
         Glide.with(getContext()).load(getContext().getResources().getIdentifier(imageName, "drawable", getContext().getPackageName())).into(viewHolder.imageView);
-        Glide.with(getContext()).load(company.getImageURL()).into(viewHolder.imageView2);
-        viewHolder.textView.setText(company.getName());
+//        Glide.with(getContext()).load(company.getImageURL()).into(viewHolder.imageView2);
+//        viewHolder.textView.setText(company.getName());
         viewHolder.text2View.setText(discount.getTitle());
 
         return v;

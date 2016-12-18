@@ -41,9 +41,9 @@ public class DiscountActivity extends AppCompatActivity {
         String imageName = "img_" + d.getImageIndex() + "_350_150";
 
         Glide.with(mContext).load(mContext.getResources().getIdentifier(imageName, "drawable", mContext.getPackageName())).into(imageView);
-        Glide.with(mContext).load(d.getCompany().getImageURL()).into(imageView2);
+        //Glide.with(mContext).load(d.getCompany().getImageURL()).into(imageView2);
 
-        companyTextView.setText(d.getCompany().getName());
+        //companyTextView.setText(d.getCompany().getName());
         descrTextView.setText(d.getDescription());
         titleTextView.setText(d.getTitle());
 

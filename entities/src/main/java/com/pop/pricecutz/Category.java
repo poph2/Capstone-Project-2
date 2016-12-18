@@ -8,13 +8,15 @@ import java.util.Random;
 
 public class Category {
 
-    int id;
+    long id;
 
     String name, imageName;
 
     int imageIndex;
 
     boolean selected;
+
+    public Category() {}
 
     public Category(int id, String imageName, String name) {
         this.id = id;
@@ -27,11 +29,11 @@ public class Category {
         selected = false;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
