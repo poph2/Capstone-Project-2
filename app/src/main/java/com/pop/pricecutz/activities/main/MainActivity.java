@@ -1,8 +1,10 @@
 package com.pop.pricecutz.activities.main;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SyncAdapterType;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -51,6 +53,7 @@ import com.pop.pricecutz.backend.discountBeanApi.model.DiscountBean;
 import com.pop.pricecutz.backend.outletBeanApi.OutletBeanApi;
 import com.pop.pricecutz.data.entries.CompanyEntry;
 import com.pop.pricecutz.data.entries.Data1;
+import com.pop.pricecutz.sync.PCSyncAdapter;
 import com.pop.pricecutz.utils.BeanEntityConverter;
 
 import org.json.JSONObject;
@@ -114,7 +117,10 @@ public class MainActivity extends AppCompatActivity
 
         Log.d("AsyncTask", "About to start");
 
-        new EndpointsAsyncTask().execute(1);
+        //new EndpointsAsyncTask().execute(1);
+
+        //Request Sync
+        PCSyncAdapter.syncImmediately(mContext);
 
         getUserData();
     }
