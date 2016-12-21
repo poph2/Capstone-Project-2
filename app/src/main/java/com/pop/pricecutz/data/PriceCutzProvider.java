@@ -9,8 +9,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.pop.pricecutz.Company;
+import com.pop.pricecutz.activities.main.fragments.HomeFragment;
 import com.pop.pricecutz.data.entries.CategoryEntry;
 import com.pop.pricecutz.data.entries.CompanyEntry;
 import com.pop.pricecutz.data.entries.DiscountEntry;
@@ -22,13 +24,16 @@ import com.pop.pricecutz.data.entries.OutletEntry;
 
 public class PriceCutzProvider extends ContentProvider {
 
+    private static final String LOG_TAG = PriceCutzProvider.class.getSimpleName();
+
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private PriceCutzDBHelper mOpenHelper;
 
-    static final int CATEGORY   = 1000;
-    static final int COMPANY    = 1100;
-    static final int DISCOUNT   = 1200;
-    static final int OUTLET     = 1300;
+    static final int CATEGORY               = 1000;
+    static final int COMPANY                = 1100;
+    static final int DISCOUNT               = 1200;
+    static final int DISCOUNT_WITH_COMPANY  = 1201;
+    static final int OUTLET                 = 1300;
 
     @Override
     public boolean onCreate() {
@@ -38,17 +43,32 @@ public class PriceCutzProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        String tableName = getTableName(uri);
 
-        Cursor retCursor = mOpenHelper.getReadableDatabase().query(
-                tableName,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                sortOrder
-        );
+        Cursor retCursor = null;
+
+        switch (sUriMatcher.match(uri)) {
+
+            case DISCOUNT_WITH_COMPANY: {
+                retCursor = getDiscountWithCompany(uri, projection, selection, selectionArgs, sortOrder);
+                break;
+            }
+            default: {
+
+                Log.d(LOG_TAG, "QUERY");
+
+                String tableName = getTableName(uri);
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        tableName,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+        }
 
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;
@@ -187,10 +207,11 @@ public class PriceCutzProvider extends ContentProvider {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = PriceCutzContract.CONTENT_AUTHORITY;
 
-        matcher.addURI(authority, CategoryEntry.PATH,   CATEGORY);
-        matcher.addURI(authority, CompanyEntry.PATH,    COMPANY);
-        matcher.addURI(authority, DiscountEntry.PATH,   DISCOUNT);
-        matcher.addURI(authority, OutletEntry.PATH,     OUTLET);
+        matcher.addURI(authority, CategoryEntry.PATH,               CATEGORY);
+        matcher.addURI(authority, CompanyEntry.PATH,                COMPANY);
+        matcher.addURI(authority, DiscountEntry.PATH,               DISCOUNT);
+        matcher.addURI(authority, DiscountEntry.PATH_WITH_COMPANY,  DISCOUNT_WITH_COMPANY);
+        matcher.addURI(authority, OutletEntry.PATH,                 OUTLET);
 
         return matcher;
     }
@@ -200,5 +221,29 @@ public class PriceCutzProvider extends ContentProvider {
     public void shutdown() {
         mOpenHelper.close();
         super.shutdown();
+    }
+
+    private Cursor getDiscountWithCompany(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+
+        SQLiteQueryBuilder discountWithCompany = new SQLiteQueryBuilder();
+
+        //This is an inner join which looks like
+        //weather INNER JOIN location ON weather.location_id = location._id
+        discountWithCompany.setTables(
+                DiscountEntry.TABLE_NAME + " INNER JOIN " +
+                        CompanyEntry.TABLE_NAME +
+                        " ON " + DiscountEntry.TABLE_NAME +
+                        "." + DiscountEntry.COLUMN_COY_ID +
+                        " = " + CompanyEntry.TABLE_NAME +
+                        "." + CompanyEntry._ID);
+
+        return discountWithCompany.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
     }
 }

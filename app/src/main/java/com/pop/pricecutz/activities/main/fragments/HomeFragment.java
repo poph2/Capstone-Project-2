@@ -41,6 +41,8 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final String LOG_TAG = HomeFragment.class.getSimpleName();
+
 //    DiscountListAdapter mDiscountListAdapter;
 
     private DiscountListAdapter2 adapter;
@@ -153,12 +155,17 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        return new CursorLoader(mContext, DiscountEntry.CONTENT_URI,
+        Log.d(LOG_TAG, "onCreateLoader");
+
+        return new CursorLoader(mContext, DiscountEntry.CONTENT_URI_WITH_COMPANY,
                 null, null, null, null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+
+
         adapter.swapCursor(data);
     }
 

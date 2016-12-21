@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity
         //new EndpointsAsyncTask().execute(1);
 
         //Request Sync
-//        PCSyncAdapter.syncImmediately(mContext);
+        PCSyncAdapter.syncImmediately(mContext);
 
         getUserData();
     }

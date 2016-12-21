@@ -4,6 +4,7 @@ import android.content.ContentValues;
 
 import com.pop.pricecutz.Category;
 import com.pop.pricecutz.backend.categoryBeanApi.model.CategoryBean;
+import com.pop.pricecutz.backend.companyBeanApi.model.CompanyBean;
 import com.pop.pricecutz.backend.discountBeanApi.model.DiscountBean;
 import com.pop.pricecutz.data.entries.CategoryEntry;
 import com.pop.pricecutz.data.entries.CompanyEntry;
@@ -24,6 +25,17 @@ public class BeanEntryConverter {
         c.put(CategoryEntry._ID,                o.getId());
         c.put(CategoryEntry.COLUMN_NAME,        o.getName());
         c.put(CategoryEntry.COLUMN_IMAGE_NAME,  o.getImageName());
+
+        return c;
+    }
+
+    public static ContentValues convertToContentValues(CompanyBean o) {
+        ContentValues c = new ContentValues();
+
+        c.put(CompanyEntry._ID,                o.getId());
+        c.put(CompanyEntry.COLUMN_NAME,        o.getName());
+        c.put(CompanyEntry.COLUMN_INDUSTRY,     o.getIndustry());
+        c.put(CompanyEntry.COLUMN_IMAGE_URL,    o.getImageURL());
 
         return c;
     }

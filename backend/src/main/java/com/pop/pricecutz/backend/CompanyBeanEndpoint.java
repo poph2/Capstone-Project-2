@@ -135,7 +135,7 @@ public class CompanyBeanEndpoint {
             name = "list",
             path = "companyBean",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public CollectionResponse<CompanyBean> list(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit) {
+    public CollectionResponse<CompanyBean> list(@Nullable @Named("cursor") String cursor, @Named("limit") Integer limit) {
         limit = limit == null ? DEFAULT_LIST_LIMIT : limit;
         Query<CompanyBean> query = ofy().load().type(CompanyBean.class).limit(limit);
         if (cursor != null) {

@@ -25,6 +25,8 @@ import java.util.ArrayList;
  */
 public class DiscountListAdapter2 extends SimpleCursorAdapter {
 
+    private static final String LOG_TAG = DiscountListAdapter2.class.getSimpleName();
+
 //    private ArrayList<Discount> mDiscountArrayList;
 
     private final LayoutInflater mInflater;
@@ -48,19 +50,51 @@ public class DiscountListAdapter2 extends SimpleCursorAdapter {
         imageView2ID = image2ResourceID;
 //        textViewID = textResourceID;
 //        textView2ID = text2ResourceID;
+
+        Log.d(LOG_TAG, "Got here");
     }
 
-    @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-        ViewHolder viewHolder = new ViewHolder(view, imageViewID, imageView2ID);
+//    @Override
+//    public void bindView(View view, Context context, Cursor cursor) {
+//        ViewHolder viewHolder = new ViewHolder(view, imageViewID, imageView2ID);
+//
+//        //Log.d("DiscountListAdapter", company.getImageURL());
+//
+//        int columnIndex = cursor.getColumnIndex(DiscountEntry.COLUMN_IMAGE_INDEX);
+//
+//        int imageIndex = cursor.getInt(columnIndex);
+//
+//        String imageName = "img_" + imageIndex + "_350_150";
+//
+////        String image = mContext.getResources().getIdentifier("img_96_350_150.jpg", "drawable", mContext.getPackageName());
+//
+//        //Log.d("DiscountListAdapter2", cursor.getColumnIndex(DiscountEntry.COLUMN_CODE));
+//        Log.d(LOG_TAG, "bindView - " + imageName);
+////
+////        //Glide.with(getContext()).load(company.getImageURL()).into(viewHolder.imageView);
+//        Glide.with(mContext).load(mContext.getResources().getIdentifier(imageName, "drawable", mContext.getPackageName())).into(viewHolder.imageView);
+////        Glide.with(mContext).load(company.getImageURL()).into(viewHolder.imageView2);
+////        viewHolder.textView.setText(company.getName());
+////        viewHolder.text2View.setText(discount.getTitle());
+//    }
 
-        //Log.d("DiscountListAdapter", company.getImageURL());
+    @Override
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        final LayoutInflater inflater = LayoutInflater.from(context);
+        View v = inflater.inflate(layoutID, parent, false);
+
+        ViewHolder viewHolder = new ViewHolder(v, imageViewID, imageView2ID);
+
+        v.setTag(imageViewID, v.findViewById(imageViewID));
+        v.setTag(imageView2ID, v.findViewById(imageView2ID));
 
         int columnIndex = cursor.getColumnIndex(DiscountEntry.COLUMN_IMAGE_INDEX);
 
         int imageIndex = cursor.getInt(columnIndex);
 
         String imageName = "img_" + imageIndex + "_350_150";
+
+        String coyImageURL = cursor.getString(cursor.getColumnIndex(CompanyEntry.COLUMN_IMAGE_URL));
 
 //        String image = mContext.getResources().getIdentifier("img_96_350_150.jpg", "drawable", mContext.getPackageName());
 
@@ -69,21 +103,10 @@ public class DiscountListAdapter2 extends SimpleCursorAdapter {
 //
 //        //Glide.with(getContext()).load(company.getImageURL()).into(viewHolder.imageView);
         Glide.with(mContext).load(mContext.getResources().getIdentifier(imageName, "drawable", mContext.getPackageName())).into(viewHolder.imageView);
-//        Glide.with(mContext).load(company.getImageURL()).into(viewHolder.imageView2);
-//        viewHolder.textView.setText(company.getName());
-//        viewHolder.text2View.setText(discount.getTitle());
-    }
+        Glide.with(mContext).load(coyImageURL).into(viewHolder.imageView2);
 
-//    @Override
-//    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-//        final LayoutInflater inflater = LayoutInflater.from(context);
-//        View v = inflater.inflate(layoutID, parent, false);
-//
-//        v.setTag(imageViewID, v.findViewById(imageViewID));
-//        v.setTag(imageView2ID, v.findViewById(imageView2ID));
-//
-//        return v;
-//    }
+        return v;
+    }
 
     static class ViewHolder {
         ImageView imageView;

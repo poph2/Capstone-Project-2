@@ -22,10 +22,12 @@ public class DiscountEntry implements BaseColumns {
 //    public static final int COUPON_TYPE = 1;
 
 
-    public static final String PATH         = "discount";
-    public static final String TABLE_NAME   = "discount";
+    public static final String PATH                 = "discount";
+    public static final String PATH_WITH_COMPANY    = "discount_with_company";
+    public static final String TABLE_NAME           = "discount";
 
-    public static final Uri CONTENT_URI = PriceCutzContract.BASE_CONTENT_URI.buildUpon().appendPath(PATH).build();
+    public static final Uri CONTENT_URI                 = PriceCutzContract.BASE_CONTENT_URI.buildUpon().appendPath(PATH).build();
+    public static final Uri CONTENT_URI_WITH_COMPANY    = PriceCutzContract.BASE_CONTENT_URI.buildUpon().appendPath(PATH_WITH_COMPANY).build();
 
     public static final String CONTENT_TYPE         = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
     public static final String CONTENT_ITEM_TYPE    = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
