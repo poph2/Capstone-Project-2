@@ -187,7 +187,10 @@ public class PriceCutzProvider extends ContentProvider {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = PriceCutzContract.CONTENT_AUTHORITY;
 
-        matcher.addURI(authority, CompanyEntry.PATH, COMPANY);
+        matcher.addURI(authority, CategoryEntry.PATH,   CATEGORY);
+        matcher.addURI(authority, CompanyEntry.PATH,    COMPANY);
+        matcher.addURI(authority, DiscountEntry.PATH,   DISCOUNT);
+        matcher.addURI(authority, OutletEntry.PATH,     OUTLET);
 
         return matcher;
     }

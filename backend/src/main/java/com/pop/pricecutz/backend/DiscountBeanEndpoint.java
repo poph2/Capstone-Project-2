@@ -135,7 +135,7 @@ public class DiscountBeanEndpoint {
             name = "list",
             path = "discountBean",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public CollectionResponse<DiscountBean> list(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit) {
+    public CollectionResponse<DiscountBean> list(@Nullable @Named("cursor") String cursor, @Named("limit") Integer limit) {
         limit = limit == null ? DEFAULT_LIST_LIMIT : limit;
         Query<DiscountBean> query = ofy().load().type(DiscountBean.class).limit(limit);
         if (cursor != null) {

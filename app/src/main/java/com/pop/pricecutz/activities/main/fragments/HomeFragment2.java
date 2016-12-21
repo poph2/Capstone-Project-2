@@ -129,7 +129,8 @@ public class HomeFragment2 extends Fragment implements AdapterView.OnItemClickLi
         mCompanyArrayList = new ArrayList();
         while (data.moveToNext()) {
 
-            int id          = data.getInt(data.getColumnIndex(CompanyEntry.COLUMN_COY_ID));
+//            int id          = data.getInt(data.getColumnIndex(CompanyEntry.COLUMN_COY_ID));
+            int id          = data.getInt(data.getColumnIndex(CompanyEntry._ID));
             String name     = data.getString(data.getColumnIndex(CompanyEntry.COLUMN_NAME));
             String industry = data.getString(data.getColumnIndex(CompanyEntry.COLUMN_INDUSTRY));
             String imageURL = data.getString(data.getColumnIndex(CompanyEntry.COLUMN_IMAGE_URL));

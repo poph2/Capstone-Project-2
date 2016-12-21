@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity
         //new EndpointsAsyncTask().execute(1);
 
         //Request Sync
-        PCSyncAdapter.syncImmediately(mContext);
+//        PCSyncAdapter.syncImmediately(mContext);
 
         getUserData();
     }
@@ -189,7 +189,8 @@ public class MainActivity extends AppCompatActivity
 
         adapter.addFragment(new HomeFragment(), "");
         adapter.addFragment(new NearMeFragment(), "");
-        adapter.addFragment(new FavoriteFragment(), "");
+        adapter.addFragment(new Fragment(), "");
+//        adapter.addFragment(new FavoriteFragment(), "");
         adapter.addFragment(new CategoryFragment(), "");
         adapter.addFragment(new InvetoryFragment(), "");
 
@@ -248,7 +249,8 @@ public class MainActivity extends AppCompatActivity
 
             contentValuesArr[i] = new ContentValues();
 
-            contentValuesArr[i].put(CompanyEntry.COLUMN_COY_ID, Integer.toString(i));
+//            contentValuesArr[i].put(CompanyEntry.COLUMN_COY_ID, Integer.toString(i));
+            contentValuesArr[i].put(CompanyEntry._ID, Integer.toString(i));
             contentValuesArr[i].put(CompanyEntry.COLUMN_NAME, Data1.name[i]);
             contentValuesArr[i].put(CompanyEntry.COLUMN_INDUSTRY, Data1.industry[i]);
             contentValuesArr[i].put(CompanyEntry.COLUMN_IMAGE_URL, Data1.image_url[i]);
@@ -308,7 +310,8 @@ public class MainActivity extends AppCompatActivity
 
             contentValues = new ContentValues();
 
-            contentValues.put(CompanyEntry.COLUMN_COY_ID, Integer.toString(i));
+//            contentValues.put(CompanyEntry.COLUMN_COY_ID, Integer.toString(i));
+            contentValues.put(CompanyEntry._ID, Integer.toString(i));
             contentValues.put(CompanyEntry.COLUMN_NAME, Data1.name[i]);
             contentValues.put(CompanyEntry.COLUMN_INDUSTRY, Data1.industry[i]);
             contentValues.put(CompanyEntry.COLUMN_IMAGE_URL, Data1.image_url[i]);

@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SyncRequest;
@@ -22,6 +23,10 @@ import com.pop.pricecutz.R;
 import com.pop.pricecutz.backend.companyBeanApi.CompanyBeanApi;
 import com.pop.pricecutz.backend.companyBeanApi.model.CompanyBean;
 import com.pop.pricecutz.backend.discountBeanApi.DiscountBeanApi;
+import com.pop.pricecutz.backend.discountBeanApi.model.CollectionResponseDiscountBean;
+import com.pop.pricecutz.backend.discountBeanApi.model.DiscountBean;
+import com.pop.pricecutz.data.entries.DiscountEntry;
+import com.pop.pricecutz.utils.BeanEntryConverter;
 
 import java.util.List;
 
@@ -56,17 +61,46 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
         // end options for devappserver
 
         DiscountBeanApi discountBeanApi = builder.build();
-         try {
-             DiscountBeanApi.List discountBeanList = discountBeanApi.list();
 
-             for(int i = 0; i < discountBeanList.getLimit(); i++) {
+        Log.d(LOG_TAG, "Sync Started");
+
+         try {
+             DiscountBeanApi.Get discountBeanGet = discountBeanApi.get(1l);
+
+             DiscountBean discountBean = discountBeanGet.execute();
+
+             Log.d(LOG_TAG, "discountBean - " + discountBean.getCode());
+
+
+             DiscountBeanApi.List discountBean_List = discountBeanApi.list(100);
+             CollectionResponseDiscountBean dbCollection = discountBean_List.execute();
+
+             List<DiscountBean> discountBeanList = dbCollection.getItems();
+
+//             Log.d(LOG_TAG, "dbCollection - " + dbCollection.getCode());
+
+             ContentValues contentValuesArr[] = new ContentValues[discountBeanList.size()];
+
+             for(int i = 0; i < discountBeanList.size(); i++) {
+                 Log.d(LOG_TAG, i + " - " + discountBeanList.get(i).getCode());
+
+                 discountBean = discountBeanList.get(i);
+
+                 ContentValues contentValues = BeanEntryConverter.convertToContentValues(discountBean);
+
+                 contentValuesArr[i] = contentValues;
+
+
                  Log.d(LOG_TAG, "Sync Performed");
              }
+
+             int i = getContext().getContentResolver().bulkInsert(DiscountEntry.CONTENT_URI, contentValuesArr);
 
              Log.d(LOG_TAG, "Sync Performed");
 
          }
          catch(Exception e) {
+             Log.e(LOG_TAG, e.getMessage());
              e.printStackTrace();
          }
     }

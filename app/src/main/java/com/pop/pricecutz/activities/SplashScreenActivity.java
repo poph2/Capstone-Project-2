@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
+import com.facebook.stetho.Stetho;
 import com.pop.pricecutz.R;
 import com.pop.pricecutz.activities.login.LoginActivity;
 import com.pop.pricecutz.activities.main.MainActivity;
@@ -26,6 +27,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         mContext = getApplicationContext();
         FacebookSdk.sdkInitialize(getApplicationContext());
+
+        Stetho.initializeWithDefaults(this);
 
         new Handler().postDelayed(new Runnable() {
 

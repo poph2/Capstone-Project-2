@@ -32,20 +32,20 @@ import com.pop.pricecutz.activities.other.DiscountActivity;
 import com.pop.pricecutz.adapters.CompanyListAdapter;
 import com.pop.pricecutz.adapters.CompanyListAdapter2;
 import com.pop.pricecutz.adapters.DiscountListAdapter;
+import com.pop.pricecutz.adapters.DiscountListAdapter2;
 import com.pop.pricecutz.data.entries.CompanyEntry;
+import com.pop.pricecutz.data.entries.DiscountEntry;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class HomeFragment extends Fragment implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
-    DiscountListAdapter mDiscountListAdapter;
+//    DiscountListAdapter mDiscountListAdapter;
 
-//    private CompanyListAdapter2 adapter;
+    private DiscountListAdapter2 adapter;
 
-//    SimpleCursorAdapter mAdapter;
-
-    ArrayList<Discount> mDiscountArrayList;
+//    ArrayList<Discount> mDiscountArrayList;
 
     ListView listView;
 
@@ -70,20 +70,34 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 
         listView = (ListView) root.findViewById(R.id.fragment_home_listview);
 
-        mDiscountArrayList = Randomizer.getDiscounts(10);
+//        mDiscountArrayList = Randomizer.getDiscounts(10);
+//
+//        mDiscountListAdapter = new DiscountListAdapter(
+//                mContext,
+//                R.layout.fragment_home_list_items,
+//                R.id.fragment_home_list_item_imageview,
+//                R.id.fragment_home_list_item_imageview2,
+//                R.id.fragment_home_list_item_textview,
+//                R.id.fragment_home_list_item_textview2,
+//                mDiscountArrayList);
+//
+//        listView.setAdapter(mDiscountListAdapter);
+//
+//        listView.setOnItemClickListener(this);
 
-        mDiscountListAdapter = new DiscountListAdapter(
-                mContext,
+        adapter = new DiscountListAdapter2(mContext,
                 R.layout.fragment_home_list_items,
+                null,
+                new String[] {DiscountEntry.COLUMN_CODE, DiscountEntry.COLUMN_TITLE},
+                new int[] { R.id.fragment_home_list_item_textview, R.id.fragment_home_list_item_textview2 },
+                0,
                 R.id.fragment_home_list_item_imageview,
-                R.id.fragment_home_list_item_imageview2,
-                R.id.fragment_home_list_item_textview,
-                R.id.fragment_home_list_item_textview2,
-                mDiscountArrayList);
+                R.id.fragment_home_list_item_imageview2);
 
-        listView.setAdapter(mDiscountListAdapter);
+        listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(this);
+        getLoaderManager().initLoader(0, null, this);
+
 
 //        if(savedInstanceState == null) {
 //
@@ -136,50 +150,23 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
         startActivity(intent);
     }
 
-//    @Override
-//    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-//
-//        return new CursorLoader(mContext, CompanyEntry.CONTENT_URI,
-//                null, null, null, null);
-//    }
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-//    @Override
-//    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-//        //mAdapter.swapCursor(data);
-//        mCompanyArrayList = new ArrayList();
-//        while (data.moveToNext()) {
-//
-//            int id          = data.getInt(data.getColumnIndex(CompanyEntry.COLUMN_COY_ID));
-//            String name     = data.getString(data.getColumnIndex(CompanyEntry.COLUMN_NAME));
-//            String industry = data.getString(data.getColumnIndex(CompanyEntry.COLUMN_INDUSTRY));
-//            String imageURL = data.getString(data.getColumnIndex(CompanyEntry.COLUMN_IMAGE_URL));
-//
-//            Company company = new Company(id, name, industry, imageURL);
-//            mCompanyArrayList.add(company);
-//
-//            Log.d("HOMEFRAGMENT", new Gson().toJson(company));
-//        }
-//
-//        Toast.makeText(mContext, "Cursor row count - " + data.getCount(), Toast.LENGTH_LONG).show();
-//
-////        mCompanyListAdapter.clear();
-////        mCompanyListAdapter.addAll(mCompanyArrayList);
-//
-//        mCompanyListAdapter = new CompanyListAdapter(
-//                mContext,
-//                R.layout.fragment_home_list_items,
-//                R.id.fragment_home_list_item_imageview,
-//                R.id.fragment_home_list_item_textview,
-//                mCompanyArrayList);
-//
-//        listView.setAdapter(mCompanyListAdapter);
-//    }
-//
-//    @Override
-//    public void onLoaderReset(Loader<Cursor> loader) {
-//        //mAdapter.swapCursor(null);
-//        //adapter.swapCursor(null);
-//    }
+        return new CursorLoader(mContext, DiscountEntry.CONTENT_URI,
+                null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        adapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        //mAdapter.swapCursor(null);
+        adapter.swapCursor(null);
+    }
 
 //    private void refreshValuesFromContentProvider() {
 //        CursorLoader cursorLoader = new CursorLoader(mContext, CompanyEntry.CONTENT_URI,

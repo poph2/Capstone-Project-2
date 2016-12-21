@@ -17,7 +17,7 @@ public class Discount {
     int type;
     int imageIndex;
 
-    boolean savedByUser;
+//    boolean savedByUser;
 
 
     public static final int SALE_TYPE = 0;
@@ -36,7 +36,7 @@ public class Discount {
         Random r = new Random();
         imageIndex = r.nextInt(99);
 
-        savedByUser = true;
+//        savedByUser = true;
     }
 
     public long getId() {
@@ -106,11 +106,11 @@ public class Discount {
         this.imageIndex = imageIndex;
     }
 
-    public boolean isSavedByUser() {
-        return savedByUser;
-    }
-
-    public void setSavedByUser(boolean savedByUser) {
-        this.savedByUser = savedByUser;
-    }
+//    public boolean isSavedByUser() {
+//        return savedByUser;
+//    }
+//
+//    public void setSavedByUser(boolean savedByUser) {
+//        this.savedByUser = savedByUser;
+//    }
 }

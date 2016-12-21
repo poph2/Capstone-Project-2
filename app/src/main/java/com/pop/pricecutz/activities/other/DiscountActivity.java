@@ -48,12 +48,12 @@ public class DiscountActivity extends AppCompatActivity {
         titleTextView.setText(d.getTitle());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        if(d.isSavedByUser()) {
+//        if(d.isSavedByUser()) {
             fab.setImageResource(R.drawable.ic_delete_sweep_white_24dp);
-        }
-        else {
-            fab.setImageResource(R.drawable.ic_archive_white_24dp);
-        }
+//        }
+//        else {
+//            fab.setImageResource(R.drawable.ic_archive_white_24dp);
+//        }
     }
 
     private void setToolbar() {
