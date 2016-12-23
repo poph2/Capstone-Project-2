@@ -27,101 +27,101 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
  * DO NOT deploy this code unchanged as part of a real application to real users.
  */
 @Api(
-        name = "outletBeanApi",
+        name = "savedDiscountApi",
         version = "v1",
-        resource = "outletBean",
+        resource = "savedDiscount",
         namespace = @ApiNamespace(
                 ownerDomain = "backend.pricecutz.pop.com",
                 ownerName = "backend.pricecutz.pop.com",
                 packagePath = ""
         )
 )
-public class OutletBeanEndpoint {
+public class SavedDiscountEndpoint {
 
-    private static final Logger logger = Logger.getLogger(OutletBeanEndpoint.class.getName());
+    private static final Logger logger = Logger.getLogger(SavedDiscountEndpoint.class.getName());
 
     private static final int DEFAULT_LIST_LIMIT = 20;
 
     static {
         // Typically you would register this inside an OfyServive wrapper. See: https://code.google.com/p/objectify-appengine/wiki/BestPractices
-        ObjectifyService.register(OutletBean.class);
+        ObjectifyService.register(SavedDiscount.class);
     }
 
     /**
-     * Returns the {@link OutletBean} with the corresponding ID.
+     * Returns the {@link SavedDiscount} with the corresponding ID.
      *
      * @param id the ID of the entity to be retrieved
      * @return the entity with the corresponding ID
-     * @throws NotFoundException if there is no {@code OutletBean} with the provided ID.
+     * @throws NotFoundException if there is no {@code SavedDiscount} with the provided ID.
      */
     @ApiMethod(
             name = "get",
-            path = "outletBean/{id}",
+            path = "savedDiscount/{id}",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public OutletBean get(@Named("id") Long id) throws NotFoundException {
-        logger.info("Getting OutletBean with ID: " + id);
-        OutletBean outletBean = ofy().load().type(OutletBean.class).id(id).now();
-        if (outletBean == null) {
-            throw new NotFoundException("Could not find OutletBean with ID: " + id);
+    public SavedDiscount get(@Named("id") Long id) throws NotFoundException {
+        logger.info("Getting SavedDiscount with ID: " + id);
+        SavedDiscount savedDiscount = ofy().load().type(SavedDiscount.class).id(id).now();
+        if (savedDiscount == null) {
+            throw new NotFoundException("Could not find SavedDiscount with ID: " + id);
         }
-        return outletBean;
+        return savedDiscount;
     }
 
     /**
-     * Inserts a new {@code OutletBean}.
+     * Inserts a new {@code SavedDiscount}.
      */
     @ApiMethod(
             name = "insert",
-            path = "outletBean",
+            path = "savedDiscount",
             httpMethod = ApiMethod.HttpMethod.POST)
-    public OutletBean insert(OutletBean outletBean) {
+    public SavedDiscount insert(SavedDiscount savedDiscount) {
         // Typically in a RESTful API a POST does not have a known ID (assuming the ID is used in the resource path).
-        // You should validate that outletBean.id has not been set. If the ID type is not supported by the
+        // You should validate that savedDiscount.id has not been set. If the ID type is not supported by the
         // Objectify ID generator, e.g. long or String, then you should generate the unique ID yourself prior to saving.
         //
         // If your client provides the ID then you should probably use PUT instead.
-        ofy().save().entity(outletBean).now();
-        logger.info("Created OutletBean with ID: " + outletBean.getId());
+        ofy().save().entity(savedDiscount).now();
+        logger.info("Created SavedDiscount with ID: " + savedDiscount.getId());
 
-        return ofy().load().entity(outletBean).now();
+        return ofy().load().entity(savedDiscount).now();
     }
 
     /**
-     * Updates an existing {@code OutletBean}.
+     * Updates an existing {@code SavedDiscount}.
      *
-     * @param id         the ID of the entity to be updated
-     * @param outletBean the desired state of the entity
+     * @param id            the ID of the entity to be updated
+     * @param savedDiscount the desired state of the entity
      * @return the updated version of the entity
      * @throws NotFoundException if the {@code id} does not correspond to an existing
-     *                           {@code OutletBean}
+     *                           {@code SavedDiscount}
      */
     @ApiMethod(
             name = "update",
-            path = "outletBean/{id}",
+            path = "savedDiscount/{id}",
             httpMethod = ApiMethod.HttpMethod.PUT)
-    public OutletBean update(@Named("id") Long id, OutletBean outletBean) throws NotFoundException {
+    public SavedDiscount update(@Named("id") Long id, SavedDiscount savedDiscount) throws NotFoundException {
         // TODO: You should validate your ID parameter against your resource's ID here.
         checkExists(id);
-        ofy().save().entity(outletBean).now();
-        logger.info("Updated OutletBean: " + outletBean);
-        return ofy().load().entity(outletBean).now();
+        ofy().save().entity(savedDiscount).now();
+        logger.info("Updated SavedDiscount: " + savedDiscount);
+        return ofy().load().entity(savedDiscount).now();
     }
 
     /**
-     * Deletes the specified {@code OutletBean}.
+     * Deletes the specified {@code SavedDiscount}.
      *
      * @param id the ID of the entity to delete
      * @throws NotFoundException if the {@code id} does not correspond to an existing
-     *                           {@code OutletBean}
+     *                           {@code SavedDiscount}
      */
     @ApiMethod(
             name = "remove",
-            path = "outletBean/{id}",
+            path = "savedDiscount/{id}",
             httpMethod = ApiMethod.HttpMethod.DELETE)
     public void remove(@Named("id") Long id) throws NotFoundException {
         checkExists(id);
-        ofy().delete().type(OutletBean.class).id(id).now();
-        logger.info("Deleted OutletBean with ID: " + id);
+        ofy().delete().type(SavedDiscount.class).id(id).now();
+        logger.info("Deleted SavedDiscount with ID: " + id);
     }
 
     /**
@@ -133,27 +133,27 @@ public class OutletBeanEndpoint {
      */
     @ApiMethod(
             name = "list",
-            path = "outletBean",
+            path = "savedDiscount",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public CollectionResponse<OutletBean> list(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit) {
+    public CollectionResponse<SavedDiscount> list(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit) {
         limit = limit == null ? DEFAULT_LIST_LIMIT : limit;
-        Query<OutletBean> query = ofy().load().type(OutletBean.class).limit(limit);
+        Query<SavedDiscount> query = ofy().load().type(SavedDiscount.class).limit(limit);
         if (cursor != null) {
             query = query.startAt(Cursor.fromWebSafeString(cursor));
         }
-        QueryResultIterator<OutletBean> queryIterator = query.iterator();
-        List<OutletBean> outletBeanList = new ArrayList<OutletBean>(limit);
+        QueryResultIterator<SavedDiscount> queryIterator = query.iterator();
+        List<SavedDiscount> savedDiscountList = new ArrayList<SavedDiscount>(limit);
         while (queryIterator.hasNext()) {
-            outletBeanList.add(queryIterator.next());
+            savedDiscountList.add(queryIterator.next());
         }
-        return CollectionResponse.<OutletBean>builder().setItems(outletBeanList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
+        return CollectionResponse.<SavedDiscount>builder().setItems(savedDiscountList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
     }
 
     private void checkExists(Long id) throws NotFoundException {
         try {
-            ofy().load().type(OutletBean.class).id(id).safe();
+            ofy().load().type(SavedDiscount.class).id(id).safe();
         } catch (com.googlecode.objectify.NotFoundException e) {
-            throw new NotFoundException("Could not find OutletBean with ID: " + id);
+            throw new NotFoundException("Could not find SavedDiscount with ID: " + id);
         }
     }
 }

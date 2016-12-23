@@ -13,11 +13,13 @@
         <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
         <init-param>
             <param-name>services</param-name>
-            <param-value>com.pop.pricecutz.backend.MyEndpoint,
-                com.pop.pricecutz.backend.CompanyBeanEndpoint,
-                com.pop.pricecutz.backend.CategoryBeanEndpoint,
-                com.pop.pricecutz.backend.DiscountBeanEndpoint,
-                com.pop.pricecutz.backend.OutletBeanEndpoint</param-value>
+            <param-value>com.pop.pricecutz.backend.CategoryEndpoint,
+                com.pop.pricecutz.backend.CompanyEndpoint,
+                com.pop.pricecutz.backend.DiscountEndpoint,
+                com.pop.pricecutz.backend.OutletEndpoint,
+                com.pop.pricecutz.backend.FBAccountEndpoint,
+                com.pop.pricecutz.backend.SavedDiscountEndpoint,
+                com.pop.pricecutz.backend.UserEndpoint, com.pop.pricecutz.backend.AEndpoint</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

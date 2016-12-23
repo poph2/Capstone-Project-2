@@ -7,36 +7,45 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.pop.pricecutz.backend.companyApi.model.Company;
+import com.pop.pricecutz.backend.fBAccountApi.model.FBAccount;
 import com.pop.pricecutz.data.PriceCutzContract;
 
 /**
- * Created by Pop H2 on 9/6/2016.
+ * Created by Pop H2 on 12/22/2016.
  * Pop Inc
  * Lagos Nigeria
  */
-public class CompanyEntry implements BaseColumns {
 
-    public static final String PATH         = "company";
-    public static final String TABLE_NAME   = "company";
+public class FBAccountEntry implements BaseColumns {
+
+    public static final String PATH         = "fb_account";
+    public static final String TABLE_NAME   = "fb_account";
 
     public static final Uri CONTENT_URI     = PriceCutzContract.BASE_CONTENT_URI.buildUpon().appendPath(PATH).build();
 
     public static final String CONTENT_TYPE         = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
     public static final String CONTENT_ITEM_TYPE    = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
 
-    public static final String COLUMN_NAME          = "coy_name";
-    public static final String COLUMN_INDUSTRY      = "coy_industry";
-    public static final String COLUMN_IMAGE_URL     = "coy_image_url";
-    public static final String COLUMN_CREATED_TIME  = "coy_created_time";
-    public static final String COLUMN_UPDATED_TIME  = "coy_updated_time";
+    public static final String COLUMN_USER_ID       = "user_id";
+    public static final String COLUMN_FB_USER_ID    = "fbacct_fb_id";
+    public static final String COLUMN_FIRST_NAME    = "fbacct_first_name";
+    public static final String COLUMN_MIDDLE_NAME   = "fbacct_middle_name";
+    public static final String COLUMN_LAST_NAME     = "fbacct_last_name";
+    public static final String COLUMN_NAME          = "fbacct_name";
+    public static final String COLUMN_LINK_URL      = "fbacct_link_uri";
+    public static final String COLUMN_CREATED_TIME  = "fbacct_created_time";
+    public static final String COLUMN_UPDATED_TIME  = "fbacct_updated_time";
 
     public static String createTableSQL() {
         String createTableSQL = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID                 + " INTEGER PRIMARY KEY," +
+                COLUMN_USER_ID      + " INTEGER NOT NULL, " +
+                COLUMN_FB_USER_ID   + " INTEGER NOT NULL, " +
+                COLUMN_FIRST_NAME   + " TEXT NOT NULL, " +
+                COLUMN_MIDDLE_NAME  + " TEXT NOT NULL, " +
+                COLUMN_LAST_NAME    + " TEXT NOT NULL, " +
                 COLUMN_NAME         + " TEXT NOT NULL, " +
-                COLUMN_INDUSTRY     + " TEXT NOT NULL, " +
-                COLUMN_IMAGE_URL    + " TEXT NOT NULL, " +
+                COLUMN_LINK_URL     + " TEXT NOT NULL, " +
                 COLUMN_CREATED_TIME + " INTEGER NOT NULL, " +
                 COLUMN_UPDATED_TIME + " INTEGER NOT NULL " +
                 " );";
@@ -44,15 +53,19 @@ public class CompanyEntry implements BaseColumns {
         return createTableSQL;
     }
 
-    public static ContentValues getContentValues(Company c) {
+    public static ContentValues getContentValues(FBAccount o) {
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(_ID,                  c.getId());
-        contentValues.put(COLUMN_NAME,          c.getCoyName());
-        contentValues.put(COLUMN_INDUSTRY,      c.getCoyIndustry());
-        contentValues.put(COLUMN_IMAGE_URL,     c.getCoyImageUrl());
-        contentValues.put(COLUMN_CREATED_TIME,  c.getCoyCreatedTime());
-        contentValues.put(COLUMN_UPDATED_TIME,  c.getCoyUpdatedTime());
+        contentValues.put(_ID,                  o.getId());
+        contentValues.put(COLUMN_USER_ID,       o.getUserId());
+        contentValues.put(COLUMN_FB_USER_ID,    o.getFbacctFbId());
+        contentValues.put(COLUMN_FIRST_NAME,    o.getFbacctFirstName());
+        contentValues.put(COLUMN_MIDDLE_NAME,   o.getFbacctMiddleName());
+        contentValues.put(COLUMN_LAST_NAME,     o.getFbacctLastName());
+        contentValues.put(COLUMN_NAME,          o.getFbacctName());
+        contentValues.put(COLUMN_LINK_URL,      o.getFbacctLinkUri());
+        contentValues.put(COLUMN_CREATED_TIME,  o.getFbacctCreatedTime());
+        contentValues.put(COLUMN_UPDATED_TIME,  o.getFbacctUpdatedTime());
 
         return contentValues;
     }

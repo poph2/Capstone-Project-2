@@ -7,25 +7,21 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.pop.pricecutz.Company;
 import com.pop.pricecutz.R;
-import com.pop.pricecutz.backend.companyBeanApi.CompanyBeanApi;
-import com.pop.pricecutz.backend.companyBeanApi.model.CollectionResponseCompanyBean;
-import com.pop.pricecutz.backend.companyBeanApi.model.CompanyBean;
-import com.pop.pricecutz.backend.discountBeanApi.DiscountBeanApi;
-import com.pop.pricecutz.backend.discountBeanApi.model.CollectionResponseDiscountBean;
-import com.pop.pricecutz.backend.discountBeanApi.model.DiscountBean;
+import com.pop.pricecutz.backend.companyApi.CompanyApi;
+import com.pop.pricecutz.backend.companyApi.model.CollectionResponseCompany;
+import com.pop.pricecutz.backend.companyApi.model.Company;
+import com.pop.pricecutz.backend.discountApi.DiscountApi;
+import com.pop.pricecutz.backend.discountApi.model.CollectionResponseDiscount;
+import com.pop.pricecutz.backend.discountApi.model.Discount;
 import com.pop.pricecutz.data.entries.CompanyEntry;
 import com.pop.pricecutz.data.entries.DiscountEntry;
 import com.pop.pricecutz.utils.BeanEntryConverter;
@@ -58,7 +54,7 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
 
         syncCompany();
-//        syncDiscount();
+        syncDiscount();
 
     }
 
@@ -138,38 +134,39 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     public void syncCompany() {
-        CompanyBeanApi.Builder builder = new CompanyBeanApi.Builder(AndroidHttp.newCompatibleTransport(),
+        CompanyApi.Builder builder = new CompanyApi.Builder(AndroidHttp.newCompatibleTransport(),
                 new AndroidJsonFactory(), null)
                 .setRootUrl("https://price-cutz.appspot.com/_ah/api/");
         // end options for devappserver
 
-        CompanyBeanApi companyBeanApi = builder.build();
+        CompanyApi companyApi = builder.build();
 
         Log.d(LOG_TAG, "Sync Started");
 
         try {
-            CompanyBeanApi.Get get = companyBeanApi.get(1l);
+            CompanyApi.Get get = companyApi.get(1l);
 
-            CompanyBean companyBean = get.execute();
+            Company company = get.execute();
 
-            Log.d(LOG_TAG, "companyBean - " + companyBean.getName());
+            Log.d(LOG_TAG, "company - " + company.getCoyName());
 
 
-            CompanyBeanApi.List companyBean_List = companyBeanApi.list(100);
-            CollectionResponseCompanyBean coyCollection = companyBean_List.execute();
+//            CompanyApi.List company_List = companyApi.list(100);
+            CompanyApi.List company_List = companyApi.list();
+            CollectionResponseCompany coyCollection = company_List.execute();
 
-            List<CompanyBean> companyBeanList = coyCollection.getItems();
+            List<Company> companyList = coyCollection.getItems();
 
 //             Log.d(LOG_TAG, "dbCollection - " + dbCollection.getCode());
 
-            ContentValues contentValuesArr[] = new ContentValues[companyBeanList.size()];
+            ContentValues contentValuesArr[] = new ContentValues[companyList.size()];
 
-            for(int i = 0; i < companyBeanList.size(); i++) {
-                Log.d(LOG_TAG, i + " - " + companyBeanList.get(i).getName());
+            for(int i = 0; i < companyList.size(); i++) {
+                Log.d(LOG_TAG, i + " - " + companyList.get(i).getCoyName());
 
-                companyBean = companyBeanList.get(i);
+                company = companyList.get(i);
 
-                ContentValues contentValues = BeanEntryConverter.convertToContentValues(companyBean);
+                ContentValues contentValues = BeanEntryConverter.convertToContentValues(company);
 
                 contentValuesArr[i] = contentValues;
 
@@ -189,38 +186,39 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     public void syncDiscount() {
-        DiscountBeanApi.Builder builder = new DiscountBeanApi.Builder(AndroidHttp.newCompatibleTransport(),
+        DiscountApi.Builder builder = new DiscountApi.Builder(AndroidHttp.newCompatibleTransport(),
                 new AndroidJsonFactory(), null)
                 .setRootUrl("https://price-cutz.appspot.com/_ah/api/");
         // end options for devappserver
 
-        DiscountBeanApi discountBeanApi = builder.build();
+        DiscountApi discountApi = builder.build();
 
         Log.d(LOG_TAG, "Sync Started");
 
         try {
-            DiscountBeanApi.Get discountBeanGet = discountBeanApi.get(1l);
+            DiscountApi.Get discountGet = discountApi.get(1l);
 
-            DiscountBean discountBean = discountBeanGet.execute();
+            Discount discount = discountGet.execute();
 
-            Log.d(LOG_TAG, "discountBean - " + discountBean.getCode());
+            Log.d(LOG_TAG, "discount - " + discount.getDiscCode());
 
 
-            DiscountBeanApi.List discountBean_List = discountBeanApi.list(100);
-            CollectionResponseDiscountBean dbCollection = discountBean_List.execute();
+//            DiscountApi.List discount_List = discountApi.list(100);
+            DiscountApi.List discount_List = discountApi.list();
+            CollectionResponseDiscount dbCollection = discount_List.execute();
 
-            List<DiscountBean> discountBeanList = dbCollection.getItems();
+            List<Discount> discountList = dbCollection.getItems();
 
 //             Log.d(LOG_TAG, "dbCollection - " + dbCollection.getCode());
 
-            ContentValues contentValuesArr[] = new ContentValues[discountBeanList.size()];
+            ContentValues contentValuesArr[] = new ContentValues[discountList.size()];
 
-            for(int i = 0; i < discountBeanList.size(); i++) {
-                Log.d(LOG_TAG, i + " - " + discountBeanList.get(i).getCode());
+            for(int i = 0; i < discountList.size(); i++) {
+                Log.d(LOG_TAG, i + " - " + discountList.get(i).getDiscCode());
 
-                discountBean = discountBeanList.get(i);
+                discount = discountList.get(i);
 
-                ContentValues contentValues = BeanEntryConverter.convertToContentValues(discountBean);
+                ContentValues contentValues = BeanEntryConverter.convertToContentValues(discount);
 
                 contentValuesArr[i] = contentValues;
 

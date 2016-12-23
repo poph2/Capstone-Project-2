@@ -7,36 +7,37 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.pop.pricecutz.backend.companyApi.model.Company;
+import com.pop.pricecutz.backend.categoryApi.model.Category;
+import com.pop.pricecutz.backend.savedDiscountApi.model.SavedDiscount;
 import com.pop.pricecutz.data.PriceCutzContract;
 
 /**
- * Created by Pop H2 on 9/6/2016.
+ * Created by Pop H2 on 12/22/2016.
  * Pop Inc
  * Lagos Nigeria
  */
-public class CompanyEntry implements BaseColumns {
 
-    public static final String PATH         = "company";
-    public static final String TABLE_NAME   = "company";
+public class SavedDiscountEntry implements BaseColumns {
+
+    public static final String PATH         = "saved_discount";
+    public static final String TABLE_NAME   = "saved_discount";
 
     public static final Uri CONTENT_URI     = PriceCutzContract.BASE_CONTENT_URI.buildUpon().appendPath(PATH).build();
 
     public static final String CONTENT_TYPE         = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
     public static final String CONTENT_ITEM_TYPE    = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
 
-    public static final String COLUMN_NAME          = "coy_name";
-    public static final String COLUMN_INDUSTRY      = "coy_industry";
-    public static final String COLUMN_IMAGE_URL     = "coy_image_url";
-    public static final String COLUMN_CREATED_TIME  = "coy_created_time";
-    public static final String COLUMN_UPDATED_TIME  = "coy_updated_time";
+    public static final String COLUMN_USER_ID       = "user_id";
+    public static final String COLUMN_DISCOUNT_ID   = "discount_id";
+    public static final String COLUMN_CREATED_TIME  = "sdisc_created_time";
+    public static final String COLUMN_UPDATED_TIME  = "sdisc_updated_time";
+
 
     public static String createTableSQL() {
         String createTableSQL = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID                 + " INTEGER PRIMARY KEY," +
-                COLUMN_NAME         + " TEXT NOT NULL, " +
-                COLUMN_INDUSTRY     + " TEXT NOT NULL, " +
-                COLUMN_IMAGE_URL    + " TEXT NOT NULL, " +
+                COLUMN_USER_ID      + " INTEGER NOT NULL, " +
+                COLUMN_DISCOUNT_ID  + " INTEGER NOT NULL, " +
                 COLUMN_CREATED_TIME + " INTEGER NOT NULL, " +
                 COLUMN_UPDATED_TIME + " INTEGER NOT NULL " +
                 " );";
@@ -44,15 +45,14 @@ public class CompanyEntry implements BaseColumns {
         return createTableSQL;
     }
 
-    public static ContentValues getContentValues(Company c) {
+    public static ContentValues getContentValues(SavedDiscount d) {
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(_ID,                  c.getId());
-        contentValues.put(COLUMN_NAME,          c.getCoyName());
-        contentValues.put(COLUMN_INDUSTRY,      c.getCoyIndustry());
-        contentValues.put(COLUMN_IMAGE_URL,     c.getCoyImageUrl());
-        contentValues.put(COLUMN_CREATED_TIME,  c.getCoyCreatedTime());
-        contentValues.put(COLUMN_UPDATED_TIME,  c.getCoyUpdatedTime());
+        contentValues.put(_ID,                  d.getId());
+        contentValues.put(COLUMN_USER_ID,       d.getUserId());
+        contentValues.put(COLUMN_DISCOUNT_ID,   d.getDiscountId());
+        contentValues.put(COLUMN_CREATED_TIME,  d.getSdiscCreatedTime());
+        contentValues.put(COLUMN_UPDATED_TIME,  d.getSdiscUpdatedTime());
 
         return contentValues;
     }

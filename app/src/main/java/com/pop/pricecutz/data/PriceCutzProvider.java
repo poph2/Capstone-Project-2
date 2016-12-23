@@ -8,11 +8,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.pop.pricecutz.Company;
-import com.pop.pricecutz.activities.main.fragments.HomeFragment;
 import com.pop.pricecutz.data.entries.CategoryEntry;
 import com.pop.pricecutz.data.entries.CompanyEntry;
 import com.pop.pricecutz.data.entries.DiscountEntry;

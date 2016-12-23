@@ -7,7 +7,6 @@ package com.pop.pricecutz.activities.main.fragments;
  */
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,12 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.pop.pricecutz.Company;
 import com.pop.pricecutz.R;
-import com.pop.pricecutz.Randomizer;
-import com.pop.pricecutz.activities.company.CompanyActivity;
-import com.pop.pricecutz.adapters.CompanyListAdapter;
 import com.pop.pricecutz.adapters.CompanyListAdapter2;
 import com.pop.pricecutz.data.entries.CompanyEntry;
 
@@ -39,12 +33,12 @@ public class FavoriteFragment extends Fragment implements AdapterView.OnItemClic
 
     private CompanyListAdapter2 adapter;
 
-    ArrayList<Company> mCompanyArrayList;
+//    ArrayList<Company> mCompanyArrayList;
 
     Context mContext;
 
     public FavoriteFragment() {
-        mCompanyArrayList = Randomizer.getCompanies(10);
+//        mCompanyArrayList = Randomizer.getCompanies(10);
     }
 
     @Override
@@ -54,15 +48,15 @@ public class FavoriteFragment extends Fragment implements AdapterView.OnItemClic
         mContext = getContext();
 
         if(savedInstanceState == null) {
-            mCompanyArrayList = Randomizer.getCompanies(10);
+//            mCompanyArrayList = Randomizer.getCompanies(10);
         }
         else {
             Gson gson = new Gson();
 
             String mCompanyArrayListJsonStr = savedInstanceState.getString("CompanyArrayList");
 
-            Type arrayType = new TypeToken<ArrayList<Company>>(){}.getType();
-            mCompanyArrayList = (ArrayList<Company>) gson.fromJson(mCompanyArrayListJsonStr, arrayType);
+//            Type arrayType = new TypeToken<ArrayList<Company>>(){}.getType();
+//            mCompanyArrayList = (ArrayList<Company>) gson.fromJson(mCompanyArrayListJsonStr, arrayType);
         }
 
     }

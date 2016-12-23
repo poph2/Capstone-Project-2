@@ -27,101 +27,101 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
  * DO NOT deploy this code unchanged as part of a real application to real users.
  */
 @Api(
-        name = "discountBeanApi",
+        name = "companyApi",
         version = "v1",
-        resource = "discountBean",
+        resource = "company",
         namespace = @ApiNamespace(
                 ownerDomain = "backend.pricecutz.pop.com",
                 ownerName = "backend.pricecutz.pop.com",
                 packagePath = ""
         )
 )
-public class DiscountBeanEndpoint {
+public class CompanyEndpoint {
 
-    private static final Logger logger = Logger.getLogger(DiscountBeanEndpoint.class.getName());
+    private static final Logger logger = Logger.getLogger(CompanyEndpoint.class.getName());
 
     private static final int DEFAULT_LIST_LIMIT = 20;
 
     static {
         // Typically you would register this inside an OfyServive wrapper. See: https://code.google.com/p/objectify-appengine/wiki/BestPractices
-        ObjectifyService.register(DiscountBean.class);
+        ObjectifyService.register(Company.class);
     }
 
     /**
-     * Returns the {@link DiscountBean} with the corresponding ID.
+     * Returns the {@link Company} with the corresponding ID.
      *
      * @param id the ID of the entity to be retrieved
      * @return the entity with the corresponding ID
-     * @throws NotFoundException if there is no {@code DiscountBean} with the provided ID.
+     * @throws NotFoundException if there is no {@code Company} with the provided ID.
      */
     @ApiMethod(
             name = "get",
-            path = "discountBean/{id}",
+            path = "company/{id}",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public DiscountBean get(@Named("id") Long id) throws NotFoundException {
-        logger.info("Getting DiscountBean with ID: " + id);
-        DiscountBean discountBean = ofy().load().type(DiscountBean.class).id(id).now();
-        if (discountBean == null) {
-            throw new NotFoundException("Could not find DiscountBean with ID: " + id);
+    public Company get(@Named("id") Long id) throws NotFoundException {
+        logger.info("Getting Company with ID: " + id);
+        Company company = ofy().load().type(Company.class).id(id).now();
+        if (company == null) {
+            throw new NotFoundException("Could not find Company with ID: " + id);
         }
-        return discountBean;
+        return company;
     }
 
     /**
-     * Inserts a new {@code DiscountBean}.
+     * Inserts a new {@code Company}.
      */
     @ApiMethod(
             name = "insert",
-            path = "discountBean",
+            path = "company",
             httpMethod = ApiMethod.HttpMethod.POST)
-    public DiscountBean insert(DiscountBean discountBean) {
+    public Company insert(Company company) {
         // Typically in a RESTful API a POST does not have a known ID (assuming the ID is used in the resource path).
-        // You should validate that discountBean.id has not been set. If the ID type is not supported by the
+        // You should validate that company.id has not been set. If the ID type is not supported by the
         // Objectify ID generator, e.g. long or String, then you should generate the unique ID yourself prior to saving.
         //
         // If your client provides the ID then you should probably use PUT instead.
-        ofy().save().entity(discountBean).now();
-        logger.info("Created DiscountBean with ID: " + discountBean.getId());
+        ofy().save().entity(company).now();
+        logger.info("Created Company with ID: " + company.getId());
 
-        return ofy().load().entity(discountBean).now();
+        return ofy().load().entity(company).now();
     }
 
     /**
-     * Updates an existing {@code DiscountBean}.
+     * Updates an existing {@code Company}.
      *
-     * @param id           the ID of the entity to be updated
-     * @param discountBean the desired state of the entity
+     * @param id      the ID of the entity to be updated
+     * @param company the desired state of the entity
      * @return the updated version of the entity
      * @throws NotFoundException if the {@code id} does not correspond to an existing
-     *                           {@code DiscountBean}
+     *                           {@code Company}
      */
     @ApiMethod(
             name = "update",
-            path = "discountBean/{id}",
+            path = "company/{id}",
             httpMethod = ApiMethod.HttpMethod.PUT)
-    public DiscountBean update(@Named("id") Long id, DiscountBean discountBean) throws NotFoundException {
+    public Company update(@Named("id") Long id, Company company) throws NotFoundException {
         // TODO: You should validate your ID parameter against your resource's ID here.
         checkExists(id);
-        ofy().save().entity(discountBean).now();
-        logger.info("Updated DiscountBean: " + discountBean);
-        return ofy().load().entity(discountBean).now();
+        ofy().save().entity(company).now();
+        logger.info("Updated Company: " + company);
+        return ofy().load().entity(company).now();
     }
 
     /**
-     * Deletes the specified {@code DiscountBean}.
+     * Deletes the specified {@code Company}.
      *
      * @param id the ID of the entity to delete
      * @throws NotFoundException if the {@code id} does not correspond to an existing
-     *                           {@code DiscountBean}
+     *                           {@code Company}
      */
     @ApiMethod(
             name = "remove",
-            path = "discountBean/{id}",
+            path = "company/{id}",
             httpMethod = ApiMethod.HttpMethod.DELETE)
     public void remove(@Named("id") Long id) throws NotFoundException {
         checkExists(id);
-        ofy().delete().type(DiscountBean.class).id(id).now();
-        logger.info("Deleted DiscountBean with ID: " + id);
+        ofy().delete().type(Company.class).id(id).now();
+        logger.info("Deleted Company with ID: " + id);
     }
 
     /**
@@ -133,27 +133,27 @@ public class DiscountBeanEndpoint {
      */
     @ApiMethod(
             name = "list",
-            path = "discountBean",
+            path = "company",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public CollectionResponse<DiscountBean> list(@Nullable @Named("cursor") String cursor, @Named("limit") Integer limit) {
+    public CollectionResponse<Company> list(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit) {
         limit = limit == null ? DEFAULT_LIST_LIMIT : limit;
-        Query<DiscountBean> query = ofy().load().type(DiscountBean.class).limit(limit);
+        Query<Company> query = ofy().load().type(Company.class).limit(limit);
         if (cursor != null) {
             query = query.startAt(Cursor.fromWebSafeString(cursor));
         }
-        QueryResultIterator<DiscountBean> queryIterator = query.iterator();
-        List<DiscountBean> discountBeanList = new ArrayList<DiscountBean>(limit);
+        QueryResultIterator<Company> queryIterator = query.iterator();
+        List<Company> companyList = new ArrayList<Company>(limit);
         while (queryIterator.hasNext()) {
-            discountBeanList.add(queryIterator.next());
+            companyList.add(queryIterator.next());
         }
-        return CollectionResponse.<DiscountBean>builder().setItems(discountBeanList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
+        return CollectionResponse.<Company>builder().setItems(companyList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
     }
 
     private void checkExists(Long id) throws NotFoundException {
         try {
-            ofy().load().type(DiscountBean.class).id(id).safe();
+            ofy().load().type(Company.class).id(id).safe();
         } catch (com.googlecode.objectify.NotFoundException e) {
-            throw new NotFoundException("Could not find DiscountBean with ID: " + id);
+            throw new NotFoundException("Could not find Company with ID: " + id);
         }
     }
 }

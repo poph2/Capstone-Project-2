@@ -14,30 +14,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.pop.pricecutz.Company;
-import com.pop.pricecutz.Discount;
 import com.pop.pricecutz.R;
-import com.pop.pricecutz.Randomizer;
 import com.pop.pricecutz.activities.other.DiscountActivity;
-import com.pop.pricecutz.adapters.CompanyListAdapter;
-import com.pop.pricecutz.adapters.CompanyListAdapter2;
-import com.pop.pricecutz.adapters.DiscountListAdapter;
 import com.pop.pricecutz.adapters.DiscountListAdapter2;
-import com.pop.pricecutz.data.entries.CompanyEntry;
 import com.pop.pricecutz.data.entries.DiscountEntry;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -72,21 +58,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 
         listView = (ListView) root.findViewById(R.id.fragment_home_listview);
 
-//        mDiscountArrayList = Randomizer.getDiscounts(10);
-//
-//        mDiscountListAdapter = new DiscountListAdapter(
-//                mContext,
-//                R.layout.fragment_home_list_items,
-//                R.id.fragment_home_list_item_imageview,
-//                R.id.fragment_home_list_item_imageview2,
-//                R.id.fragment_home_list_item_textview,
-//                R.id.fragment_home_list_item_textview2,
-//                mDiscountArrayList);
-//
-//        listView.setAdapter(mDiscountListAdapter);
-//
-//        listView.setOnItemClickListener(this);
-
         adapter = new DiscountListAdapter2(mContext,
                 R.layout.fragment_home_list_items,
                 null,
@@ -99,6 +70,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
         listView.setAdapter(adapter);
 
         getLoaderManager().initLoader(0, null, this);
+
+        listView.setOnItemClickListener(this);
+
+        return root;
 
 
 //        if(savedInstanceState == null) {
@@ -130,20 +105,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 //
 //            listView.setAdapter(mCompanyListAdapter);
 //        }
-
-//        getLoaderManager().initLoader(0, null, this);
-
-//        listView.setOnItemClickListener(this);
-
-        return root;
     }
 
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
-//        outState.putString("CompanyArrayList", new Gson().toJson(mCompanyArrayList));
     }
 
     @Override
@@ -154,24 +121,23 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
-        Log.d(LOG_TAG, "onCreateLoader");
-
-        return new CursorLoader(mContext, DiscountEntry.CONTENT_URI_WITH_COMPANY,
-                null, null, null, null);
+        return new CursorLoader(
+                mContext,
+                DiscountEntry.CONTENT_URI_WITH_COMPANY,
+                null,
+                null,
+                null,
+                null
+        );
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-
-
         adapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        //mAdapter.swapCursor(null);
         adapter.swapCursor(null);
     }
 

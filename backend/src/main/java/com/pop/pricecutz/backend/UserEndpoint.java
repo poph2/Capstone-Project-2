@@ -27,101 +27,101 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
  * DO NOT deploy this code unchanged as part of a real application to real users.
  */
 @Api(
-        name = "companyBeanApi",
+        name = "userApi",
         version = "v1",
-        resource = "companyBean",
+        resource = "user",
         namespace = @ApiNamespace(
                 ownerDomain = "backend.pricecutz.pop.com",
                 ownerName = "backend.pricecutz.pop.com",
                 packagePath = ""
         )
 )
-public class CompanyBeanEndpoint {
+public class UserEndpoint {
 
-    private static final Logger logger = Logger.getLogger(CompanyBeanEndpoint.class.getName());
+    private static final Logger logger = Logger.getLogger(UserEndpoint.class.getName());
 
     private static final int DEFAULT_LIST_LIMIT = 20;
 
     static {
         // Typically you would register this inside an OfyServive wrapper. See: https://code.google.com/p/objectify-appengine/wiki/BestPractices
-        ObjectifyService.register(CompanyBean.class);
+        ObjectifyService.register(User.class);
     }
 
     /**
-     * Returns the {@link CompanyBean} with the corresponding ID.
+     * Returns the {@link User} with the corresponding ID.
      *
      * @param id the ID of the entity to be retrieved
      * @return the entity with the corresponding ID
-     * @throws NotFoundException if there is no {@code CompanyBean} with the provided ID.
+     * @throws NotFoundException if there is no {@code User} with the provided ID.
      */
     @ApiMethod(
             name = "get",
-            path = "companyBean/{id}",
+            path = "user/{id}",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public CompanyBean get(@Named("id") Long id) throws NotFoundException {
-        logger.info("Getting CompanyBean with ID: " + id);
-        CompanyBean companyBean = ofy().load().type(CompanyBean.class).id(id).now();
-        if (companyBean == null) {
-            throw new NotFoundException("Could not find CompanyBean with ID: " + id);
+    public User get(@Named("id") Long id) throws NotFoundException {
+        logger.info("Getting User with ID: " + id);
+        User user = ofy().load().type(User.class).id(id).now();
+        if (user == null) {
+            throw new NotFoundException("Could not find User with ID: " + id);
         }
-        return companyBean;
+        return user;
     }
 
     /**
-     * Inserts a new {@code CompanyBean}.
+     * Inserts a new {@code User}.
      */
     @ApiMethod(
             name = "insert",
-            path = "companyBean",
+            path = "user",
             httpMethod = ApiMethod.HttpMethod.POST)
-    public CompanyBean insert(CompanyBean companyBean) {
+    public User insert(User user) {
         // Typically in a RESTful API a POST does not have a known ID (assuming the ID is used in the resource path).
-        // You should validate that companyBean.id has not been set. If the ID type is not supported by the
+        // You should validate that user.id has not been set. If the ID type is not supported by the
         // Objectify ID generator, e.g. long or String, then you should generate the unique ID yourself prior to saving.
         //
         // If your client provides the ID then you should probably use PUT instead.
-        ofy().save().entity(companyBean).now();
-        logger.info("Created CompanyBean with ID: " + companyBean.getId());
+        ofy().save().entity(user).now();
+        logger.info("Created User with ID: " + user.getId());
 
-        return ofy().load().entity(companyBean).now();
+        return ofy().load().entity(user).now();
     }
 
     /**
-     * Updates an existing {@code CompanyBean}.
+     * Updates an existing {@code User}.
      *
-     * @param id          the ID of the entity to be updated
-     * @param companyBean the desired state of the entity
+     * @param id   the ID of the entity to be updated
+     * @param user the desired state of the entity
      * @return the updated version of the entity
      * @throws NotFoundException if the {@code id} does not correspond to an existing
-     *                           {@code CompanyBean}
+     *                           {@code User}
      */
     @ApiMethod(
             name = "update",
-            path = "companyBean/{id}",
+            path = "user/{id}",
             httpMethod = ApiMethod.HttpMethod.PUT)
-    public CompanyBean update(@Named("id") Long id, CompanyBean companyBean) throws NotFoundException {
+    public User update(@Named("id") Long id, User user) throws NotFoundException {
         // TODO: You should validate your ID parameter against your resource's ID here.
         checkExists(id);
-        ofy().save().entity(companyBean).now();
-        logger.info("Updated CompanyBean: " + companyBean);
-        return ofy().load().entity(companyBean).now();
+        ofy().save().entity(user).now();
+        logger.info("Updated User: " + user);
+        return ofy().load().entity(user).now();
     }
 
     /**
-     * Deletes the specified {@code CompanyBean}.
+     * Deletes the specified {@code User}.
      *
      * @param id the ID of the entity to delete
      * @throws NotFoundException if the {@code id} does not correspond to an existing
-     *                           {@code CompanyBean}
+     *                           {@code User}
      */
     @ApiMethod(
             name = "remove",
-            path = "companyBean/{id}",
+            path = "user/{id}",
             httpMethod = ApiMethod.HttpMethod.DELETE)
     public void remove(@Named("id") Long id) throws NotFoundException {
         checkExists(id);
-        ofy().delete().type(CompanyBean.class).id(id).now();
-        logger.info("Deleted CompanyBean with ID: " + id);
+        ofy().delete().type(User.class).id(id).now();
+        logger.info("Deleted User with ID: " + id);
     }
 
     /**
@@ -133,27 +133,27 @@ public class CompanyBeanEndpoint {
      */
     @ApiMethod(
             name = "list",
-            path = "companyBean",
+            path = "user",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public CollectionResponse<CompanyBean> list(@Nullable @Named("cursor") String cursor, @Named("limit") Integer limit) {
+    public CollectionResponse<User> list(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit) {
         limit = limit == null ? DEFAULT_LIST_LIMIT : limit;
-        Query<CompanyBean> query = ofy().load().type(CompanyBean.class).limit(limit);
+        Query<User> query = ofy().load().type(User.class).limit(limit);
         if (cursor != null) {
             query = query.startAt(Cursor.fromWebSafeString(cursor));
         }
-        QueryResultIterator<CompanyBean> queryIterator = query.iterator();
-        List<CompanyBean> companyBeanList = new ArrayList<CompanyBean>(limit);
+        QueryResultIterator<User> queryIterator = query.iterator();
+        List<User> userList = new ArrayList<User>(limit);
         while (queryIterator.hasNext()) {
-            companyBeanList.add(queryIterator.next());
+            userList.add(queryIterator.next());
         }
-        return CollectionResponse.<CompanyBean>builder().setItems(companyBeanList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
+        return CollectionResponse.<User>builder().setItems(userList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
     }
 
     private void checkExists(Long id) throws NotFoundException {
         try {
-            ofy().load().type(CompanyBean.class).id(id).safe();
+            ofy().load().type(User.class).id(id).safe();
         } catch (com.googlecode.objectify.NotFoundException e) {
-            throw new NotFoundException("Could not find CompanyBean with ID: " + id);
+            throw new NotFoundException("Could not find User with ID: " + id);
         }
     }
 }

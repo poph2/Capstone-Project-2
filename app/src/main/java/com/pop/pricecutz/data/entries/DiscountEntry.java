@@ -7,8 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.pop.pricecutz.Company;
-import com.pop.pricecutz.Discount;
+import com.pop.pricecutz.backend.discountApi.model.Discount;
 import com.pop.pricecutz.data.PriceCutzContract;
 
 /**
@@ -32,30 +31,26 @@ public class DiscountEntry implements BaseColumns {
     public static final String CONTENT_TYPE         = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
     public static final String CONTENT_ITEM_TYPE    = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
 
-//    public static final String COLUMN_DISCOUNT_ID   = "discount_id";
-    public static final String COLUMN_CODE          = "code";
-    public static final String COLUMN_TITLE         = "title";
-    public static final String COLUMN_DESCRIPTION   = "description";
+    public static final String COLUMN_CODE          = "disc_code";
+    public static final String COLUMN_TITLE         = "disc_title";
+    public static final String COLUMN_DESCRIPTION   = "disc_description";
     public static final String COLUMN_COY_ID        = "coy_id";
-    public static final String COLUMN_TYPE          = "type";
-    public static final String COLUMN_IMAGE_INDEX   = "image_index";
-//    public static final String COLUMN_SAVED_BY_USER = "saved_by_user";
-
-//    public static Uri buildUri(long id) {
-//        return ContentUris.withAppendedId(CONTENT_URI, id);
-//    }
+    public static final String COLUMN_TYPE          = "disc_type";
+    public static final String COLUMN_IMAGE_INDEX   = "disc_image_index";
+    public static final String COLUMN_CREATED_TIME  = "disc_created_time";
+    public static final String COLUMN_UPDATED_TIME  = "disc_updated_time";
 
     public static String createTableSQL() {
         String createTableSQL = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID                 + " INTEGER PRIMARY KEY," +
-//                COLUMN_DISCOUNT_ID  + " INTEGER UNIQUE NOT NULL, " +
                 COLUMN_CODE         + " TEXT NOT NULL, " +
                 COLUMN_TITLE        + " TEXT NOT NULL, " +
                 COLUMN_DESCRIPTION  + " TEXT NOT NULL, " +
                 COLUMN_COY_ID       + " INTEGER NOT NULL, " +
                 COLUMN_TYPE         + " TEXT NOT NULL, " +
-                COLUMN_IMAGE_INDEX  + " INTEGER NOT NULL " +
-//                COLUMN_SAVED_BY_USER    + " TEXT NOT NULL " +
+                COLUMN_IMAGE_INDEX  + " INTEGER NOT NULL, " +
+                COLUMN_CREATED_TIME + " INTEGER NOT NULL, " +
+                COLUMN_UPDATED_TIME + " INTEGER NOT NULL " +
                 " );";
 
         return createTableSQL;
@@ -64,14 +59,15 @@ public class DiscountEntry implements BaseColumns {
     public static ContentValues getContentValues(Discount d) {
         ContentValues contentValues = new ContentValues();
 
-//        contentValues.put(COLUMN_DISCOUNT_ID,   d.getId());
-        contentValues.put(COLUMN_CODE,          d.getCode());
-        contentValues.put(COLUMN_TITLE,         d.getTitle());
-        contentValues.put(COLUMN_DESCRIPTION,   d.getDescription());
-        contentValues.put(COLUMN_COY_ID,        d.getCompany_id());
-        contentValues.put(COLUMN_TYPE,          d.getType());
-        contentValues.put(COLUMN_IMAGE_INDEX,   d.getImageIndex());
-//        contentValues.put(COLUMN_SAVED_BY_USER, d.isSavedByUser());
+        contentValues.put(_ID,                  d.getId());
+        contentValues.put(COLUMN_CODE,          d.getDiscCode());
+        contentValues.put(COLUMN_TITLE,         d.getDiscTitle());
+        contentValues.put(COLUMN_DESCRIPTION,   d.getDiscDescription());
+        contentValues.put(COLUMN_COY_ID,        d.getCoyId());
+        contentValues.put(COLUMN_TYPE,          d.getDiscType());
+        contentValues.put(COLUMN_IMAGE_INDEX,   d.getDiscImageIndex());
+        contentValues.put(COLUMN_CREATED_TIME,  d.getDiscCreatedTime());
+        contentValues.put(COLUMN_UPDATED_TIME,  d.getDiscUpdatedTime());
 
         return contentValues;
     }

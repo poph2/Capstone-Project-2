@@ -27,101 +27,101 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
  * DO NOT deploy this code unchanged as part of a real application to real users.
  */
 @Api(
-        name = "categoryBeanApi",
+        name = "outletApi",
         version = "v1",
-        resource = "categoryBean",
+        resource = "outlet",
         namespace = @ApiNamespace(
                 ownerDomain = "backend.pricecutz.pop.com",
                 ownerName = "backend.pricecutz.pop.com",
                 packagePath = ""
         )
 )
-public class CategoryBeanEndpoint {
+public class OutletEndpoint {
 
-    private static final Logger logger = Logger.getLogger(CategoryBeanEndpoint.class.getName());
+    private static final Logger logger = Logger.getLogger(OutletEndpoint.class.getName());
 
     private static final int DEFAULT_LIST_LIMIT = 20;
 
     static {
         // Typically you would register this inside an OfyServive wrapper. See: https://code.google.com/p/objectify-appengine/wiki/BestPractices
-        ObjectifyService.register(CategoryBean.class);
+        ObjectifyService.register(Outlet.class);
     }
 
     /**
-     * Returns the {@link CategoryBean} with the corresponding ID.
+     * Returns the {@link Outlet} with the corresponding ID.
      *
      * @param id the ID of the entity to be retrieved
      * @return the entity with the corresponding ID
-     * @throws NotFoundException if there is no {@code CategoryBean} with the provided ID.
+     * @throws NotFoundException if there is no {@code Outlet} with the provided ID.
      */
     @ApiMethod(
             name = "get",
-            path = "categoryBean/{id}",
+            path = "outlet/{id}",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public CategoryBean get(@Named("id") Long id) throws NotFoundException {
-        logger.info("Getting CategoryBean with ID: " + id);
-        CategoryBean categoryBean = ofy().load().type(CategoryBean.class).id(id).now();
-        if (categoryBean == null) {
-            throw new NotFoundException("Could not find CategoryBean with ID: " + id);
+    public Outlet get(@Named("id") Long id) throws NotFoundException {
+        logger.info("Getting Outlet with ID: " + id);
+        Outlet outlet = ofy().load().type(Outlet.class).id(id).now();
+        if (outlet == null) {
+            throw new NotFoundException("Could not find Outlet with ID: " + id);
         }
-        return categoryBean;
+        return outlet;
     }
 
     /**
-     * Inserts a new {@code CategoryBean}.
+     * Inserts a new {@code Outlet}.
      */
     @ApiMethod(
             name = "insert",
-            path = "categoryBean",
+            path = "outlet",
             httpMethod = ApiMethod.HttpMethod.POST)
-    public CategoryBean insert(CategoryBean categoryBean) {
+    public Outlet insert(Outlet outlet) {
         // Typically in a RESTful API a POST does not have a known ID (assuming the ID is used in the resource path).
-        // You should validate that categoryBean.id has not been set. If the ID type is not supported by the
+        // You should validate that outlet.id has not been set. If the ID type is not supported by the
         // Objectify ID generator, e.g. long or String, then you should generate the unique ID yourself prior to saving.
         //
         // If your client provides the ID then you should probably use PUT instead.
-        ofy().save().entity(categoryBean).now();
-        logger.info("Created CategoryBean with ID: " + categoryBean.getId());
+        ofy().save().entity(outlet).now();
+        logger.info("Created Outlet with ID: " + outlet.getId());
 
-        return ofy().load().entity(categoryBean).now();
+        return ofy().load().entity(outlet).now();
     }
 
     /**
-     * Updates an existing {@code CategoryBean}.
+     * Updates an existing {@code Outlet}.
      *
-     * @param id           the ID of the entity to be updated
-     * @param categoryBean the desired state of the entity
+     * @param id     the ID of the entity to be updated
+     * @param outlet the desired state of the entity
      * @return the updated version of the entity
      * @throws NotFoundException if the {@code id} does not correspond to an existing
-     *                           {@code CategoryBean}
+     *                           {@code Outlet}
      */
     @ApiMethod(
             name = "update",
-            path = "categoryBean/{id}",
+            path = "outlet/{id}",
             httpMethod = ApiMethod.HttpMethod.PUT)
-    public CategoryBean update(@Named("id") Long id, CategoryBean categoryBean) throws NotFoundException {
+    public Outlet update(@Named("id") Long id, Outlet outlet) throws NotFoundException {
         // TODO: You should validate your ID parameter against your resource's ID here.
         checkExists(id);
-        ofy().save().entity(categoryBean).now();
-        logger.info("Updated CategoryBean: " + categoryBean);
-        return ofy().load().entity(categoryBean).now();
+        ofy().save().entity(outlet).now();
+        logger.info("Updated Outlet: " + outlet);
+        return ofy().load().entity(outlet).now();
     }
 
     /**
-     * Deletes the specified {@code CategoryBean}.
+     * Deletes the specified {@code Outlet}.
      *
      * @param id the ID of the entity to delete
      * @throws NotFoundException if the {@code id} does not correspond to an existing
-     *                           {@code CategoryBean}
+     *                           {@code Outlet}
      */
     @ApiMethod(
             name = "remove",
-            path = "categoryBean/{id}",
+            path = "outlet/{id}",
             httpMethod = ApiMethod.HttpMethod.DELETE)
     public void remove(@Named("id") Long id) throws NotFoundException {
         checkExists(id);
-        ofy().delete().type(CategoryBean.class).id(id).now();
-        logger.info("Deleted CategoryBean with ID: " + id);
+        ofy().delete().type(Outlet.class).id(id).now();
+        logger.info("Deleted Outlet with ID: " + id);
     }
 
     /**
@@ -133,27 +133,27 @@ public class CategoryBeanEndpoint {
      */
     @ApiMethod(
             name = "list",
-            path = "categoryBean",
+            path = "outlet",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public CollectionResponse<CategoryBean> list(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit) {
+    public CollectionResponse<Outlet> list(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit) {
         limit = limit == null ? DEFAULT_LIST_LIMIT : limit;
-        Query<CategoryBean> query = ofy().load().type(CategoryBean.class).limit(limit);
+        Query<Outlet> query = ofy().load().type(Outlet.class).limit(limit);
         if (cursor != null) {
             query = query.startAt(Cursor.fromWebSafeString(cursor));
         }
-        QueryResultIterator<CategoryBean> queryIterator = query.iterator();
-        List<CategoryBean> categoryBeanList = new ArrayList<CategoryBean>(limit);
+        QueryResultIterator<Outlet> queryIterator = query.iterator();
+        List<Outlet> outletList = new ArrayList<Outlet>(limit);
         while (queryIterator.hasNext()) {
-            categoryBeanList.add(queryIterator.next());
+            outletList.add(queryIterator.next());
         }
-        return CollectionResponse.<CategoryBean>builder().setItems(categoryBeanList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
+        return CollectionResponse.<Outlet>builder().setItems(outletList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
     }
 
     private void checkExists(Long id) throws NotFoundException {
         try {
-            ofy().load().type(CategoryBean.class).id(id).safe();
+            ofy().load().type(Outlet.class).id(id).safe();
         } catch (com.googlecode.objectify.NotFoundException e) {
-            throw new NotFoundException("Could not find CategoryBean with ID: " + id);
+            throw new NotFoundException("Could not find Outlet with ID: " + id);
         }
     }
 }

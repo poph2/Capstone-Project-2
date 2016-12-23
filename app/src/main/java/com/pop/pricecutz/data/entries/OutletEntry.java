@@ -7,10 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.pop.pricecutz.Discount;
-import com.pop.pricecutz.Outlet;
+import com.pop.pricecutz.backend.outletApi.model.Outlet;
 import com.pop.pricecutz.data.PriceCutzContract;
-import com.pop.pricecutz.map.GPSPoint;
 
 /**
  * Created by Pop H2 on 10/18/2016.
@@ -27,22 +25,21 @@ public class OutletEntry implements BaseColumns {
     public static final String CONTENT_TYPE         = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
     public static final String CONTENT_ITEM_TYPE    = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
 
-//    public static final String COLUMN_OUTLET_ID     = "outlet_id";
     public static final String COLUMN_COY_ID        = "coy_id";
-    public static final String COLUMN_LATITUDE      = "latitude";
-    public static final String COLUMN_LONGITUDE     = "longitude";
-
-//    public static Uri buildUri(long id) {
-//        return ContentUris.withAppendedId(CONTENT_URI, id);
-//    }
+    public static final String COLUMN_NAME          = "outlet_name";
+    public static final String COLUMN_LATITUDE      = "outlet_latitude";
+    public static final String COLUMN_LONGITUDE     = "outlet_longitude";
+    public static final String COLUMN_CREATED_TIME  = "outlet_created_time";
+    public static final String COLUMN_UPDATED_TIME  = "outlet_updated_time";
 
     public static String createTableSQL() {
         String createTableSQL = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID                 + " INTEGER PRIMARY KEY," +
-//                COLUMN_OUTLET_ID    + " INTEGER UNIQUE NOT NULL, " +
                 COLUMN_COY_ID       + " INTEGER NOT NULL, " +
-                COLUMN_LATITUDE     + " TEXT NOT NULL, " +
-                COLUMN_LONGITUDE    + " TEXT NOT NULL " +
+                COLUMN_LATITUDE     + " REAL NOT NULL, " +
+                COLUMN_LONGITUDE    + " REAL NOT NULL, " +
+                COLUMN_CREATED_TIME + " INTEGER NOT NULL, " +
+                COLUMN_UPDATED_TIME + " INTEGER NOT NULL " +
                 " );";
 
         return createTableSQL;
@@ -51,10 +48,12 @@ public class OutletEntry implements BaseColumns {
     public static ContentValues getContentValues(Outlet o) {
         ContentValues contentValues = new ContentValues();
 
-//        contentValues.put(COLUMN_OUTLET_ID, o.getId());
-        contentValues.put(COLUMN_COY_ID,    o.getCompany_id());
-        contentValues.put(COLUMN_LATITUDE,  o.getLatitude());
-        contentValues.put(COLUMN_LONGITUDE, o.getLongitude());
+        contentValues.put(_ID,                  o.getId());
+        contentValues.put(COLUMN_COY_ID,        o.getCoyId());
+        contentValues.put(COLUMN_LATITUDE,      o.getOutletLatitude());
+        contentValues.put(COLUMN_LONGITUDE,     o.getOutletLongitude());
+        contentValues.put(COLUMN_CREATED_TIME,  o.getOutletCreatedTime());
+        contentValues.put(COLUMN_UPDATED_TIME,  o.getOutletUpdatedTime());
 
         return contentValues;
     }
