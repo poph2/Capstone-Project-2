@@ -13,4 +13,14 @@
     <string name="permission_rationale">Les autorisations relatives aux contacts sont nécessaires pour fournir les complétions d\'e-mails</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Mot de passe (facultatif)</string>
+    <string name="cat_pref_title">Sélectionnez les catégories qui vous intéressent</string>
+    <string name="communicate">Communiquer</string>
+    <string name="finish">Terminer</string>
+    <string name="gallery">Galerie</string>
+    <string name="import_">Importer</string>
+    <string name="send">Envoyer</string>
+    <string name="tools">Outils</string>
+    <string name="slideshow">Diaporama</string>
+    <string name="share">Partager</string>
+    <string name="log_out">Se déconnecter</string>
 </resources>

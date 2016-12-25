@@ -40,7 +40,7 @@ public class DiscountEndpoint {
 
     private static final Logger logger = Logger.getLogger(DiscountEndpoint.class.getName());
 
-    private static final int DEFAULT_LIST_LIMIT = 20;
+    private static final int DEFAULT_LIST_LIMIT = 1000;
 
     static {
         // Typically you would register this inside an OfyServive wrapper. See: https://code.google.com/p/objectify-appengine/wiki/BestPractices
@@ -142,7 +142,7 @@ public class DiscountEndpoint {
             query = query.startAt(Cursor.fromWebSafeString(cursor));
         }
         QueryResultIterator<Discount> queryIterator = query.iterator();
-        List<Discount> discountList = new ArrayList<Discount>(limit);
+        List<Discount> discountList = new ArrayList<>(limit);
         while (queryIterator.hasNext()) {
             discountList.add(queryIterator.next());
         }

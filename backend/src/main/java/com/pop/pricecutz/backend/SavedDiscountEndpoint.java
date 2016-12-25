@@ -142,7 +142,7 @@ public class SavedDiscountEndpoint {
             query = query.startAt(Cursor.fromWebSafeString(cursor));
         }
         QueryResultIterator<SavedDiscount> queryIterator = query.iterator();
-        List<SavedDiscount> savedDiscountList = new ArrayList<SavedDiscount>(limit);
+        List<SavedDiscount> savedDiscountList = new ArrayList<>(limit);
         while (queryIterator.hasNext()) {
             savedDiscountList.add(queryIterator.next());
         }

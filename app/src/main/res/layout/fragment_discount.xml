@@ -60,7 +60,6 @@
                 android:layout_alignParentStart="true" />
 
             <TextView
-                android:text="TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/companyLogoImageView"
@@ -70,7 +69,6 @@
                 android:id="@+id/discountDescriptionTextView" />
 
             <TextView
-                android:text="TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/discountDescriptionTextView"
@@ -79,7 +77,6 @@
                 android:id="@+id/discountCompanyTextView" />
 
             <TextView
-                android:text="TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"

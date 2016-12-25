@@ -142,7 +142,7 @@ public class UserEndpoint {
             query = query.startAt(Cursor.fromWebSafeString(cursor));
         }
         QueryResultIterator<User> queryIterator = query.iterator();
-        List<User> userList = new ArrayList<User>(limit);
+        List<User> userList = new ArrayList<>(limit);
         while (queryIterator.hasNext()) {
             userList.add(queryIterator.next());
         }

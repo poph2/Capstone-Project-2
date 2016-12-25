@@ -14,7 +14,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -30,7 +29,6 @@ import com.pop.pricecutz.activities.main.fragments.CategoryFragment;
 import com.pop.pricecutz.activities.main.fragments.HomeFragment;
 import com.pop.pricecutz.activities.main.fragments.NearMeFragment;
 import com.pop.pricecutz.activities.main.fragments.InvetoryFragment;
-import com.pop.pricecutz.sync.PCSyncAdapter;
 
 import org.json.JSONObject;
 
@@ -86,7 +84,7 @@ public class MainActivity extends AppCompatActivity
         viewPager.setCurrentItem(0);
 
         //Request Sync
-        PCSyncAdapter.syncImmediately(mContext);
+//        PCSyncAdapter.syncImmediately(mContext);
 
     }
 

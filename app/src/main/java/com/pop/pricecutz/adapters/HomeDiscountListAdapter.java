@@ -2,10 +2,8 @@ package com.pop.pricecutz.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 
@@ -18,9 +16,9 @@ import com.pop.pricecutz.data.entries.DiscountEntry;
  * Pop Inc
  * Lagos Nigeria
  */
-public class DiscountListAdapter extends SimpleCursorAdapter {
+public class HomeDiscountListAdapter extends SimpleCursorAdapter {
 
-    private static final String LOG_TAG = DiscountListAdapter.class.getSimpleName();
+    private static final String LOG_TAG = HomeDiscountListAdapter.class.getSimpleName();
 
     private final LayoutInflater mInflater;
 
@@ -30,7 +28,7 @@ public class DiscountListAdapter extends SimpleCursorAdapter {
     final int imageViewID;
     final int imageView2ID;
 
-    public DiscountListAdapter(Context context, int layoutResourceID, Cursor c, String[] from, int[] to, int flags, int imageResourceID, int image2ResourceID) {
+    public HomeDiscountListAdapter(Context context, int layoutResourceID, Cursor c, String[] from, int[] to, int flags, int imageResourceID, int image2ResourceID) {
         super(context, layoutResourceID, c, from, to, flags);
 
         this.mContext = context;
@@ -43,9 +41,10 @@ public class DiscountListAdapter extends SimpleCursorAdapter {
     }
 
     @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        final LayoutInflater inflater = LayoutInflater.from(context);
-        View v = inflater.inflate(layoutID, parent, false);
+    public void bindView(View view, Context context, Cursor cursor) {
+        super.bindView(view, context, cursor);
+
+        View v = view;
 
         ViewHolder viewHolder = new ViewHolder(v, imageViewID, imageView2ID);
 
@@ -63,8 +62,15 @@ public class DiscountListAdapter extends SimpleCursorAdapter {
         Glide.with(mContext).load(mContext.getResources().getIdentifier(imageName, "drawable", mContext.getPackageName())).into(viewHolder.imageView);
         Glide.with(mContext).load(coyImageURL).into(viewHolder.imageView2);
 
-        return v;
     }
+
+//    @Override
+//    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+//        final LayoutInflater inflater = LayoutInflater.from(context);
+//        View v = inflater.inflate(layoutID, parent, false);
+//        return v;
+//    }
+
 
     static class ViewHolder {
 

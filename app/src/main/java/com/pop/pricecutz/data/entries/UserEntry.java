@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.pop.pricecutz.backend.categoryApi.model.Category;
 import com.pop.pricecutz.backend.userApi.model.User;
 import com.pop.pricecutz.data.PriceCutzContract;
 

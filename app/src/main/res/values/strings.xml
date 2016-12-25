@@ -26,13 +26,25 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
-    <string name="title_activity_discount">DiscountActivity</string>
-    <string name="title_activity_preference">PreferenceActivity</string>
+    <string name="title_activity_discount" translatable="false">DiscountActivity</string>
+    <string name="title_activity_preference" translatable="false">PreferenceActivity</string>
 
     <!-- SyncAdapter -->
-    <string name="sync_account_type">pricecutz.pop.com</string>
-    <string name="sync_account">default_account</string>
+    <string name="sync_account_type" translatable="false">pricecutz.pop.com</string>
+    <string name="sync_account" translatable="false">default_account</string>
 
     <!-- Strings related to Sync preference -->
-    <string name="pref_last_sync">last_sync</string>
+    <string name="pref_last_sync" translatable="false">last_sync</string>
+    <string name="send">Send</string>
+    <string name="log_out">Log Out</string>
+    <string name="share">Share</string>
+    <string name="communicate">Communicate</string>
+    <string name="tools">Tools</string>
+    <string name="slideshow">Slideshow</string>
+    <string name="gallery">Gallery</string>
+    <string name="import_">Import</string>
+    <string name="finish">Finish</string>
+    <string name="cat_pref_title">Select the categories you are interested in</string>
+
+
 </resources>

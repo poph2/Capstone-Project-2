@@ -23,7 +23,7 @@
         android:layout_above="@+id/fragment_preference_button" />
 
     <TextView
-        android:text="Select the categories you are interested in"
+        android:text="@string/cat_pref_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -33,7 +33,7 @@
         android:padding="10dp" />
 
     <Button
-        android:text="Finish"
+        android:text="@string/finish"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"

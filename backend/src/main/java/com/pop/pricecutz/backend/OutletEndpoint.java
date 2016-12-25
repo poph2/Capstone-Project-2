@@ -142,7 +142,7 @@ public class OutletEndpoint {
             query = query.startAt(Cursor.fromWebSafeString(cursor));
         }
         QueryResultIterator<Outlet> queryIterator = query.iterator();
-        List<Outlet> outletList = new ArrayList<Outlet>(limit);
+        List<Outlet> outletList = new ArrayList<>(limit);
         while (queryIterator.hasNext()) {
             outletList.add(queryIterator.next());
         }

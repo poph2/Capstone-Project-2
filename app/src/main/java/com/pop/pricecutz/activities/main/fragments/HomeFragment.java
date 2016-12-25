@@ -19,19 +19,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.pop.pricecutz.R;
 import com.pop.pricecutz.activities.other.DiscountActivity;
-import com.pop.pricecutz.adapters.DiscountListAdapter;
-import com.pop.pricecutz.data.entries.CompanyEntry;
+import com.pop.pricecutz.adapters.HomeDiscountListAdapter;
 import com.pop.pricecutz.data.entries.DiscountEntry;
 
 public class HomeFragment extends Fragment implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = HomeFragment.class.getSimpleName();
 
-    private DiscountListAdapter adapter;
+    private HomeDiscountListAdapter adapter;
 
     ListView listView;
 
@@ -56,7 +54,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 
         listView = (ListView) root.findViewById(R.id.fragment_home_listview);
 
-        adapter = new DiscountListAdapter(mContext,
+        adapter = new HomeDiscountListAdapter(mContext,
                 R.layout.fragment_home_list_items,
                 null,
                 new String[] {DiscountEntry.COLUMN_CODE, DiscountEntry.COLUMN_TITLE},
@@ -82,8 +80,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-        //adapterView.getItemAtPosition(i)
 
         Cursor c = adapter.getCursor();
         c.moveToPosition(i);

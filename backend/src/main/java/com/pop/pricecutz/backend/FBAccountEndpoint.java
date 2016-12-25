@@ -142,7 +142,7 @@ public class FBAccountEndpoint {
             query = query.startAt(Cursor.fromWebSafeString(cursor));
         }
         QueryResultIterator<FBAccount> queryIterator = query.iterator();
-        List<FBAccount> fBAccountList = new ArrayList<FBAccount>(limit);
+        List<FBAccount> fBAccountList = new ArrayList<>(limit);
         while (queryIterator.hasNext()) {
             fBAccountList.add(queryIterator.next());
         }

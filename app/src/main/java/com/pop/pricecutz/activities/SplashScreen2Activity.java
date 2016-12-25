@@ -20,7 +20,6 @@ import com.pop.pricecutz.R;
 import com.pop.pricecutz.activities.main.MainActivity;
 import com.pop.pricecutz.backend.fBAccountApi.FBAccountApi;
 import com.pop.pricecutz.backend.fBAccountApi.model.FBAccount;
-import com.pop.pricecutz.data.entries.CompanyEntry;
 import com.pop.pricecutz.data.entries.FBAccountEntry;
 
 import org.json.JSONException;

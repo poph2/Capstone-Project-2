@@ -7,10 +7,12 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -52,8 +54,13 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
 
-        syncCompany();
-        syncDiscount();
+        long timeInMillis = System.currentTimeMillis();
+        long lastSyncTime = getLastSyncTime();
+
+        syncCompany(timeInMillis);
+        syncDiscount(timeInMillis);
+
+//        setLastSyncTime(timeInMillis);
 
     }
 
@@ -132,50 +139,51 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
                 context.getString(R.string.content_authority), bundle);
     }
 
-    public void syncCompany() {
+    public long getLastSyncTime() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        String lastSyncKey = context.getString(R.string.pref_last_sync);
+        long lastSyncTime = prefs.getLong(lastSyncKey, 0);
+
+        return lastSyncTime;
+    }
+
+    public void setLastSyncTime(long syncTime) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        SharedPreferences.Editor editor = prefs.edit();
+
+        String lastSyncKey = context.getString(R.string.pref_last_sync);
+        editor.putLong(lastSyncKey, syncTime);
+        editor.commit();
+    }
+
+    public void syncCompany(long syncLastTime) {
         CompanyApi.Builder builder = new CompanyApi.Builder(AndroidHttp.newCompatibleTransport(),
                 new AndroidJsonFactory(), null)
                 .setRootUrl("https://price-cutz.appspot.com/_ah/api/");
-        // end options for devappserver
 
         CompanyApi companyApi = builder.build();
 
-        Log.d(LOG_TAG, "Sync Started");
-
         try {
-//            CompanyApi.Get get = companyApi.get(1l);
-//
-//            Company company = get.execute();
-//
-//            Log.d(LOG_TAG, "company - " + company.getCoyName());
 
-            Company company = null;
-//            CompanyApi.List company_List = companyApi.list(100);
-            CompanyApi.List company_List = companyApi.list();
-            CollectionResponseCompany coyCollection = company_List.execute();
+            CompanyApi.List companyList = companyApi.list();
+            CollectionResponseCompany coyCollection = companyList.execute();
 
-            List<Company> companyList = coyCollection.getItems();
+            List<Company> companies = coyCollection.getItems();
 
-//             Log.d(LOG_TAG, "dbCollection - " + dbCollection.getCode());
+            ContentValues contentValuesArr[] = new ContentValues[companies.size()];
 
-            ContentValues contentValuesArr[] = new ContentValues[companyList.size()];
+            for(int i = 0; i < companies.size(); i++) {
 
-            for(int i = 0; i < companyList.size(); i++) {
-                Log.d(LOG_TAG, i + " - " + companyList.get(i).getCoyName());
-
-                company = companyList.get(i);
+                Company company = companies.get(i);
 
                 ContentValues contentValues = CompanyEntry.getContentValues(company);
 
                 contentValuesArr[i] = contentValues;
-
-
-                Log.d(LOG_TAG, "Sync Performed");
             }
 
             int i = getContext().getContentResolver().bulkInsert(CompanyEntry.CONTENT_URI, contentValuesArr);
-
-            Log.d(LOG_TAG, "Sync Performed");
 
         }
         catch(Exception e) {
@@ -184,7 +192,7 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
 
-    public void syncDiscount() {
+    public void syncDiscount(long syncLastTime) {
         DiscountApi.Builder builder = new DiscountApi.Builder(AndroidHttp.newCompatibleTransport(),
                 new AndroidJsonFactory(), null)
                 .setRootUrl("https://price-cutz.appspot.com/_ah/api/");
@@ -195,40 +203,26 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
         Log.d(LOG_TAG, "Sync Started");
 
         try {
-//            DiscountApi.Get discountGet = discountApi.get(1l);
-//
-//            Discount discount = discountGet.execute();
-//
-//            Log.d(LOG_TAG, "discount - " + discount.getDiscCode());
 
-            Discount discount = null;
-
-//            DiscountApi.List discount_List = discountApi.list(100);
             DiscountApi.List discount_List = discountApi.list();
             CollectionResponseDiscount dbCollection = discount_List.execute();
 
             List<Discount> discountList = dbCollection.getItems();
-
-//             Log.d(LOG_TAG, "dbCollection - " + dbCollection.getCode());
 
             ContentValues contentValuesArr[] = new ContentValues[discountList.size()];
 
             for(int i = 0; i < discountList.size(); i++) {
                 Log.d(LOG_TAG, i + " - " + discountList.get(i).getDiscCode());
 
-                discount = discountList.get(i);
+                Discount discount = discountList.get(i);
 
                 ContentValues contentValues = DiscountEntry.getContentValues(discount);
 
                 contentValuesArr[i] = contentValues;
 
-
-                Log.d(LOG_TAG, "Sync Performed");
             }
 
             int i = getContext().getContentResolver().bulkInsert(DiscountEntry.CONTENT_URI, contentValuesArr);
-
-            Log.d(LOG_TAG, "Sync Performed");
 
         }
         catch(Exception e) {
@@ -237,19 +231,5 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
 
-//    private void syncData() {
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-//
-//        String lastSyncKey = context.getString(R.string.pref_last_sync);
-//        long lastSync = prefs.getLong(lastSyncKey, 0);
-//
-//        if (System.currentTimeMillis() - lastSync >= DAY_IN_MILLIS) {
-//
-//
-//            //refreshing last sync
-//            SharedPreferences.Editor editor = prefs.edit();
-//            editor.putLong(lastSyncKey, System.currentTimeMillis());
-//            editor.commit();
-//        }
-//    }
+
 }
