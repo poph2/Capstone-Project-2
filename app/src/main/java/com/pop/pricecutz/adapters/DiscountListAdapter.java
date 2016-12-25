@@ -1,111 +1,79 @@
 package com.pop.pricecutz.adapters;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.SimpleCursorAdapter;
 
 import com.bumptech.glide.Glide;
-
-import java.util.ArrayList;
+import com.pop.pricecutz.data.entries.CompanyEntry;
+import com.pop.pricecutz.data.entries.DiscountEntry;
 
 /**
  * Created by Pop H2 on 9/12/2016.
  * Pop Inc
  * Lagos Nigeria
  */
-public class DiscountListAdapter { //extends ArrayAdapter<Discount> {
+public class DiscountListAdapter extends SimpleCursorAdapter {
 
-//    private ArrayList<Discount> mDiscountArrayList;
-//
-//    private final LayoutInflater mInflater;
-//
-//    final int layoutID;
-//    final int imageViewID;
-//    final int imageView2ID;
-//    final int textViewID;
-//    final int textView2ID;
-//
-//    public DiscountListAdapter(Context context, int layoutResourceID, int imageResourceID, int image2ResourceID, int textResourceID, int text2ResourceID, ArrayList<Discount> discountArrayList) {
-//        super(context, layoutResourceID, textResourceID, discountArrayList);
-//
-//        layoutID = layoutResourceID;
-//        imageViewID = imageResourceID;
-//        imageView2ID = image2ResourceID;
-//        textViewID = textResourceID;
-//        textView2ID = text2ResourceID;
-//
-//        mInflater = LayoutInflater.from(context);
-//        mDiscountArrayList = discountArrayList;
-//    }
-//
-//    @Override
-//    public void clear() {
-//        super.clear();
-//        mDiscountArrayList.clear();
-//    }
-//
-//    public void addAll(ArrayList<Discount> itemList) {
-//        super.addAll();
-//        mDiscountArrayList =  itemList;
-//
-//    }
-//
-//    @Override
-//    public View getView(int i, View view, ViewGroup viewGroup) {
-//        View v = view;
-//
-//        if (v == null) {
-//            v = mInflater.inflate(layoutID, viewGroup, false);
-//            v.setTag(imageViewID, v.findViewById(imageViewID));
-//            v.setTag(imageView2ID, v.findViewById(imageView2ID));
-//            v.setTag(textViewID, v.findViewById(textViewID));
-//            v.setTag(textView2ID, v.findViewById(textView2ID));
-////            v = mInflater.inflate(R.layout.fragment_favorites_list_item, viewGroup, false);
-////            v.setTag(R.id.fragment_favorites_list_item_imageview, v.findViewById(R.id.fragment_favorites_list_item_imageview));
-////            v.setTag(R.id.fragment_favorites_list_item_textview, v.findViewById(R.id.fragment_favorites_list_item_textview));
-//        }
-//
-//        Discount discount = getItem(i);
-//        //Company company = discount.getCompany();
-//
-//        ViewHolder viewHolder = new ViewHolder(v, imageViewID, imageView2ID, textViewID, textView2ID);
-//
-//        //Log.d("DiscountListAdapter", company.getImageURL());
-//
-//        String imageName = "img_" + discount.getImageIndex() + "_350_150";
-//
-//        //String image = getContext().getResources().getIdentifier("img_96_350_150.jpg", "drawable", getContext().getPackageName());
-//
-//        //Glide.with(getContext()).load(company.getImageURL()).into(viewHolder.imageView);
-//        Glide.with(getContext()).load(getContext().getResources().getIdentifier(imageName, "drawable", getContext().getPackageName())).into(viewHolder.imageView);
-////        Glide.with(getContext()).load(company.getImageURL()).into(viewHolder.imageView2);
-////        viewHolder.textView.setText(company.getName());
-//        viewHolder.text2View.setText(discount.getTitle());
-//
-//        return v;
-//    }
-//
-//    static class ViewHolder {
-//        ImageView imageView;
-//        ImageView imageView2;
-//        TextView textView;
-//        TextView text2View;
-//
-//        public ViewHolder(View view, int imageViewID, int imageView2ID, int textViewID, int text2ViewID) {
-//            imageView   = (ImageView) view.findViewById(imageViewID);
-//            imageView2   = (ImageView) view.findViewById(imageView2ID);
-//            textView    = (TextView) view.findViewById(textViewID);
-//            text2View    = (TextView) view.findViewById(text2ViewID);
-////            imageView   = (ImageView) view.findViewById(R.id.fragment_favorites_list_item_imageview);
-////            textView    = (TextView) view.findViewById(R.id.fragment_favorites_list_item_textview);
-//        }
-//    }
-//
-//    public ArrayList<Discount> getItems() {
-//        return mDiscountArrayList;
-//    }
+    private static final String LOG_TAG = DiscountListAdapter.class.getSimpleName();
+
+    private final LayoutInflater mInflater;
+
+    private Context mContext;
+
+    final int layoutID;
+    final int imageViewID;
+    final int imageView2ID;
+
+    public DiscountListAdapter(Context context, int layoutResourceID, Cursor c, String[] from, int[] to, int flags, int imageResourceID, int image2ResourceID) {
+        super(context, layoutResourceID, c, from, to, flags);
+
+        this.mContext = context;
+        this.mInflater = LayoutInflater.from(context);
+
+        layoutID = layoutResourceID;
+        imageViewID = imageResourceID;
+        imageView2ID = image2ResourceID;
+
+    }
+
+    @Override
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        final LayoutInflater inflater = LayoutInflater.from(context);
+        View v = inflater.inflate(layoutID, parent, false);
+
+        ViewHolder viewHolder = new ViewHolder(v, imageViewID, imageView2ID);
+
+        v.setTag(imageViewID, v.findViewById(imageViewID));
+        v.setTag(imageView2ID, v.findViewById(imageView2ID));
+
+        int columnIndex = cursor.getColumnIndex(DiscountEntry.COLUMN_IMAGE_INDEX);
+
+        int imageIndex = cursor.getInt(columnIndex);
+
+        String imageName = "img_" + imageIndex + "_350_150";
+
+        String coyImageURL = cursor.getString(cursor.getColumnIndex(CompanyEntry.COLUMN_IMAGE_URL));
+
+        Glide.with(mContext).load(mContext.getResources().getIdentifier(imageName, "drawable", mContext.getPackageName())).into(viewHolder.imageView);
+        Glide.with(mContext).load(coyImageURL).into(viewHolder.imageView2);
+
+        return v;
+    }
+
+    static class ViewHolder {
+
+        ImageView imageView;
+        ImageView imageView2;
+
+        public ViewHolder(View view, int imageViewID, int imageView2ID) {
+            imageView   = (ImageView) view.findViewById(imageViewID);
+            imageView2   = (ImageView) view.findViewById(imageView2ID);
+        }
+    }
 }

@@ -21,17 +21,14 @@ import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.pop.pricecutz.R;
-import com.pop.pricecutz.adapters.CompanyListAdapter2;
+import com.pop.pricecutz.adapters.CompanyListAdapter;
 import com.pop.pricecutz.data.entries.CompanyEntry;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 public class FavoriteFragment extends Fragment implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
 //    CompanyListAdapter mCompanyListAdapter;
 
-    private CompanyListAdapter2 adapter;
+    private CompanyListAdapter adapter;
 
 //    ArrayList<Company> mCompanyArrayList;
 
@@ -72,7 +69,7 @@ public class FavoriteFragment extends Fragment implements AdapterView.OnItemClic
 //                R.id.fragment_favorites_list_item_textview,
 //                mCompanyArrayList);
 
-        adapter = new CompanyListAdapter2(mContext,
+        adapter = new CompanyListAdapter(mContext,
                 R.layout.fragment_favorites_list_item,
                 null,
                 new String[] {CompanyEntry.COLUMN_NAME},

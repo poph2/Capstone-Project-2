@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.pop.pricecutz.data.entries.CategoryEntry;
 import com.pop.pricecutz.data.entries.CompanyEntry;
 import com.pop.pricecutz.data.entries.DiscountEntry;
+import com.pop.pricecutz.data.entries.FBAccountEntry;
 import com.pop.pricecutz.data.entries.OutletEntry;
+import com.pop.pricecutz.data.entries.SavedDiscountEntry;
 
 /**
  * Created by Pop H2 on 12/1/2016.
@@ -30,7 +32,9 @@ public class PriceCutzDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CategoryEntry.createTableSQL());
         sqLiteDatabase.execSQL(CompanyEntry.createTableSQL());
         sqLiteDatabase.execSQL(DiscountEntry.createTableSQL());
+        sqLiteDatabase.execSQL(FBAccountEntry.createTableSQL());
         sqLiteDatabase.execSQL(OutletEntry.createTableSQL());
+        sqLiteDatabase.execSQL(SavedDiscountEntry.createTableSQL());
     }
 
     @Override
@@ -38,7 +42,9 @@ public class PriceCutzDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CategoryEntry.dropTableSQL());
         sqLiteDatabase.execSQL(CompanyEntry.dropTableSQL());
         sqLiteDatabase.execSQL(DiscountEntry.dropTableSQL());
+        sqLiteDatabase.execSQL(FBAccountEntry.dropTableSQL());
         sqLiteDatabase.execSQL(OutletEntry.dropTableSQL());
+        sqLiteDatabase.execSQL(SavedDiscountEntry.dropTableSQL());
         onCreate(sqLiteDatabase);
     }
 }

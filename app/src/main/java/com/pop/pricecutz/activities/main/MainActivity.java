@@ -30,6 +30,7 @@ import com.pop.pricecutz.activities.main.fragments.CategoryFragment;
 import com.pop.pricecutz.activities.main.fragments.HomeFragment;
 import com.pop.pricecutz.activities.main.fragments.NearMeFragment;
 import com.pop.pricecutz.activities.main.fragments.InvetoryFragment;
+import com.pop.pricecutz.sync.PCSyncAdapter;
 
 import org.json.JSONObject;
 
@@ -84,19 +85,9 @@ public class MainActivity extends AppCompatActivity
 
         viewPager.setCurrentItem(0);
 
-//        new InitialDataAsyncTask().execute("");
-
-        //addToDatabase();
-        //readFromDatabase();
-
-        Log.d("AsyncTask", "About to start");
-
-//        new EndpointsAsyncTask().execute(1);
-
         //Request Sync
-//        PCSyncAdapter.syncImmediately(mContext);
+        PCSyncAdapter.syncImmediately(mContext);
 
-        getUserData();
     }
 
     @Override
@@ -224,12 +215,12 @@ public class MainActivity extends AppCompatActivity
 
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
-        GraphRequest request = GraphRequest.newMeRequest(
-                accessToken,
+        GraphRequest request = GraphRequest.newMeRequest(accessToken,
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        Toast.makeText(getBaseContext(), new Gson().toJson(object), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getBaseContext(), new Gson().toJson(response), Toast.LENGTH_LONG).show();
+
                     }
                 });
             Bundle parameters = new Bundle();

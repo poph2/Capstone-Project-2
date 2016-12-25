@@ -156,4 +156,24 @@ public class FBAccountEndpoint {
             throw new NotFoundException("Could not find FBAccount with ID: " + id);
         }
     }
+
+
+    /**
+     * Returns the {@link FBAccount} with the corresponding FB_ID.
+     *
+     * @param sID the ID of the entity to be retrieved
+     * @return the entity with the corresponding ID
+     * @throws NotFoundException if there is no {@code FBAccount} with the provided ID.
+     */
+    @ApiMethod(
+            name = "checkExists",
+            path = "fBAccount/checkExists/{sID}",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public FBAccount checkExists(@Named("sID") String sID) throws NotFoundException {
+        logger.info("Getting FBAccount with FB-ID: " + sID);
+
+        FBAccount fbAccount = ofy().load().type(FBAccount.class).filter("fbacct_fb_id = ", sID).first().now();
+
+        return fbAccount;
+    }
 }

@@ -24,7 +24,6 @@ import com.pop.pricecutz.backend.discountApi.model.CollectionResponseDiscount;
 import com.pop.pricecutz.backend.discountApi.model.Discount;
 import com.pop.pricecutz.data.entries.CompanyEntry;
 import com.pop.pricecutz.data.entries.DiscountEntry;
-import com.pop.pricecutz.utils.BeanEntryConverter;
 
 import java.util.List;
 
@@ -144,13 +143,13 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
         Log.d(LOG_TAG, "Sync Started");
 
         try {
-            CompanyApi.Get get = companyApi.get(1l);
+//            CompanyApi.Get get = companyApi.get(1l);
+//
+//            Company company = get.execute();
+//
+//            Log.d(LOG_TAG, "company - " + company.getCoyName());
 
-            Company company = get.execute();
-
-            Log.d(LOG_TAG, "company - " + company.getCoyName());
-
-
+            Company company = null;
 //            CompanyApi.List company_List = companyApi.list(100);
             CompanyApi.List company_List = companyApi.list();
             CollectionResponseCompany coyCollection = company_List.execute();
@@ -166,7 +165,7 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 company = companyList.get(i);
 
-                ContentValues contentValues = BeanEntryConverter.convertToContentValues(company);
+                ContentValues contentValues = CompanyEntry.getContentValues(company);
 
                 contentValuesArr[i] = contentValues;
 
@@ -196,12 +195,13 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
         Log.d(LOG_TAG, "Sync Started");
 
         try {
-            DiscountApi.Get discountGet = discountApi.get(1l);
+//            DiscountApi.Get discountGet = discountApi.get(1l);
+//
+//            Discount discount = discountGet.execute();
+//
+//            Log.d(LOG_TAG, "discount - " + discount.getDiscCode());
 
-            Discount discount = discountGet.execute();
-
-            Log.d(LOG_TAG, "discount - " + discount.getDiscCode());
-
+            Discount discount = null;
 
 //            DiscountApi.List discount_List = discountApi.list(100);
             DiscountApi.List discount_List = discountApi.list();
@@ -218,7 +218,7 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 discount = discountList.get(i);
 
-                ContentValues contentValues = BeanEntryConverter.convertToContentValues(discount);
+                ContentValues contentValues = DiscountEntry.getContentValues(discount);
 
                 contentValuesArr[i] = contentValues;
 

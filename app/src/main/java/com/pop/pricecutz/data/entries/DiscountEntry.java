@@ -37,20 +37,22 @@ public class DiscountEntry implements BaseColumns {
     public static final String COLUMN_COY_ID        = "coy_id";
     public static final String COLUMN_TYPE          = "disc_type";
     public static final String COLUMN_IMAGE_INDEX   = "disc_image_index";
+    public static final String COLUMN_SAVED_BY_USER = "disc_saved_by_user";
     public static final String COLUMN_CREATED_TIME  = "disc_created_time";
     public static final String COLUMN_UPDATED_TIME  = "disc_updated_time";
 
     public static String createTableSQL() {
         String createTableSQL = "CREATE TABLE " + TABLE_NAME + " (" +
-                _ID                 + " INTEGER PRIMARY KEY," +
-                COLUMN_CODE         + " TEXT NOT NULL, " +
-                COLUMN_TITLE        + " TEXT NOT NULL, " +
-                COLUMN_DESCRIPTION  + " TEXT NOT NULL, " +
-                COLUMN_COY_ID       + " INTEGER NOT NULL, " +
-                COLUMN_TYPE         + " TEXT NOT NULL, " +
-                COLUMN_IMAGE_INDEX  + " INTEGER NOT NULL, " +
-                COLUMN_CREATED_TIME + " INTEGER NOT NULL, " +
-                COLUMN_UPDATED_TIME + " INTEGER NOT NULL " +
+                _ID                     + " INTEGER PRIMARY KEY," +
+                COLUMN_CODE             + " TEXT, " +
+                COLUMN_TITLE            + " TEXT, " +
+                COLUMN_DESCRIPTION      + " TEXT, " +
+                COLUMN_COY_ID           + " INTEGER, " +
+                COLUMN_TYPE             + " TEXT, " +
+                COLUMN_IMAGE_INDEX      + " INTEGER, " +
+                COLUMN_SAVED_BY_USER    + " INTEGER, " +
+                COLUMN_CREATED_TIME     + " INTEGER, " +
+                COLUMN_UPDATED_TIME     + " INTEGER " +
                 " );";
 
         return createTableSQL;
@@ -82,6 +84,9 @@ public class DiscountEntry implements BaseColumns {
     }
 
     public static Uri insert(SQLiteDatabase db, ContentValues values, Uri uri) {
+
+        //ContentValues values = getContentValues(d);
+
         long _id = db.insert(TABLE_NAME, null, values);
 
         Uri returnUri = null;

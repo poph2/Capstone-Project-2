@@ -25,6 +25,7 @@ public class CompanyEntry implements BaseColumns {
     public static final String CONTENT_TYPE         = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
     public static final String CONTENT_ITEM_TYPE    = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
 
+    public static final String COLUMN_APPENGINE_ID  = "coy_app_engine_id";
     public static final String COLUMN_NAME          = "coy_name";
     public static final String COLUMN_INDUSTRY      = "coy_industry";
     public static final String COLUMN_IMAGE_URL     = "coy_image_url";
@@ -34,11 +35,11 @@ public class CompanyEntry implements BaseColumns {
     public static String createTableSQL() {
         String createTableSQL = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID                 + " INTEGER PRIMARY KEY," +
-                COLUMN_NAME         + " TEXT NOT NULL, " +
-                COLUMN_INDUSTRY     + " TEXT NOT NULL, " +
-                COLUMN_IMAGE_URL    + " TEXT NOT NULL, " +
-                COLUMN_CREATED_TIME + " INTEGER NOT NULL, " +
-                COLUMN_UPDATED_TIME + " INTEGER NOT NULL " +
+                COLUMN_NAME         + " TEXT, " +
+                COLUMN_INDUSTRY     + " TEXT, " +
+                COLUMN_IMAGE_URL    + " TEXT, " +
+                COLUMN_CREATED_TIME + " INTEGER, " +
+                COLUMN_UPDATED_TIME + " INTEGER " +
                 " );";
 
         return createTableSQL;

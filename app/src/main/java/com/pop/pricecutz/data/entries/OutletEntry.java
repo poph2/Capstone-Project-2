@@ -35,11 +35,11 @@ public class OutletEntry implements BaseColumns {
     public static String createTableSQL() {
         String createTableSQL = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID                 + " INTEGER PRIMARY KEY," +
-                COLUMN_COY_ID       + " INTEGER NOT NULL, " +
-                COLUMN_LATITUDE     + " REAL NOT NULL, " +
-                COLUMN_LONGITUDE    + " REAL NOT NULL, " +
-                COLUMN_CREATED_TIME + " INTEGER NOT NULL, " +
-                COLUMN_UPDATED_TIME + " INTEGER NOT NULL " +
+                COLUMN_COY_ID       + " INTEGER, " +
+                COLUMN_LATITUDE     + " REAL, " +
+                COLUMN_LONGITUDE    + " REAL, " +
+                COLUMN_CREATED_TIME + " INTEGER, " +
+                COLUMN_UPDATED_TIME + " INTEGER " +
                 " );";
 
         return createTableSQL;

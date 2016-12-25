@@ -13,7 +13,9 @@ import android.util.Log;
 import com.pop.pricecutz.data.entries.CategoryEntry;
 import com.pop.pricecutz.data.entries.CompanyEntry;
 import com.pop.pricecutz.data.entries.DiscountEntry;
+import com.pop.pricecutz.data.entries.FBAccountEntry;
 import com.pop.pricecutz.data.entries.OutletEntry;
+import com.pop.pricecutz.data.entries.SavedDiscountEntry;
 
 /**
  * Created by adeniyi.bello on 12/1/2016.
@@ -30,7 +32,9 @@ public class PriceCutzProvider extends ContentProvider {
     static final int COMPANY                = 1100;
     static final int DISCOUNT               = 1200;
     static final int DISCOUNT_WITH_COMPANY  = 1201;
-    static final int OUTLET                 = 1300;
+    static final int FB_ACCOUNT             = 1300;
+    static final int OUTLET                 = 1400;
+    static final int SAVED_DISCOUNT         = 1500;
 
     @Override
     public boolean onCreate() {
@@ -84,8 +88,14 @@ public class PriceCutzProvider extends ContentProvider {
             case DISCOUNT: {
                 return DiscountEntry.TABLE_NAME;
             }
+            case FB_ACCOUNT: {
+                return FBAccountEntry.TABLE_NAME;
+            }
             case OUTLET: {
                 return OutletEntry.TABLE_NAME;
+            }
+            case SAVED_DISCOUNT: {
+                return SavedDiscountEntry.TABLE_NAME;
             }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -103,8 +113,12 @@ public class PriceCutzProvider extends ContentProvider {
                 return CompanyEntry.CONTENT_TYPE;
             case DISCOUNT:
                 return DiscountEntry.CONTENT_TYPE;
+            case FB_ACCOUNT:
+                return FBAccountEntry.CONTENT_TYPE;
             case OUTLET:
                 return OutletEntry.CONTENT_TYPE;
+            case SAVED_DISCOUNT:
+                return SavedDiscountEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -130,8 +144,16 @@ public class PriceCutzProvider extends ContentProvider {
                 returnUri = DiscountEntry.insert(db, values, uri);
                 break;
             }
+            case FB_ACCOUNT: {
+                returnUri = FBAccountEntry.insert(db, values, uri);
+                break;
+            }
             case OUTLET: {
                 returnUri = OutletEntry.insert(db, values, uri);
+                break;
+            }
+            case SAVED_DISCOUNT: {
+                returnUri = SavedDiscountEntry.insert(db, values, uri);
                 break;
             }
             default:
@@ -189,8 +211,14 @@ public class PriceCutzProvider extends ContentProvider {
             case DISCOUNT:
                 returnCount = DiscountEntry.bulkInsert(db, valuesArr);
                 break;
+            case FB_ACCOUNT:
+                returnCount = FBAccountEntry.bulkInsert(db, valuesArr);
+                break;
             case OUTLET:
                 returnCount = OutletEntry.bulkInsert(db, valuesArr);
+                break;
+            case SAVED_DISCOUNT:
+                returnCount = SavedDiscountEntry.bulkInsert(db, valuesArr);
                 break;
             default:
                 return super.bulkInsert(uri, valuesArr);
@@ -208,7 +236,9 @@ public class PriceCutzProvider extends ContentProvider {
         matcher.addURI(authority, CompanyEntry.PATH,                COMPANY);
         matcher.addURI(authority, DiscountEntry.PATH,               DISCOUNT);
         matcher.addURI(authority, DiscountEntry.PATH_WITH_COMPANY,  DISCOUNT_WITH_COMPANY);
+        matcher.addURI(authority, FBAccountEntry.PATH,              FB_ACCOUNT);
         matcher.addURI(authority, OutletEntry.PATH,                 OUTLET);
+        matcher.addURI(authority, SavedDiscountEntry.PATH,          SAVED_DISCOUNT);
 
         return matcher;
     }

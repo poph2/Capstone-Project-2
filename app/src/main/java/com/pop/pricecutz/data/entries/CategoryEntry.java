@@ -33,11 +33,11 @@ public class CategoryEntry implements BaseColumns {
     public static String createTableSQL() {
         String createTableSQL = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID                 + " INTEGER PRIMARY KEY," +
-                COLUMN_NAME         + " TEXT NOT NULL, " +
-                COLUMN_IMAGE_NAME   + " TEXT NOT NULL, " +
-                COLUMN_IMAGE_INDEX  + " INTEGER NOT NULL, " +
-                COLUMN_CREATED_TIME + " INTEGER NOT NULL, " +
-                COLUMN_UPDATED_TIME + " INTEGER NOT NULL " +
+                COLUMN_NAME         + " TEXT, " +
+                COLUMN_IMAGE_NAME   + " TEXT, " +
+                COLUMN_IMAGE_INDEX  + " INTEGER, " +
+                COLUMN_CREATED_TIME + " INTEGER, " +
+                COLUMN_UPDATED_TIME + " INTEGER " +
                 " );";
 
         return createTableSQL;

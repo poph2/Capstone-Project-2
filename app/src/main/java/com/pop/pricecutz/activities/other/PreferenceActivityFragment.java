@@ -1,21 +1,9 @@
 package com.pop.pricecutz.activities.other;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.GridView;
 import android.widget.RadioButton;
-import android.widget.Toast;
-
-import com.pop.pricecutz.R;
-import com.pop.pricecutz.adapters.CategoryGridAdapter;
-
-import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.

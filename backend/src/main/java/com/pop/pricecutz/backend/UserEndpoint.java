@@ -156,4 +156,46 @@ public class UserEndpoint {
             throw new NotFoundException("Could not find User with ID: " + id);
         }
     }
+
+//    /**
+//     * Returns the {@link User} with which is created after the facebook details has been saved.
+//     *
+//     * @param fbAccount the Facebook Account for User
+//     * @return the entity with the corresponding ID
+//     * @throws NotFoundException if there is no {@code User} with the provided ID.
+//     */
+//    @ApiMethod(
+//            name = "create",
+//            path = "user/create",
+//            httpMethod = ApiMethod.HttpMethod.POST)
+//    public User create(FBAccount fbAccount) throws NotFoundException {
+//
+//        User user = null;
+//
+//        FBAccount fbA = ofy().load().type(FBAccount.class).filter("fbacct_fb_id = ", fbAccount.getFbacct_fb_id()).first().now();
+//
+//        if(fbA == null) { //Create User and FBAccount
+//
+//            long timeInMillis = System.currentTimeMillis();
+//
+//            user = new User();
+//
+//            user.setUser_email(fbAccount.getFbacct_email());
+//            user.setUser_created_time(timeInMillis);
+//            user.setUser_updated_time(timeInMillis);
+//
+//            user = insert(user);
+//
+//            fbAccount.setUser_id(user.getId());
+//            fbAccount = new FBAccountEndpoint().insert(fbAccount);
+//
+//        }
+//        else {
+//            long userID = fbA.getUser_id();
+//
+//            user = get(userID);
+//        }
+//
+//        return user;
+//    }
 }

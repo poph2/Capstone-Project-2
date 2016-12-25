@@ -26,28 +26,30 @@ public class FBAccountEntry implements BaseColumns {
     public static final String CONTENT_TYPE         = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
     public static final String CONTENT_ITEM_TYPE    = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
 
-    public static final String COLUMN_USER_ID       = "user_id";
     public static final String COLUMN_FB_USER_ID    = "fbacct_fb_id";
     public static final String COLUMN_FIRST_NAME    = "fbacct_first_name";
     public static final String COLUMN_MIDDLE_NAME   = "fbacct_middle_name";
     public static final String COLUMN_LAST_NAME     = "fbacct_last_name";
     public static final String COLUMN_NAME          = "fbacct_name";
     public static final String COLUMN_LINK_URL      = "fbacct_link_uri";
+    public static final String COLUMN_EMAIL         = "fbacct_email";
+    public static final String COLUMN_GENDER        = "fbacct_gender";
     public static final String COLUMN_CREATED_TIME  = "fbacct_created_time";
     public static final String COLUMN_UPDATED_TIME  = "fbacct_updated_time";
 
     public static String createTableSQL() {
         String createTableSQL = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID                 + " INTEGER PRIMARY KEY," +
-                COLUMN_USER_ID      + " INTEGER NOT NULL, " +
-                COLUMN_FB_USER_ID   + " INTEGER NOT NULL, " +
-                COLUMN_FIRST_NAME   + " TEXT NOT NULL, " +
-                COLUMN_MIDDLE_NAME  + " TEXT NOT NULL, " +
-                COLUMN_LAST_NAME    + " TEXT NOT NULL, " +
-                COLUMN_NAME         + " TEXT NOT NULL, " +
-                COLUMN_LINK_URL     + " TEXT NOT NULL, " +
-                COLUMN_CREATED_TIME + " INTEGER NOT NULL, " +
-                COLUMN_UPDATED_TIME + " INTEGER NOT NULL " +
+                COLUMN_FB_USER_ID   + " INTEGER, " +
+                COLUMN_FIRST_NAME   + " TEXT, " +
+                COLUMN_MIDDLE_NAME  + " TEXT, " +
+                COLUMN_LAST_NAME    + " TEXT, " +
+                COLUMN_NAME         + " TEXT, " +
+                COLUMN_LINK_URL     + " TEXT, " +
+                COLUMN_EMAIL        + " TEXT, " +
+                COLUMN_GENDER       + " TEXT, " +
+                COLUMN_CREATED_TIME + " INTEGER, " +
+                COLUMN_UPDATED_TIME + " INTEGER " +
                 " );";
 
         return createTableSQL;
@@ -57,13 +59,14 @@ public class FBAccountEntry implements BaseColumns {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(_ID,                  o.getId());
-        contentValues.put(COLUMN_USER_ID,       o.getUserId());
         contentValues.put(COLUMN_FB_USER_ID,    o.getFbacctFbId());
         contentValues.put(COLUMN_FIRST_NAME,    o.getFbacctFirstName());
         contentValues.put(COLUMN_MIDDLE_NAME,   o.getFbacctMiddleName());
         contentValues.put(COLUMN_LAST_NAME,     o.getFbacctLastName());
         contentValues.put(COLUMN_NAME,          o.getFbacctName());
         contentValues.put(COLUMN_LINK_URL,      o.getFbacctLinkUri());
+        contentValues.put(COLUMN_EMAIL,         o.getFbacctEmail());
+        contentValues.put(COLUMN_GENDER,        o.getFbacctGender());
         contentValues.put(COLUMN_CREATED_TIME,  o.getFbacctCreatedTime());
         contentValues.put(COLUMN_UPDATED_TIME,  o.getFbacctUpdatedTime());
 

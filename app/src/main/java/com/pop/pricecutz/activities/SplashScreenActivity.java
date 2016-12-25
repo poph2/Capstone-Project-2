@@ -8,11 +8,13 @@ import android.os.Bundle;
 
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.facebook.stetho.Stetho;
 import com.pop.pricecutz.R;
 import com.pop.pricecutz.activities.login.LoginActivity;
 import com.pop.pricecutz.activities.main.MainActivity;
 import com.pop.pricecutz.activities.other.PreferenceActivity;
+import com.pop.pricecutz.sync.PCSyncAdapter;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -29,6 +31,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         Stetho.initializeWithDefaults(this);
+
+        //PCSyncAdapter.syncImmediately(mContext);
 
         new Handler().postDelayed(new Runnable() {
 
@@ -47,21 +51,22 @@ public class SplashScreenActivity extends AppCompatActivity {
     private void checkFacebookLogin() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         Intent i = null;
-        if(accessToken != null) {
-            boolean preferenceIsSet = true;
-            if(preferenceIsSet) {
-                i = new Intent(getApplicationContext(), MainActivity.class);
-            }
-            else {
-                i = new Intent(getApplicationContext(), PreferenceActivity.class);
-            }
-            startActivity(i);
-            finish();
-
-        }
-        else {
+//        if(accessToken != null) {
+//            boolean preferenceIsSet = true;
+//            if(preferenceIsSet) {
+//                i = new Intent(getApplicationContext(), MainActivity.class);
+//            }
+//            else {
+//                i = new Intent(getApplicationContext(), PreferenceActivity.class);
+//            }
+//            startActivity(i);
+//            finish();
+//
+//        }
+//        else {
             i = new Intent(mContext, LoginActivity.class);
-        }
+//        }
+        LoginManager.getInstance().logOut();
         startActivity(i);
         finish();
     }

@@ -15,9 +15,7 @@ public class FBAccount {
     @Id
     Long id;
 
-    long user_id, fbacct_fb_id;
-
-    String fbacct_first_name, fbacct_middle_name, fbacct_last_name, fbacct_name, fbacct_link_uri;
+    String fbacct_fb_id, fbacct_first_name, fbacct_middle_name, fbacct_last_name, fbacct_name, fbacct_link_uri, fbacct_email, fbacct_gender;
 
     long fbacct_created_time, fbacct_updated_time;
 
@@ -31,19 +29,11 @@ public class FBAccount {
         this.id = id;
     }
 
-    public long getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(long user_id) {
-        this.user_id = user_id;
-    }
-
-    public long getFbacct_fb_id() {
+    public String getFbacct_fb_id() {
         return fbacct_fb_id;
     }
 
-    public void setFbacct_fb_id(long fbacct_fb_id) {
+    public void setFbacct_fb_id(String fbacct_fb_id) {
         this.fbacct_fb_id = fbacct_fb_id;
     }
 
@@ -85,6 +75,22 @@ public class FBAccount {
 
     public void setFbacct_link_uri(String fbacct_link_uri) {
         this.fbacct_link_uri = fbacct_link_uri;
+    }
+
+    public String getFbacct_email() {
+        return fbacct_email;
+    }
+
+    public void setFbacct_email(String fbacct_email) {
+        this.fbacct_email = fbacct_email;
+    }
+
+    public String getFbacct_gender() {
+        return fbacct_gender;
+    }
+
+    public void setFbacct_gender(String fbacct_gender) {
+        this.fbacct_gender = fbacct_gender;
     }
 
     public long getFbacct_created_time() {

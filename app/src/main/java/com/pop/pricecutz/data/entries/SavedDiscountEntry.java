@@ -36,10 +36,10 @@ public class SavedDiscountEntry implements BaseColumns {
     public static String createTableSQL() {
         String createTableSQL = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID                 + " INTEGER PRIMARY KEY," +
-                COLUMN_USER_ID      + " INTEGER NOT NULL, " +
-                COLUMN_DISCOUNT_ID  + " INTEGER NOT NULL, " +
-                COLUMN_CREATED_TIME + " INTEGER NOT NULL, " +
-                COLUMN_UPDATED_TIME + " INTEGER NOT NULL " +
+                COLUMN_USER_ID      + " INTEGER , " +
+                COLUMN_DISCOUNT_ID  + " INTEGER , " +
+                COLUMN_CREATED_TIME + " INTEGER , " +
+                COLUMN_UPDATED_TIME + " INTEGER " +
                 " );";
 
         return createTableSQL;
