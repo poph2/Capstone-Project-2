@@ -29,6 +29,7 @@ import com.pop.pricecutz.activities.main.fragments.CategoryFragment;
 import com.pop.pricecutz.activities.main.fragments.HomeFragment;
 import com.pop.pricecutz.activities.main.fragments.NearMeFragment;
 import com.pop.pricecutz.activities.main.fragments.InvetoryFragment;
+import com.pop.pricecutz.sync.PCSyncAdapter;
 
 import org.json.JSONObject;
 

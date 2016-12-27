@@ -26,7 +26,7 @@ public class SavedDiscountEntry implements BaseColumns {
     public static final String CONTENT_TYPE         = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
     public static final String CONTENT_ITEM_TYPE    = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
 
-    public static final String COLUMN_USER_ID       = "user_id";
+    public static final String COLUMN_FBACCT_FB_ID  = "fbacct_fb_id";
     public static final String COLUMN_DISCOUNT_ID   = "discount_id";
     public static final String COLUMN_CREATED_TIME  = "sdisc_created_time";
     public static final String COLUMN_UPDATED_TIME  = "sdisc_updated_time";
@@ -35,7 +35,7 @@ public class SavedDiscountEntry implements BaseColumns {
     public static String createTableSQL() {
         String createTableSQL = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID                 + " INTEGER PRIMARY KEY," +
-                COLUMN_USER_ID      + " INTEGER , " +
+                COLUMN_FBACCT_FB_ID + " TEXT , " +
                 COLUMN_DISCOUNT_ID  + " INTEGER , " +
                 COLUMN_CREATED_TIME + " INTEGER , " +
                 COLUMN_UPDATED_TIME + " INTEGER " +
@@ -48,7 +48,7 @@ public class SavedDiscountEntry implements BaseColumns {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(_ID,                  d.getId());
-        contentValues.put(COLUMN_USER_ID,       d.getUserId());
+        contentValues.put(COLUMN_FBACCT_FB_ID,  d.getFbacctFbId());
         contentValues.put(COLUMN_DISCOUNT_ID,   d.getDiscountId());
         contentValues.put(COLUMN_CREATED_TIME,  d.getSdiscCreatedTime());
         contentValues.put(COLUMN_UPDATED_TIME,  d.getSdiscUpdatedTime());

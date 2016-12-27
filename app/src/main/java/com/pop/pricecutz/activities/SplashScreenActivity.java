@@ -33,8 +33,6 @@ public class SplashScreenActivity extends AppCompatActivity implements LoaderMan
 
         Stetho.initializeWithDefaults(this);
 
-        //PCSyncAdapter.syncImmediately(mContext);
-
         new Handler().postDelayed(new Runnable() {
 
             /*

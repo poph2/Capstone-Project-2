@@ -15,7 +15,7 @@ public class SavedDiscount {
     @Id
     Long id;
 
-    long user_id;
+    String fbacct_fb_id;
 
     long discount_id;
 
@@ -31,12 +31,12 @@ public class SavedDiscount {
         this.id = id;
     }
 
-    public long getUser_id() {
-        return user_id;
+    public String getFbacct_fb_id() {
+        return fbacct_fb_id;
     }
 
-    public void setUser_id(long user_id) {
-        this.user_id = user_id;
+    public void setFbacct_fb_id(String fbacct_fb_id) {
+        this.fbacct_fb_id = fbacct_fb_id;
     }
 
     public long getDiscount_id() {
