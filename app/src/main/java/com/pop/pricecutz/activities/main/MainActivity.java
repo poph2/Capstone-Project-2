@@ -28,8 +28,7 @@ import com.pop.pricecutz.activities.login.LoginActivity;
 import com.pop.pricecutz.activities.main.fragments.CategoryFragment;
 import com.pop.pricecutz.activities.main.fragments.HomeFragment;
 import com.pop.pricecutz.activities.main.fragments.NearMeFragment;
-import com.pop.pricecutz.activities.main.fragments.InvetoryFragment;
-import com.pop.pricecutz.sync.PCSyncAdapter;
+import com.pop.pricecutz.activities.main.fragments.InventoryFragment;
 
 import org.json.JSONObject;
 
@@ -156,7 +155,7 @@ public class MainActivity extends AppCompatActivity
         adapter.addFragment(new Fragment(), "");
 //        adapter.addFragment(new FavoriteFragment(), "");
         adapter.addFragment(new CategoryFragment(), "");
-        adapter.addFragment(new InvetoryFragment(), "");
+        adapter.addFragment(new InventoryFragment(), "");
 
 //        adapter.addFragment(new Fragment(), "ONE");
 //        adapter.addFragment(new Fragment(), "TWO");

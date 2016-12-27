@@ -28,13 +28,14 @@ public class PriceCutzProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private PriceCutzDBHelper mOpenHelper;
 
-    static final int CATEGORY               = 1000;
-    static final int COMPANY                = 1100;
-    static final int DISCOUNT               = 1200;
-    static final int DISCOUNT_WITH_COMPANY  = 1201;
-    static final int FB_ACCOUNT             = 1300;
-    static final int OUTLET                 = 1400;
-    static final int SAVED_DISCOUNT         = 1500;
+    static final int CATEGORY                       = 1000;
+    static final int COMPANY                        = 1100;
+    static final int DISCOUNT                       = 1200;
+    static final int DISCOUNT_WITH_COMPANY          = 1201;
+    static final int SAVED_DISCOUNT_WITH_COMPANY    = 1202;
+    static final int FB_ACCOUNT                     = 1300;
+    static final int OUTLET                         = 1400;
+    static final int SAVED_DISCOUNT                 = 1500;
 
     @Override
     public boolean onCreate() {
@@ -51,6 +52,10 @@ public class PriceCutzProvider extends ContentProvider {
 
             case DISCOUNT_WITH_COMPANY: {
                 retCursor = getDiscountWithCompany(uri, projection, selection, selectionArgs, sortOrder);
+                break;
+            }
+            case SAVED_DISCOUNT_WITH_COMPANY: {
+                retCursor = getSavedDiscountWithCompany(uri, projection, selection, selectionArgs, sortOrder);
                 break;
             }
             default: {
@@ -112,6 +117,10 @@ public class PriceCutzProvider extends ContentProvider {
             case COMPANY:
                 return CompanyEntry.CONTENT_TYPE;
             case DISCOUNT:
+                return DiscountEntry.CONTENT_TYPE;
+            case DISCOUNT_WITH_COMPANY:
+                return DiscountEntry.CONTENT_TYPE;
+            case SAVED_DISCOUNT_WITH_COMPANY:
                 return DiscountEntry.CONTENT_TYPE;
             case FB_ACCOUNT:
                 return FBAccountEntry.CONTENT_TYPE;
@@ -232,13 +241,14 @@ public class PriceCutzProvider extends ContentProvider {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = PriceCutzContract.CONTENT_AUTHORITY;
 
-        matcher.addURI(authority, CategoryEntry.PATH,               CATEGORY);
-        matcher.addURI(authority, CompanyEntry.PATH,                COMPANY);
-        matcher.addURI(authority, DiscountEntry.PATH,               DISCOUNT);
-        matcher.addURI(authority, DiscountEntry.PATH_WITH_COMPANY,  DISCOUNT_WITH_COMPANY);
-        matcher.addURI(authority, FBAccountEntry.PATH,              FB_ACCOUNT);
-        matcher.addURI(authority, OutletEntry.PATH,                 OUTLET);
-        matcher.addURI(authority, SavedDiscountEntry.PATH,          SAVED_DISCOUNT);
+        matcher.addURI(authority, CategoryEntry.PATH,                       CATEGORY);
+        matcher.addURI(authority, CompanyEntry.PATH,                        COMPANY);
+        matcher.addURI(authority, DiscountEntry.PATH,                       DISCOUNT);
+        matcher.addURI(authority, DiscountEntry.PATH_WITH_COMPANY,          DISCOUNT_WITH_COMPANY);
+        matcher.addURI(authority, DiscountEntry.PATH_SAVED_WITH_COMPANY,    SAVED_DISCOUNT_WITH_COMPANY);
+        matcher.addURI(authority, FBAccountEntry.PATH,                      FB_ACCOUNT);
+        matcher.addURI(authority, OutletEntry.PATH,                         OUTLET);
+        matcher.addURI(authority, SavedDiscountEntry.PATH,                  SAVED_DISCOUNT);
 
         return matcher;
     }
@@ -263,6 +273,29 @@ public class PriceCutzProvider extends ContentProvider {
                         "." + DiscountEntry.COLUMN_COY_ID +
                         " = " + CompanyEntry.TABLE_NAME +
                         "." + CompanyEntry._ID);
+
+        return discountWithCompany.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getSavedDiscountWithCompany(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+
+        SQLiteQueryBuilder discountWithCompany = new SQLiteQueryBuilder();
+
+        //This is an inner join which looks like
+        //weather INNER JOIN location ON weather.location_id = location._id
+        discountWithCompany.setTables(
+                DiscountEntry.TABLE_NAME +
+                        " INNER JOIN " + CompanyEntry.TABLE_NAME +
+                        " ON " + DiscountEntry.TABLE_NAME + "." + DiscountEntry.COLUMN_COY_ID + " = " + CompanyEntry.TABLE_NAME + "." + CompanyEntry._ID +
+                        " INNER JOIN " + SavedDiscountEntry.TABLE_NAME +
+                        " ON " + DiscountEntry.TABLE_NAME + "." + DiscountEntry._ID + " = " + SavedDiscountEntry.TABLE_NAME + "." + SavedDiscountEntry.COLUMN_DISCOUNT_ID);
 
         return discountWithCompany.query(mOpenHelper.getReadableDatabase(),
                 projection,

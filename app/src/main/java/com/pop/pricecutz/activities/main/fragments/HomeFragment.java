@@ -44,7 +44,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
         super.onCreate(savedInstanceState);
 
         mContext = getContext();
-
     }
 
     @Override
