@@ -2,6 +2,7 @@ package com.pop.pricecutz.backend;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 /**
  * Created by Pop H2 on 10/18/2016.
@@ -21,7 +22,10 @@ public class Outlet {
 
     double outlet_latitude, outlet_longitude;
 
-    long outlet_created_time, outlet_updated_time;
+    long outlet_created_time;
+
+    @Index
+    long outlet_updated_time;
 
     public Outlet() {}
 

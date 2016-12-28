@@ -149,6 +149,34 @@ public class FBAccountEndpoint {
         return CollectionResponse.<FBAccount>builder().setItems(fBAccountList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
     }
 
+    /**
+     * List all entities after a certain timestamp.
+     *
+     * @param cursor used for pagination to determine which page to return
+     * @param limit  the maximum number of entries to return
+     * @param timestamp  the timestamp to check for
+     * @return a response that encapsulates the result list and the next page token/cursor
+     */
+    @ApiMethod(
+            name = "list_by_time",
+            path = "fBAccount/list_by_time",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public CollectionResponse<FBAccount> list_by_time(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit, @Named("timestamp") Long timestamp) {
+        limit = limit == null ? DEFAULT_LIST_LIMIT : limit;
+
+        Query<FBAccount> query = ofy().load().type(FBAccount.class).filter("fbacct_updated_time >= ", timestamp).limit(limit);
+
+        if (cursor != null) {
+            query = query.startAt(Cursor.fromWebSafeString(cursor));
+        }
+        QueryResultIterator<FBAccount> queryIterator = query.iterator();
+        List<FBAccount> fbAccountList = new ArrayList<>(limit);
+        while (queryIterator.hasNext()) {
+            fbAccountList.add(queryIterator.next());
+        }
+        return CollectionResponse.<FBAccount>builder().setItems(fbAccountList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
+    }
+
     private void checkExists(Long id) throws NotFoundException {
         try {
             ofy().load().type(FBAccount.class).id(id).safe();
@@ -156,7 +184,6 @@ public class FBAccountEndpoint {
             throw new NotFoundException("Could not find FBAccount with ID: " + id);
         }
     }
-
 
     /**
      * Returns the {@link FBAccount} with the corresponding FB_ID.

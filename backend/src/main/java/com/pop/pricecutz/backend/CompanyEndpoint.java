@@ -137,6 +137,7 @@ public class CompanyEndpoint {
             httpMethod = ApiMethod.HttpMethod.GET)
     public CollectionResponse<Company> list(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit) {
         limit = limit == null ? DEFAULT_LIST_LIMIT : limit;
+
         Query<Company> query = ofy().load().type(Company.class).limit(limit);
         if (cursor != null) {
             query = query.startAt(Cursor.fromWebSafeString(cursor));
@@ -161,15 +162,13 @@ public class CompanyEndpoint {
             name = "list_by_time",
             path = "company/list_by_time",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public CollectionResponse<Company> list_by_time(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit, @Named("timestamp") Long timestamp) {
+    public CollectionResponse<Company> list_by_time(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit, @Named("timestamp") Long timestamp) throws NotFoundException {
+
         limit = limit == null ? DEFAULT_LIST_LIMIT : limit;
-
-        Query<Company> query = ofy().load().type(Company.class).limit(limit);
-
+        Query<Company> query = ofy().load().type(Company.class).filter("coy_updated_time >= ", timestamp).limit(limit);
         if (cursor != null) {
             query = query.startAt(Cursor.fromWebSafeString(cursor));
         }
-
         QueryResultIterator<Company> queryIterator = query.iterator();
         List<Company> companyList = new ArrayList<>(limit);
         while (queryIterator.hasNext()) {

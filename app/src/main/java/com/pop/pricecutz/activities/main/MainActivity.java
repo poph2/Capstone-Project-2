@@ -1,7 +1,11 @@
 package com.pop.pricecutz.activities.main;
 
+import android.app.LoaderManager;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,10 +18,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -29,6 +38,9 @@ import com.pop.pricecutz.activities.main.fragments.CategoryFragment;
 import com.pop.pricecutz.activities.main.fragments.HomeFragment;
 import com.pop.pricecutz.activities.main.fragments.NearMeFragment;
 import com.pop.pricecutz.activities.main.fragments.InventoryFragment;
+import com.pop.pricecutz.data.entries.DiscountEntry;
+import com.pop.pricecutz.data.entries.FBAccountEntry;
+import com.pop.pricecutz.sync.PCSyncAdapter;
 
 import org.json.JSONObject;
 
@@ -36,7 +48,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor> {
+
+    TextView usernameTextView, emailTextView;
+
+    ImageView profilePictureImageView;
+
 
     public static String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -69,9 +86,14 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.getHeaderView(0);
+
+        usernameTextView = (TextView) header.findViewById(R.id.usernameTextView);
+        emailTextView = (TextView) header.findViewById(R.id.emailTextView);
+        profilePictureImageView = (ImageView) header.findViewById(R.id.profile_picture_imageview);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -84,8 +106,9 @@ public class MainActivity extends AppCompatActivity
         viewPager.setCurrentItem(0);
 
         //Request Sync
-//        PCSyncAdapter.syncImmediately(mContext);
+        PCSyncAdapter.syncImmediately(mContext);
 
+        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -170,6 +193,42 @@ public class MainActivity extends AppCompatActivity
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
         tabLayout.getTabAt(4).setIcon(tabIcons[4]);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        return new CursorLoader(
+                mContext,
+                FBAccountEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+
+        if(cursor.getCount() > 0) {
+            cursor.moveToFirst();
+
+            Log.d(LOG_TAG, " index " + cursor.getString(cursor.getColumnIndex(FBAccountEntry.COLUMN_NAME)));
+
+            usernameTextView.setText(cursor.getString(cursor.getColumnIndex(FBAccountEntry.COLUMN_NAME)));
+            emailTextView.setText(cursor.getString(cursor.getColumnIndex(FBAccountEntry.COLUMN_EMAIL)));
+
+            String id = cursor.getString(cursor.getColumnIndex(FBAccountEntry.COLUMN_FB_USER_ID));
+
+            String imageURL = "https://graph.facebook.com/" + id + "/picture?type=large";
+
+            Glide.with(mContext).load(imageURL).into(profilePictureImageView);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

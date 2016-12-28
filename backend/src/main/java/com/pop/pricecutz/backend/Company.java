@@ -2,6 +2,7 @@ package com.pop.pricecutz.backend;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 /**
  * Created by Pop H2 on 9/6/2016.
@@ -16,7 +17,10 @@ public class Company {
 
     String coy_name, coy_industry, coy_image_url;
 
-    long coy_created_time, coy_updated_time;
+    long coy_created_time;
+
+    @Index
+    long coy_updated_time;
 
     public Company() {}
 

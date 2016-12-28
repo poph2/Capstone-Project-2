@@ -2,6 +2,7 @@ package com.pop.pricecutz.backend;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 /**
  * Created by Pop H2 on 11/26/2016.
@@ -19,7 +20,10 @@ public class Category {
 
     int cat_image_index;
 
-    long cat_created_time, cat_updated_time;
+    long cat_created_time;
+
+    @Index
+    long cat_updated_time;
 
     public Category() {}
 

@@ -2,6 +2,7 @@ package com.pop.pricecutz.backend;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 /**
  * Created by Pop H2 on 9/30/2016.
@@ -21,7 +22,10 @@ public class Discount {
 
     int disc_type, disc_image_index;
 
-    long disc_created_time, disc_updated_time;
+    long disc_created_time;
+
+    @Index
+    long disc_updated_time;
 
     public Discount() {}
 

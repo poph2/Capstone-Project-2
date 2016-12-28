@@ -2,6 +2,7 @@ package com.pop.pricecutz.backend;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 /**
  * Created by Pop H2 on 12/22/2016.
@@ -15,11 +16,15 @@ public class SavedDiscount {
     @Id
     Long id;
 
+    @Index
     String fbacct_fb_id;
 
     long discount_id;
 
-    long sdisc_created_time, sdisc_updated_time;
+    long sdisc_created_time;
+
+    @Index
+    long sdisc_updated_time;
 
     public SavedDiscount() {}
 

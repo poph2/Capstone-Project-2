@@ -2,6 +2,7 @@ package com.pop.pricecutz.backend;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 /**
  * Created by Pop H2 on 12/22/2016.
@@ -16,7 +17,10 @@ public class User {
 
     String user_email;
 
-    long user_created_time, user_updated_time;
+    long user_created_time;
+
+    @Index
+    long user_updated_time;
 
     public User() {}
 

@@ -149,6 +149,34 @@ public class OutletEndpoint {
         return CollectionResponse.<Outlet>builder().setItems(outletList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
     }
 
+    /**
+     * List all entities after a certain timestamp.
+     *
+     * @param cursor used for pagination to determine which page to return
+     * @param limit  the maximum number of entries to return
+     * @param timestamp  the timestamp to check for
+     * @return a response that encapsulates the result list and the next page token/cursor
+     */
+    @ApiMethod(
+            name = "list_by_time",
+            path = "outlet/list_by_time",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public CollectionResponse<Outlet> list_by_time(@Nullable @Named("cursor") String cursor, @Nullable @Named("limit") Integer limit, @Named("timestamp") Long timestamp) {
+        limit = limit == null ? DEFAULT_LIST_LIMIT : limit;
+
+        Query<Outlet> query = ofy().load().type(Outlet.class).filter("outlet_updated_time >= ", timestamp).limit(limit);
+
+        if (cursor != null) {
+            query = query.startAt(Cursor.fromWebSafeString(cursor));
+        }
+        QueryResultIterator<Outlet> queryIterator = query.iterator();
+        List<Outlet> outletList = new ArrayList<>(limit);
+        while (queryIterator.hasNext()) {
+            outletList.add(queryIterator.next());
+        }
+        return CollectionResponse.<Outlet>builder().setItems(outletList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
+    }
+
     private void checkExists(Long id) throws NotFoundException {
         try {
             ofy().load().type(Outlet.class).id(id).safe();

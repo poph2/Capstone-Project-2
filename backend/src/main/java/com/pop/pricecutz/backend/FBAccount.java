@@ -2,6 +2,7 @@ package com.pop.pricecutz.backend;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 /**
  * Created by Pop H2 on 12/22/2016.
@@ -15,9 +16,15 @@ public class FBAccount {
     @Id
     Long id;
 
-    String fbacct_fb_id, fbacct_first_name, fbacct_middle_name, fbacct_last_name, fbacct_name, fbacct_link_uri, fbacct_email, fbacct_gender;
+    @Index
+    String fbacct_fb_id;
 
-    long fbacct_created_time, fbacct_updated_time;
+    String fbacct_first_name, fbacct_middle_name, fbacct_last_name, fbacct_name, fbacct_link_uri, fbacct_email, fbacct_gender;
+
+    long fbacct_created_time;
+
+    @Index
+    long fbacct_updated_time;
 
     public FBAccount() {}
 

@@ -12,6 +12,7 @@ import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.stetho.Stetho;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -48,12 +49,26 @@ public class SplashScreen2Activity extends AppCompatActivity {
 
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
+//        new GraphRequest(
+//                AccessToken.getCurrentAccessToken(),
+//                "/me",
+//                null,
+//                HttpMethod.GET,
+//                new GraphRequest.Callback() {
+//                    public void onCompleted(GraphResponse response) {
+//                        Log.d(LOG_TAG, new Gson().toJson(response.toString()));
+//                    }
+//                }
+//        ).executeAsync();
+
         GraphRequest request = GraphRequest.newMeRequest(accessToken,
             new GraphRequest.GraphJSONObjectCallback() {
                 @Override
                 public void onCompleted(JSONObject object, GraphResponse response) {
 
                     try {
+
+                        Log.d(LOG_TAG, new Gson().toJson(object));
 
                         long timeInMillis = System.currentTimeMillis();
 

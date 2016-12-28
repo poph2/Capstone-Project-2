@@ -17,6 +17,7 @@ import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.gson.Gson;
 import com.pop.pricecutz.R;
 import com.pop.pricecutz.backend.companyApi.CompanyApi;
 import com.pop.pricecutz.backend.companyApi.model.CollectionResponseCompany;
@@ -57,8 +58,9 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
         long timeInMillis = System.currentTimeMillis();
         long lastSyncTime = getLastSyncTime();
 
-        syncCompany(timeInMillis);
-        syncDiscount(timeInMillis);
+        syncCompany(lastSyncTime);
+        syncDiscount(lastSyncTime);
+
 
 //        setLastSyncTime(timeInMillis);
 
@@ -148,17 +150,17 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
         return lastSyncTime;
     }
 
-    public void setLastSyncTime(long syncTime) {
+    public void setLastSyncTime(long lastSyncTime) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         SharedPreferences.Editor editor = prefs.edit();
 
         String lastSyncKey = context.getString(R.string.pref_last_sync);
-        editor.putLong(lastSyncKey, syncTime);
+        editor.putLong(lastSyncKey, lastSyncTime);
         editor.commit();
     }
 
-    public void syncCompany(long syncLastTime) {
+    public void syncCompany(long lastSyncTime) {
         CompanyApi.Builder builder = new CompanyApi.Builder(AndroidHttp.newCompatibleTransport(),
                 new AndroidJsonFactory(), null)
                 .setRootUrl("https://price-cutz.appspot.com/_ah/api/");
@@ -167,10 +169,12 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
 
         try {
 
-            CompanyApi.List companyList = companyApi.list();
-            CollectionResponseCompany coyCollection = companyList.execute();
+            CompanyApi.ListByTime companyListByTime = companyApi.listByTime(lastSyncTime);
+            CollectionResponseCompany coyCollection = companyListByTime.execute();
 
             List<Company> companies = coyCollection.getItems();
+
+            Log.d(LOG_TAG, "companies - " + new Gson().toJson(companies));
 
             ContentValues contentValuesArr[] = new ContentValues[companies.size()];
 
@@ -192,7 +196,7 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
 
-    public void syncDiscount(long syncLastTime) {
+    public void syncDiscount(long lastSyncTime) {
         DiscountApi.Builder builder = new DiscountApi.Builder(AndroidHttp.newCompatibleTransport(),
                 new AndroidJsonFactory(), null)
                 .setRootUrl("https://price-cutz.appspot.com/_ah/api/");
@@ -204,8 +208,8 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
 
         try {
 
-            DiscountApi.List discount_List = discountApi.list();
-            CollectionResponseDiscount dbCollection = discount_List.execute();
+            DiscountApi.ListByTime discountListByTime = discountApi.listByTime(lastSyncTime);
+            CollectionResponseDiscount dbCollection = discountListByTime.execute();
 
             List<Discount> discountList = dbCollection.getItems();
 
