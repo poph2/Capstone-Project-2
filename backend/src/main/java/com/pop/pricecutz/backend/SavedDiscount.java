@@ -23,7 +23,7 @@ public class SavedDiscount {
     long discount_id;
 
     @Index
-    String status;
+    String sdisc_status;
 
     @Index
     long sdisc_created_time;
@@ -66,12 +66,12 @@ public class SavedDiscount {
         this.discount_id = discount_id;
     }
 
-    public String getStatus() {
-        return status;
+    public String getSdisc_status() {
+        return sdisc_status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setSdisc_status(String sdisc_status) {
+        this.sdisc_status = sdisc_status;
     }
 
     public long getSdisc_created_time() {

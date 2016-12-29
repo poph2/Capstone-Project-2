@@ -33,15 +33,18 @@ public class DiscountEntry implements BaseColumns {
     public static final String CONTENT_TYPE         = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
     public static final String CONTENT_ITEM_TYPE    = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
 
-    public static final String COLUMN_CODE          = "disc_code";
-    public static final String COLUMN_TITLE         = "disc_title";
-    public static final String COLUMN_DESCRIPTION   = "disc_description";
-    public static final String COLUMN_COY_ID        = "coy_id";
-    public static final String COLUMN_TYPE          = "disc_type";
-    public static final String COLUMN_IMAGE_INDEX   = "disc_image_index";
-    public static final String COLUMN_SAVED_BY_USER = "disc_saved_by_user";
-    public static final String COLUMN_CREATED_TIME  = "disc_created_time";
-    public static final String COLUMN_UPDATED_TIME  = "disc_updated_time";
+    public static final String COLUMN_CODE              = "disc_code";
+    public static final String COLUMN_TITLE             = "disc_title";
+    public static final String COLUMN_DESCRIPTION       = "disc_description";
+    public static final String COLUMN_COY_ID            = "coy_id";
+    public static final String COLUMN_TYPE              = "disc_type";
+    public static final String COLUMN_IMAGE_INDEX       = "disc_image_index";
+    public static final String COLUMN_STATUS            = "disc_status";
+    public static final String COLUMN_IMAGE_ID          = "disc_image_id";
+    public static final String COLUMN_EXPIRY_TIME       = "disc_expiry_time";
+    public static final String COLUMN_EXPIRY_TIMEZONE   = "disc_expiry_time_zone";
+    public static final String COLUMN_CREATED_TIME      = "disc_created_time";
+    public static final String COLUMN_UPDATED_TIME      = "disc_updated_time";
 
     public static String createTableSQL() {
         String createTableSQL = "CREATE TABLE " + TABLE_NAME + " (" +
@@ -52,7 +55,10 @@ public class DiscountEntry implements BaseColumns {
                 COLUMN_COY_ID           + " INTEGER, " +
                 COLUMN_TYPE             + " TEXT, " +
                 COLUMN_IMAGE_INDEX      + " INTEGER, " +
-                COLUMN_SAVED_BY_USER    + " INTEGER, " +
+                COLUMN_STATUS           + " TEXT, " +
+                COLUMN_IMAGE_ID         + " INTEGER, " +
+                COLUMN_EXPIRY_TIME      + " INTEGER, " +
+                COLUMN_EXPIRY_TIMEZONE  + " TEXT, " +
                 COLUMN_CREATED_TIME     + " INTEGER, " +
                 COLUMN_UPDATED_TIME     + " INTEGER " +
                 " );";
@@ -63,15 +69,19 @@ public class DiscountEntry implements BaseColumns {
     public static ContentValues getContentValues(Discount d) {
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(_ID,                  d.getId());
-        contentValues.put(COLUMN_CODE,          d.getDiscCode());
-        contentValues.put(COLUMN_TITLE,         d.getDiscTitle());
-        contentValues.put(COLUMN_DESCRIPTION,   d.getDiscDescription());
-        contentValues.put(COLUMN_COY_ID,        d.getCoyId());
-        contentValues.put(COLUMN_TYPE,          d.getDiscType());
-        contentValues.put(COLUMN_IMAGE_INDEX,   d.getDiscImageIndex());
-        contentValues.put(COLUMN_CREATED_TIME,  d.getDiscCreatedTime());
-        contentValues.put(COLUMN_UPDATED_TIME,  d.getDiscUpdatedTime());
+        contentValues.put(_ID,                      d.getId());
+        contentValues.put(COLUMN_CODE,              d.getDiscCode());
+        contentValues.put(COLUMN_TITLE,             d.getDiscTitle());
+        contentValues.put(COLUMN_DESCRIPTION,       d.getDiscDescription());
+        contentValues.put(COLUMN_COY_ID,            d.getCoyId());
+        contentValues.put(COLUMN_TYPE,              d.getDiscType());
+        contentValues.put(COLUMN_IMAGE_INDEX,       d.getDiscImageIndex());
+        contentValues.put(COLUMN_STATUS,            d.getDiscStatus());
+        contentValues.put(COLUMN_IMAGE_ID,          d.getDiscImageId());
+        contentValues.put(COLUMN_EXPIRY_TIME,       d.getDiscExpiryTime());
+        contentValues.put(COLUMN_EXPIRY_TIMEZONE,   d.getDiscExpiryTimeZone());
+        contentValues.put(COLUMN_CREATED_TIME,      d.getDiscCreatedTime());
+        contentValues.put(COLUMN_UPDATED_TIME,      d.getDiscUpdatedTime());
 
         return contentValues;
     }

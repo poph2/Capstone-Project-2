@@ -28,15 +28,17 @@ public class SavedDiscountEntry implements BaseColumns {
 
     public static final String COLUMN_FBACCT_FB_ID  = "fbacct_fb_id";
     public static final String COLUMN_DISCOUNT_ID   = "discount_id";
+    public static final String COLUMN_STATUS        = "sdisc_status";
     public static final String COLUMN_CREATED_TIME  = "sdisc_created_time";
     public static final String COLUMN_UPDATED_TIME  = "sdisc_updated_time";
 
 
     public static String createTableSQL() {
         String createTableSQL = "CREATE TABLE " + TABLE_NAME + " (" +
-                _ID                 + " INTEGER PRIMARY KEY," +
+                _ID                     + " INTEGER PRIMARY KEY," +
                 COLUMN_FBACCT_FB_ID + " TEXT , " +
                 COLUMN_DISCOUNT_ID  + " INTEGER , " +
+                COLUMN_STATUS       + " TEXT , " +
                 COLUMN_CREATED_TIME + " INTEGER , " +
                 COLUMN_UPDATED_TIME + " INTEGER " +
                 " );";
@@ -50,6 +52,7 @@ public class SavedDiscountEntry implements BaseColumns {
         contentValues.put(_ID,                  d.getId());
         contentValues.put(COLUMN_FBACCT_FB_ID,  d.getFbacctFbId());
         contentValues.put(COLUMN_DISCOUNT_ID,   d.getDiscountId());
+        contentValues.put(COLUMN_STATUS,        d.getSdiscStatus());
         contentValues.put(COLUMN_CREATED_TIME,  d.getSdiscCreatedTime());
         contentValues.put(COLUMN_UPDATED_TIME,  d.getSdiscUpdatedTime());
 

@@ -29,7 +29,7 @@ public class Discount {
     int disc_type, disc_image_index;
 
     @Index
-    String status;
+    String disc_status;
 
     public static final String STATUS_INACTIVE    = "inactive";
     public static final String STATUS_ACTIVE      = "active";
@@ -113,12 +113,20 @@ public class Discount {
         this.disc_image_index = disc_image_index;
     }
 
-    public String getStatus() {
-        return status;
+    public String getDisc_status() {
+        return disc_status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setDisc_status(String disc_status) {
+        this.disc_status = disc_status;
+    }
+
+    public long getDisc_image_id() {
+        return disc_image_id;
+    }
+
+    public void setDisc_image_id(long disc_image_id) {
+        this.disc_image_id = disc_image_id;
     }
 
     public long getDisc_expiry_time() {

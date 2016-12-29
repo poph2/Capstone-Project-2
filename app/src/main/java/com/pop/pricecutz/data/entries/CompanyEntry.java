@@ -29,6 +29,7 @@ public class CompanyEntry implements BaseColumns {
     public static final String COLUMN_NAME          = "coy_name";
     public static final String COLUMN_INDUSTRY      = "coy_industry";
     public static final String COLUMN_IMAGE_URL     = "coy_image_url";
+    public static final String COLUMN_IMAGE_ID      = "coy_image_id";
     public static final String COLUMN_CREATED_TIME  = "coy_created_time";
     public static final String COLUMN_UPDATED_TIME  = "coy_updated_time";
 
@@ -38,6 +39,7 @@ public class CompanyEntry implements BaseColumns {
                 COLUMN_NAME         + " TEXT, " +
                 COLUMN_INDUSTRY     + " TEXT, " +
                 COLUMN_IMAGE_URL    + " TEXT, " +
+                COLUMN_IMAGE_ID     + " INTEGER, " +
                 COLUMN_CREATED_TIME + " INTEGER, " +
                 COLUMN_UPDATED_TIME + " INTEGER " +
                 " );";
@@ -53,6 +55,7 @@ public class CompanyEntry implements BaseColumns {
         contentValues.put(COLUMN_INDUSTRY,      c.getCoyIndustry());
         contentValues.put(COLUMN_IMAGE_URL,     c.getCoyImageUrl());
         contentValues.put(COLUMN_CREATED_TIME,  c.getCoyCreatedTime());
+        contentValues.put(COLUMN_IMAGE_ID,      c.getImageId());
         contentValues.put(COLUMN_UPDATED_TIME,  c.getCoyUpdatedTime());
 
         return contentValues;

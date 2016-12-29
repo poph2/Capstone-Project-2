@@ -19,6 +19,9 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.gson.Gson;
 import com.pop.pricecutz.R;
+import com.pop.pricecutz.backend.categoryApi.CategoryApi;
+import com.pop.pricecutz.backend.categoryApi.model.Category;
+import com.pop.pricecutz.backend.categoryApi.model.CollectionResponseCategory;
 import com.pop.pricecutz.backend.companyApi.CompanyApi;
 import com.pop.pricecutz.backend.companyApi.model.CollectionResponseCompany;
 import com.pop.pricecutz.backend.companyApi.model.Company;
@@ -28,6 +31,7 @@ import com.pop.pricecutz.backend.discountApi.model.Discount;
 import com.pop.pricecutz.backend.outletApi.OutletApi;
 import com.pop.pricecutz.backend.outletApi.model.CollectionResponseOutlet;
 import com.pop.pricecutz.backend.outletApi.model.Outlet;
+import com.pop.pricecutz.data.entries.CategoryEntry;
 import com.pop.pricecutz.data.entries.CompanyEntry;
 import com.pop.pricecutz.data.entries.DiscountEntry;
 import com.pop.pricecutz.data.entries.OutletEntry;
@@ -62,9 +66,9 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
         long timeInMillis = System.currentTimeMillis();
         long lastSyncTime = getLastSyncTime();
 
-        syncCompany(lastSyncTime);
-        syncDiscount(lastSyncTime);
-
+        syncCategory(lastSyncTime);
+//        syncCompany(lastSyncTime);
+//        syncDiscount(lastSyncTime);
 
 //        setLastSyncTime(timeInMillis);
 
@@ -162,6 +166,40 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
         String lastSyncKey = context.getString(R.string.pref_last_sync);
         editor.putLong(lastSyncKey, lastSyncTime);
         editor.commit();
+    }
+
+    public void syncCategory(long lastSyncTime) {
+        CategoryApi.Builder builder = new CategoryApi.Builder(AndroidHttp.newCompatibleTransport(),
+                new AndroidJsonFactory(), null)
+                .setRootUrl("https://price-cutz.appspot.com/_ah/api/");
+
+        CategoryApi categoryApi = builder.build();
+
+        try {
+
+            CategoryApi.ListByTime categoryListByTime = categoryApi.listByTime(lastSyncTime);
+            CollectionResponseCategory catCollection = categoryListByTime.execute();
+
+            List<Category> categories = catCollection.getItems();
+
+            ContentValues contentValuesArr[] = new ContentValues[categories.size()];
+
+            for(int i = 0; i < categories.size(); i++) {
+
+                Category category = categories.get(i);
+
+                ContentValues contentValues = CategoryEntry.getContentValues(category);
+
+                contentValuesArr[i] = contentValues;
+            }
+
+            int i = getContext().getContentResolver().bulkInsert(CategoryEntry.CONTENT_URI, contentValuesArr);
+
+        }
+        catch(Exception e) {
+            Log.e(LOG_TAG, e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void syncCompany(long lastSyncTime) {

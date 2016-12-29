@@ -19,7 +19,9 @@ public class Image {
 
     Blob blob;
 
-    public Image() {}
+    public Image(Blob blob) {
+        this.blob = blob;
+    }
 
     public long getId() {
         return id;
