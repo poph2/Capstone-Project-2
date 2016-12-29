@@ -16,18 +16,46 @@ public class Discount {
     @Id
     Long id;
 
-    String disc_code, disc_title, disc_description;
+    @Index
+    String disc_code;
 
+    String disc_title;
+
+    String disc_description;
+
+    @Index
     long coy_id;
 
     int disc_type, disc_image_index;
 
+    @Index
+    String status;
+
+    public static final String STATUS_INACTIVE    = "inactive";
+    public static final String STATUS_ACTIVE      = "active";
+    public static final String STATUS_EXPIRED     = "Expired";
+    public static final String STATUS_CANCELLED   = "Cancelled";
+
+    long disc_image_id;
+
+    @Index
+    long disc_expiry_time;
+
+    @Index
+    long disc_expiry_time_zone;
+
+    @Index
     long disc_created_time;
 
     @Index
     long disc_updated_time;
 
-    public Discount() {}
+    public Discount() {
+        long timeImMillis = System.currentTimeMillis();
+
+        disc_created_time = timeImMillis;
+        disc_updated_time = timeImMillis;
+    }
 
     public Long getId() {
         return id;
@@ -85,6 +113,30 @@ public class Discount {
         this.disc_image_index = disc_image_index;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public long getDisc_expiry_time() {
+        return disc_expiry_time;
+    }
+
+    public void setDisc_expiry_time(long disc_expiry_time) {
+        this.disc_expiry_time = disc_expiry_time;
+    }
+
+    public long getDisc_expiry_time_zone() {
+        return disc_expiry_time_zone;
+    }
+
+    public void setDisc_expiry_time_zone(long disc_expiry_time_zone) {
+        this.disc_expiry_time_zone = disc_expiry_time_zone;
+    }
+
     public long getDisc_created_time() {
         return disc_created_time;
     }
@@ -99,5 +151,13 @@ public class Discount {
 
     public void setDisc_updated_time(long disc_updated_time) {
         this.disc_updated_time = disc_updated_time;
+    }
+
+    public long getImage_id() {
+        return disc_image_id;
+    }
+
+    public void setImage_id(long disc_image_id) {
+        this.disc_image_id = disc_image_id;
     }
 }

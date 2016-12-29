@@ -25,8 +25,8 @@ public class CategoryEntry implements BaseColumns {
     public static final String CONTENT_ITEM_TYPE    = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
 
     public static final String COLUMN_NAME          = "cat_name";
-    public static final String COLUMN_IMAGE_NAME    = "cat_image_name";
     public static final String COLUMN_IMAGE_INDEX   = "cat_image_index";
+    public static final String COLUMN_IMAGE_ID      = "cat_image_id";
     public static final String COLUMN_CREATED_TIME  = "cat_created_time";
     public static final String COLUMN_UPDATED_TIME  = "cat_updated_time";
 
@@ -34,8 +34,8 @@ public class CategoryEntry implements BaseColumns {
         String createTableSQL = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID                 + " INTEGER PRIMARY KEY," +
                 COLUMN_NAME         + " TEXT, " +
-                COLUMN_IMAGE_NAME   + " TEXT, " +
                 COLUMN_IMAGE_INDEX  + " INTEGER, " +
+                COLUMN_IMAGE_ID     + " INTEGER, " +
                 COLUMN_CREATED_TIME + " INTEGER, " +
                 COLUMN_UPDATED_TIME + " INTEGER " +
                 " );";
@@ -48,8 +48,8 @@ public class CategoryEntry implements BaseColumns {
 
         contentValues.put(_ID,                  c.getId());
         contentValues.put(COLUMN_NAME,          c.getCatName());
-        contentValues.put(COLUMN_IMAGE_NAME,    c.getCatImageName());
         contentValues.put(COLUMN_IMAGE_INDEX,   c.getCatImageIndex());
+        contentValues.put(COLUMN_IMAGE_ID,      c.getImageId());
         contentValues.put(COLUMN_CREATED_TIME,  c.getCatCreatedTime());
         contentValues.put(COLUMN_UPDATED_TIME,  c.getCatUpdatedTime());
 
@@ -85,6 +85,25 @@ public class CategoryEntry implements BaseColumns {
             for (ContentValues values : valuesArr) {
 
                 long _id = db.insert(TABLE_NAME, null, values);
+                if (_id != -1) {
+                    returnCount++;
+                }
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+
+        return returnCount;
+    }
+
+    public static int bulkUpdate(SQLiteDatabase db, ContentValues[] valuesArr) {
+        db.beginTransaction();
+        int returnCount = 0;
+        try {
+            for (ContentValues values : valuesArr) {
+
+                long _id = db.update(TABLE_NAME, values, _ID + " = " + values.getAsString("ID"), null);
                 if (_id != -1) {
                     returnCount++;
                 }

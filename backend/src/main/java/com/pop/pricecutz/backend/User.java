@@ -17,12 +17,18 @@ public class User {
 
     String user_email;
 
+    @Index
     long user_created_time;
 
     @Index
     long user_updated_time;
 
-    public User() {}
+    public User() {
+        long timeImMillis = System.currentTimeMillis();
+
+        user_created_time = timeImMillis;
+        user_updated_time = timeImMillis;
+    }
 
     public Long getId() {
         return id;

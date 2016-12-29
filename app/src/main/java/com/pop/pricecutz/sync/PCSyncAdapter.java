@@ -25,8 +25,12 @@ import com.pop.pricecutz.backend.companyApi.model.Company;
 import com.pop.pricecutz.backend.discountApi.DiscountApi;
 import com.pop.pricecutz.backend.discountApi.model.CollectionResponseDiscount;
 import com.pop.pricecutz.backend.discountApi.model.Discount;
+import com.pop.pricecutz.backend.outletApi.OutletApi;
+import com.pop.pricecutz.backend.outletApi.model.CollectionResponseOutlet;
+import com.pop.pricecutz.backend.outletApi.model.Outlet;
 import com.pop.pricecutz.data.entries.CompanyEntry;
 import com.pop.pricecutz.data.entries.DiscountEntry;
+import com.pop.pricecutz.data.entries.OutletEntry;
 
 import java.util.List;
 
@@ -221,6 +225,44 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
                 Discount discount = discountList.get(i);
 
                 ContentValues contentValues = DiscountEntry.getContentValues(discount);
+
+                contentValuesArr[i] = contentValues;
+
+            }
+
+            int i = getContext().getContentResolver().bulkInsert(DiscountEntry.CONTENT_URI, contentValuesArr);
+
+        }
+        catch(Exception e) {
+            Log.e(LOG_TAG, e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void syncOutlet(long lastSyncTime) {
+        OutletApi.Builder builder = new OutletApi.Builder(AndroidHttp.newCompatibleTransport(),
+                new AndroidJsonFactory(), null)
+                .setRootUrl("https://price-cutz.appspot.com/_ah/api/");
+        // end options for devappserver
+
+        OutletApi outletApi = builder.build();
+
+        Log.d(LOG_TAG, "Sync Started");
+
+        try {
+
+            OutletApi.ListByTime outletListByTime = outletApi.listByTime(lastSyncTime);
+            CollectionResponseOutlet dbCollection = outletListByTime.execute();
+
+            List<Outlet> outletList = dbCollection.getItems();
+
+            ContentValues contentValuesArr[] = new ContentValues[outletList.size()];
+
+            for(int i = 0; i < outletList.size(); i++) {
+
+                Outlet outlet = outletList.get(i);
+
+                ContentValues contentValues = OutletEntry.getContentValues(outlet);
 
                 contentValuesArr[i] = contentValues;
 

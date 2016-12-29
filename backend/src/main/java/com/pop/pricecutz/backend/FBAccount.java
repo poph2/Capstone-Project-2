@@ -19,14 +19,28 @@ public class FBAccount {
     @Index
     String fbacct_fb_id;
 
-    String fbacct_first_name, fbacct_middle_name, fbacct_last_name, fbacct_name, fbacct_link_uri, fbacct_email, fbacct_gender;
+    String fbacct_first_name, fbacct_middle_name, fbacct_last_name, fbacct_name, fbacct_link_uri, fbacct_gender;
 
+    @Index
+    String fbacct_email;
+
+    @Index
+    boolean fbacct_can_create_discount;
+
+    @Index
     long fbacct_created_time;
 
     @Index
     long fbacct_updated_time;
 
-    public FBAccount() {}
+    public FBAccount() {
+        fbacct_can_create_discount = false;
+
+        long timeImMillis = System.currentTimeMillis();
+
+        fbacct_created_time = timeImMillis;
+        fbacct_updated_time = timeImMillis;
+    }
 
     public Long getId() {
         return id;
@@ -84,6 +98,14 @@ public class FBAccount {
         this.fbacct_link_uri = fbacct_link_uri;
     }
 
+    public String getFbacct_gender() {
+        return fbacct_gender;
+    }
+
+    public void setFbacct_gender(String fbacct_gender) {
+        this.fbacct_gender = fbacct_gender;
+    }
+
     public String getFbacct_email() {
         return fbacct_email;
     }
@@ -92,12 +114,12 @@ public class FBAccount {
         this.fbacct_email = fbacct_email;
     }
 
-    public String getFbacct_gender() {
-        return fbacct_gender;
+    public boolean isFbacct_can_create_discount() {
+        return fbacct_can_create_discount;
     }
 
-    public void setFbacct_gender(String fbacct_gender) {
-        this.fbacct_gender = fbacct_gender;
+    public void setFbacct_can_create_discount(boolean fbacct_can_create_discount) {
+        this.fbacct_can_create_discount = fbacct_can_create_discount;
     }
 
     public long getFbacct_created_time() {

@@ -17,12 +17,23 @@ public class Company {
 
     String coy_name, coy_industry, coy_image_url;
 
+    @Index
+    long category_id;
+
+    long coy_image_id;
+
+    @Index
     long coy_created_time;
 
     @Index
     long coy_updated_time;
 
-    public Company() {}
+    public Company() {
+        long timeImMillis = System.currentTimeMillis();
+
+        coy_created_time = timeImMillis;
+        coy_updated_time = timeImMillis;
+    }
 
     public Long getId() {
         return id;
@@ -54,6 +65,22 @@ public class Company {
 
     public void setCoy_image_url(String coy_image_url) {
         this.coy_image_url = coy_image_url;
+    }
+
+    public long getCategory_id() {
+        return category_id;
+    }
+
+    public void setCategory_id(long category_id) {
+        this.category_id = category_id;
+    }
+
+    public long getImage_id() {
+        return coy_image_id;
+    }
+
+    public void setImage_id(long coy_image_id) {
+        this.coy_image_id = coy_image_id;
     }
 
     public long getCoy_created_time() {

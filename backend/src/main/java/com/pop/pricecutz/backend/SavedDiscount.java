@@ -19,14 +19,28 @@ public class SavedDiscount {
     @Index
     String fbacct_fb_id;
 
+    @Index
     long discount_id;
 
+    @Index
+    String status;
+
+    @Index
     long sdisc_created_time;
 
     @Index
     long sdisc_updated_time;
 
-    public SavedDiscount() {}
+    public static String STATUS_NEW     = "New";
+    public static String STATUS_USED    = "Used";
+    public static String STATUS_Expired = "Expired";
+
+    public SavedDiscount() {
+        long timeImMillis = System.currentTimeMillis();
+
+        sdisc_created_time = timeImMillis;
+        sdisc_updated_time = timeImMillis;
+    }
 
     public Long getId() {
         return id;
@@ -50,6 +64,14 @@ public class SavedDiscount {
 
     public void setDiscount_id(long discount_id) {
         this.discount_id = discount_id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public long getSdisc_created_time() {

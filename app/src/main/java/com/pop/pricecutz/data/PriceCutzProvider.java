@@ -236,6 +236,36 @@ public class PriceCutzProvider extends ContentProvider {
         return returnCount;
     }
 
+    public int bulkUpdate(Uri uri, ContentValues[] valuesArr) {
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        int returnCount = 0;
+        switch (match) {
+            case CATEGORY:
+                returnCount = CategoryEntry.bulkUpdate(db, valuesArr);
+                break;
+            case COMPANY:
+                returnCount = CompanyEntry.bulkUpdate(db, valuesArr);
+                break;
+            case DISCOUNT:
+                returnCount = DiscountEntry.bulkUpdate(db, valuesArr);
+                break;
+            case FB_ACCOUNT:
+                returnCount = FBAccountEntry.bulkUpdate(db, valuesArr);
+                break;
+            case OUTLET:
+                returnCount = OutletEntry.bulkUpdate(db, valuesArr);
+                break;
+            case SAVED_DISCOUNT:
+                returnCount = SavedDiscountEntry.bulkUpdate(db, valuesArr);
+                break;
+            default:
+                return super.bulkInsert(uri, valuesArr);
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return returnCount;
+    }
+
     static UriMatcher buildUriMatcher() {
 
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);

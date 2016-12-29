@@ -16,16 +16,25 @@ public class Category {
     @Id
     Long id;
 
-    String cat_name, cat_image_name;
+    @Index
+    String cat_name;
 
     int cat_image_index;
 
+    long cat_image_id;
+
+    @Index
     long cat_created_time;
 
     @Index
     long cat_updated_time;
 
-    public Category() {}
+    public Category() {
+        long timeImMillis = System.currentTimeMillis();
+
+        cat_created_time = timeImMillis;
+        cat_updated_time = timeImMillis;
+    }
 
     public Long getId() {
         return id;
@@ -43,20 +52,20 @@ public class Category {
         this.cat_name = cat_name;
     }
 
-    public String getCat_image_name() {
-        return cat_image_name;
-    }
-
-    public void setCat_image_name(String cat_image_name) {
-        this.cat_image_name = cat_image_name;
-    }
-
     public int getCat_image_index() {
         return cat_image_index;
     }
 
     public void setCat_image_index(int cat_image_index) {
         this.cat_image_index = cat_image_index;
+    }
+
+    public long getImage_id() {
+        return cat_image_id;
+    }
+
+    public void setImage_id(long cat_image_id) {
+        this.cat_image_id = cat_image_id;
     }
 
     public long getCat_created_time() {

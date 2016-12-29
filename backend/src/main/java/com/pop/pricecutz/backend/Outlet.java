@@ -22,12 +22,18 @@ public class Outlet {
 
     double outlet_latitude, outlet_longitude;
 
+    @Index
     long outlet_created_time;
 
     @Index
     long outlet_updated_time;
 
-    public Outlet() {}
+    public Outlet() {
+        long timeImMillis = System.currentTimeMillis();
+
+        outlet_created_time = timeImMillis;
+        outlet_updated_time = timeImMillis;
+    }
 
     public Long getId() {
         return id;

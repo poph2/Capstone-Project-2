@@ -68,6 +68,26 @@ public class CategoryEndpoint {
     }
 
     /**
+     * Returns the {@link Category} with the corresponding ID.
+     *
+     * @param name the ID of the entity to be retrieved
+     * @return the entity with the corresponding ID
+     * @throws NotFoundException if there is no {@code Category} with the provided ID.
+     */
+    @ApiMethod(
+            name = "get_by_name",
+            path = "category/name/{id}",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public Category get_by_name(@Named("name") String name) throws NotFoundException {
+        logger.info("Getting Category with name: " + name);
+        Category category = ofy().load().type(Category.class).filter("cat_name = ", name).first().now();
+        if (category == null) {
+            throw new NotFoundException("Could not find Category with name: " + name);
+        }
+        return category;
+    }
+
+    /**
      * Inserts a new {@code Category}.
      */
     @ApiMethod(

@@ -124,4 +124,23 @@ public class DiscountEntry implements BaseColumns {
         return returnCount;
     }
 
+    public static int bulkUpdate(SQLiteDatabase db, ContentValues[] valuesArr) {
+        db.beginTransaction();
+        int returnCount = 0;
+        try {
+            for (ContentValues values : valuesArr) {
+
+                long _id = db.update(TABLE_NAME, values, _ID + " = " + values.getAsString("ID"), null);
+                if (_id != -1) {
+                    returnCount++;
+                }
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+
+        return returnCount;
+    }
+
 }

@@ -1,5 +1,8 @@
 package com.pop.pricecutz.backend;
 
+import com.googlecode.objectify.annotation.Entity;
+import com.pop.pricecutz.backend.utils.Data;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -9,22 +12,25 @@ import java.util.Random;
  * Lagos Nigeria
  */
 
-public class InitData {
+@Entity
+public class Init {
 
-    static ArrayList<Category> categoryArrayList;
-    static ArrayList<Company> companyArraylist;
-    static ArrayList<Discount> discountArrayList;
-    static ArrayList<Outlet> outletArrayList;
+    public Init() {}
+
+    ArrayList<Category> categoryArrayList;
+    ArrayList<Company> companyArraylist;
+    ArrayList<Discount> discountArrayList;
+    ArrayList<Outlet> outletArrayList;
 
 
-    public static void initData() {
+    public void initData() {
         initCategories();
         initCompanies();
         initDiscounts();
         initOutlets();
     }
 
-    private static void initCategories() {
+    private void initCategories() {
 
         categoryArrayList = new ArrayList<>();
 
@@ -34,20 +40,16 @@ public class InitData {
 
         for(int i = 0; i < Data.categories.length; i++) {
 
-            long timeInMillis = System.currentTimeMillis();
-
             Category category = new Category();
 
             category.setCat_name(Data.categories[i]);
             category.setCat_image_index(r.nextInt(99));
-            category.setCat_created_time(timeInMillis);
-            category.setCat_updated_time(timeInMillis);
 
             categoryArrayList.add(categoryEndpoint.insert(category));
         }
     }
 
-    private static void initCompanies() {
+    private void initCompanies() {
 
         companyArraylist = new ArrayList<>();
 
@@ -56,21 +58,24 @@ public class InitData {
 
         for(int i = 0; i < Data.name.length; i++) {
 
-            long timeInMillis = System.currentTimeMillis();
-
             Company company = new Company();
+
+            Category category = searchCategory(Data.industry[i]);
+            long cat_id = 0;
+            if(category != null) {
+                cat_id = category.getId();
+            }
 
             company.setCoy_name(Data.name[i]);
             company.setCoy_industry(Data.industry[i]);
+            company.setCategory_id(cat_id);
             company.setCoy_image_url(Data.image_url[i]);
-            company.setCoy_created_time(timeInMillis);
-            company.setCoy_updated_time(timeInMillis);
 
             companyArraylist.add(companyEndpoint.insert(company));
         }
     }
 
-    private static void initDiscounts() {
+    private void initDiscounts() {
 
         discountArrayList = new ArrayList<>();
 
@@ -78,8 +83,6 @@ public class InitData {
         Random r = new Random();
 
         for(int i = 0; i < 200; i++) {
-
-            long timeInMillis = System.currentTimeMillis();
 
             Discount discount = new Discount();
 
@@ -93,14 +96,12 @@ public class InitData {
             discount.setDisc_image_index(r.nextInt(99));
             discount.setDisc_title("Discount " + i);
             discount.setDisc_type(1);
-            discount.setDisc_created_time(timeInMillis);
-            discount.setDisc_updated_time(timeInMillis);
 
             discountEndpoint.insert(discount);
         }
     }
 
-    private static void initOutlets() {
+    private void initOutlets() {
 
         outletArrayList = new ArrayList<>();
 
@@ -109,21 +110,32 @@ public class InitData {
 
         for(int i = 0; i < 200; i++) {
 
-            long timeInMillis = System.currentTimeMillis();
-
             Outlet outlet = new Outlet();
 
             Company company = companyArraylist.get(r.nextInt(companyArraylist.size() - 1));
 
             outlet.setCoy_id(company.getId());
             outlet.setOutlet_name("Outlet " + i);
-            outlet.setOutlet_latitude(0.0d);
-            outlet.setOutlet_longitude(0.0d);
-            outlet.setOutlet_created_time(timeInMillis);
-            outlet.setOutlet_updated_time(timeInMillis);
+
+            double randLat = r.nextDouble();
+            double latitude = randLat < 0.5 ? -(randLat*0.2): (randLat*0.2);
+            outlet.setOutlet_latitude(latitude);    //0.2deg == 22.2km
+
+            double randLong = r.nextDouble();
+            double longitude = randLong < 0.5 ? -(randLong*0.2): (randLong*0.2);
+            outlet.setOutlet_longitude(longitude);   //0.2deg == 22.2km
 
             outletEndpoint.insert(outlet);
         }
+    }
+
+    private Category searchCategory(String name) {
+        for(Category category: categoryArrayList) {
+            if(category.getCat_name().equalsIgnoreCase(name)) {
+                return category;
+            }
+        }
+        return null;
     }
 
 }
