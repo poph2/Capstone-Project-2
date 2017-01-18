@@ -3,6 +3,7 @@ package com.pop.pricecutz.activities.main.fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,13 +31,24 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 import com.pop.pricecutz.R;
+import com.pop.pricecutz.SharedUtils;
+import com.pop.pricecutz.backend.discountApi.model.Discount;
+import com.pop.pricecutz.data.entries.CompanyEntry;
+import com.pop.pricecutz.data.entries.DiscountEntry;
+import com.pop.pricecutz.data.entries.OutletEntry;
+import com.pop.pricecutz.data.mirrorbeans.Company;
+import com.pop.pricecutz.data.mirrorbeans.Outlet;
+
+import java.util.ArrayList;
 
 /**
  * Created by adeniyi.bello on 11/24/2016.
  */
 
-public class NearMeFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class NearMeFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static String[] PERMISSIONS_LOCATION = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
 
@@ -49,11 +65,21 @@ public class NearMeFragment extends SupportMapFragment implements OnMapReadyCall
     boolean mapReady = false;
     boolean initialZoom = true;
 
+    ArrayList<Discount> discountArrayList;
+    ArrayList<Company> companyArrayList;
+    ArrayList<Outlet> outletArrayList;
+
     Context mContext;
 
     int buildVersion;
 
     private final String LOG_TAG = NearMeFragment.class.getSimpleName();
+
+    public NearMeFragment() {
+        discountArrayList = new ArrayList<>();
+        companyArrayList = new ArrayList<>();
+        outletArrayList = new ArrayList<>();
+    }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +99,8 @@ public class NearMeFragment extends SupportMapFragment implements OnMapReadyCall
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+
+        getLoaderManager().initLoader(0, null, this);
 
         initilizeMap();
 
@@ -115,7 +143,10 @@ public class NearMeFragment extends SupportMapFragment implements OnMapReadyCall
 
         if(initialZoom) {
             updateInitialCamera();
+
+            addOutletMarkers();
         }
+
     }
 
     @Override
@@ -182,11 +213,14 @@ public class NearMeFragment extends SupportMapFragment implements OnMapReadyCall
                         .build();                   // Creates a CameraPosition from the builder
 
                 mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
+
+                addOutletMarkers();
             }
             mMap.getUiSettings().setZoomControlsEnabled(false);
             mMap.getUiSettings().setCompassEnabled(false);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
             mMap.setMyLocationEnabled(true);
+
         }
     }
 
@@ -202,5 +236,168 @@ public class NearMeFragment extends SupportMapFragment implements OnMapReadyCall
 
     private void requestLocationPermission() {
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        CursorLoader cursorLoader = null;
+
+        Log.d(LOG_TAG, " CursorLoader ID - " + id);
+
+        switch (id) {
+            case 0:                 //Get Discounts
+                String condition =
+                        DiscountEntry.TABLE_NAME + "." + DiscountEntry.COLUMN_STATUS + " = '" + SharedUtils.DISCOUNT_STATUS_ACTIVE + "' AND " +
+                        DiscountEntry.TABLE_NAME + "." + DiscountEntry.COLUMN_AVAILABLE_BAL + " > 0";
+
+                cursorLoader = new CursorLoader(
+                        mContext,
+                        DiscountEntry.CONTENT_URI_WITH_COMPANY,
+                        null,
+                        condition,
+                        null,
+                        null);
+                break;
+
+            case 1:             //Get Outlets
+
+                Log.d(LOG_TAG, " 2222 ");
+
+                String condition2 = OutletEntry.TABLE_NAME + "." + OutletEntry.COLUMN_COY_ID + " IN ( ";
+
+                for(Company company: companyArrayList) {
+                    condition2 = condition2 + " '" + company.getId() + "' , ";
+                }
+
+                condition2 = condition2.substring(0, condition2.length() - 3);
+
+                condition2 = condition2 + " ) ";
+
+                Log.d(LOG_TAG, condition2);
+
+                cursorLoader = new CursorLoader(
+                        mContext,
+                        OutletEntry.CONTENT_URI,
+                        null,
+                        condition2,
+                        null,
+                        null);
+
+                break;
+        }
+
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+
+        switch (loader.getId()) {
+
+            case 0:
+                companyArrayList = new ArrayList<>();
+
+                data.moveToFirst();
+
+                if(data.moveToFirst()){
+                    do{
+
+                        long companyID = data.getLong(data.getColumnIndex(DiscountEntry.COLUMN_COY_ID));
+
+//                        Log.d(LOG_TAG, "Company - " + new Gson().toJson(c));
+
+                        if (!searchCompanyArrayList(companyID)) {
+                            Company c = new Company();
+                            c.update(data, DiscountEntry.COLUMN_COY_ID);
+
+//                            Log.d(LOG_TAG, "Company - " + new Gson().toJson(c));
+
+                            companyArrayList.add(c);
+                        }
+                    }while(data.moveToNext());
+                }
+
+//                Log.d(LOG_TAG, "companyArrayList.size() - " + companyArrayList.size());
+
+                if(companyArrayList.size() > 0) {
+                    getLoaderManager().initLoader(1, null, this);
+                }
+                break;
+            case 1:
+
+                outletArrayList = new ArrayList<>();
+
+                Log.d(LOG_TAG, "Outlet - " + data.getCount());
+
+                if(data.moveToFirst()) {
+                    do {
+
+                        long outletID = data.getLong(data.getColumnIndex(OutletEntry._ID));
+
+                        if (!searchOutletArrayList(outletID)) {
+                            Outlet o = new Outlet();
+                            o.update(data, OutletEntry._ID);
+
+                            Log.d(LOG_TAG, "Outlet - " + new Gson().toJson(o));
+
+                            outletArrayList.add(o);
+                        }
+                    } while (data.moveToNext());
+                }
+
+                addOutletMarkers();
+                break;
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+    public boolean searchCompanyArrayList(Long id) {
+        for(Company c: companyArrayList) {
+            if(c.getId() == new Long(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean searchOutletArrayList(Long id) {
+        for(Outlet o: outletArrayList) {
+            if(o.getId() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Company getCompany(Outlet o) {
+        for (Company c : companyArrayList) {
+            if(c.getId() == o.getCoy_id()) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public void addOutletMarkers() {
+
+        //mMap.clear();
+
+//        Log.d(LOG_TAG, "mLastLocation - " + new Gson().toJson(mLastLocation));
+
+        if(mLastLocation != null) {
+
+            for (Outlet o : outletArrayList) {
+                Company c = getCompany(o);
+                mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(mLastLocation.getLatitude() + o.getOutlet_latitude()/10, mLastLocation.getLongitude() + o.getOutlet_longitude()/10))
+                        .title(c.getCoy_name()));
+            }
+        }
     }
 }

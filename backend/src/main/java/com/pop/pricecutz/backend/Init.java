@@ -1,6 +1,7 @@
 package com.pop.pricecutz.backend;
 
 import com.googlecode.objectify.annotation.Entity;
+import com.pop.pricecutz.SharedUtils;
 import com.pop.pricecutz.backend.utils.Data;
 
 import java.util.ArrayList;
@@ -97,6 +98,10 @@ public class Init {
             discount.setDisc_title("Discount " + i);
             discount.setDisc_type(1);
 
+            discount.setDisc_status(SharedUtils.DISCOUNT_STATUS_ACTIVE);
+
+            discount.setDisc_issued_bal(5 + r.nextInt(50));
+
             discountEndpoint.insert(discount);
         }
     }
@@ -108,24 +113,29 @@ public class Init {
         OutletEndpoint outletEndpoint = new OutletEndpoint();
         Random r = new Random();
 
-        for(int i = 0; i < 200; i++) {
+        for(int i = 0; i < companyArraylist.size(); i++) {
 
-            Outlet outlet = new Outlet();
+            Company company = companyArraylist.get(i);
 
-            Company company = companyArraylist.get(r.nextInt(companyArraylist.size() - 1));
+            int outletCount = 1 + r.nextInt(2);
 
-            outlet.setCoy_id(company.getId());
-            outlet.setOutlet_name("Outlet " + i);
+            for(int j = 0; j < outletCount; j++) {
 
-            double randLat = r.nextDouble();
-            double latitude = randLat < 0.5 ? -(randLat*0.2): (randLat*0.2);
-            outlet.setOutlet_latitude(latitude);    //0.2deg == 22.2km
+                Outlet outlet = new Outlet();
 
-            double randLong = r.nextDouble();
-            double longitude = randLong < 0.5 ? -(randLong*0.2): (randLong*0.2);
-            outlet.setOutlet_longitude(longitude);   //0.2deg == 22.2km
+                outlet.setCoy_id(company.getId());
+                outlet.setOutlet_name("Outlet " + i);
 
-            outletEndpoint.insert(outlet);
+                double randLat = r.nextDouble();
+                double latitude = map(randLat, 0, 1, -0.2, 0.2);
+                outlet.setOutlet_latitude(latitude);    //0.2deg == 22.2km
+
+                double randLong = r.nextDouble();
+                double longitude = map(randLong, 0, 1, -0.2, 0.2);
+                outlet.setOutlet_longitude(longitude);   //0.2deg == 22.2km
+
+                outletEndpoint.insert(outlet);
+            }
         }
     }
 
@@ -136,6 +146,10 @@ public class Init {
             }
         }
         return null;
+    }
+
+    private double map(double x, double in_min, double in_max, double out_min, double out_max) {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 
 }

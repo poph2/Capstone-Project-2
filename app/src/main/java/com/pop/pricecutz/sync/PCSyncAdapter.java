@@ -67,8 +67,9 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
         long lastSyncTime = getLastSyncTime();
 
         syncCategory(lastSyncTime);
-//        syncCompany(lastSyncTime);
-//        syncDiscount(lastSyncTime);
+        syncCompany(lastSyncTime);
+        syncDiscount(lastSyncTime);
+        syncOutlet(lastSyncTime);
 
 //        setLastSyncTime(timeInMillis);
 
@@ -165,7 +166,7 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
 
         String lastSyncKey = context.getString(R.string.pref_last_sync);
         editor.putLong(lastSyncKey, lastSyncTime);
-        editor.commit();
+        editor.apply();
     }
 
     public void syncCategory(long lastSyncTime) {
@@ -296,6 +297,8 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
 
             ContentValues contentValuesArr[] = new ContentValues[outletList.size()];
 
+            Log.d(LOG_TAG, "outletList.size() - " + outletList.size());
+
             for(int i = 0; i < outletList.size(); i++) {
 
                 Outlet outlet = outletList.get(i);
@@ -306,7 +309,7 @@ public class PCSyncAdapter extends AbstractThreadedSyncAdapter {
 
             }
 
-            int i = getContext().getContentResolver().bulkInsert(DiscountEntry.CONTENT_URI, contentValuesArr);
+            int i = getContext().getContentResolver().bulkInsert(OutletEntry.CONTENT_URI, contentValuesArr);
 
         }
         catch(Exception e) {

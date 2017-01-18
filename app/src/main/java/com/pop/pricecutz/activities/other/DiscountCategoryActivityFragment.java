@@ -1,0 +1,101 @@
+package com.pop.pricecutz.activities.other;
+
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.support.v4.app.Fragment;
+import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import com.pop.pricecutz.R;
+import com.pop.pricecutz.adapters.HomeDiscountListAdapter;
+import com.pop.pricecutz.data.entries.CategoryEntry;
+import com.pop.pricecutz.data.entries.DiscountEntry;
+
+/**
+ * A placeholder fragment containing a simple view.
+ */
+public class DiscountCategoryActivityFragment extends Fragment implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+
+    Context mContext;
+
+    ListView listView;
+
+    HomeDiscountListAdapter adapter;
+
+    public DiscountCategoryActivityFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mContext = getContext();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.fragment_home, container, false);
+
+        Intent i = getActivity().getIntent();
+
+        i.getLongExtra(CategoryEntry._ID, 0);
+
+        listView = (ListView) root.findViewById(R.id.fragment_home_listview);
+
+        adapter = new HomeDiscountListAdapter(mContext,
+                R.layout.fragment_home_list_items,
+                null,
+                new String[] {DiscountEntry.COLUMN_CODE, DiscountEntry.COLUMN_TITLE},
+                new int[] { R.id.fragment_home_list_item_textview, R.id.fragment_home_list_item_textview2 },
+                0,
+                R.id.fragment_home_list_item_imageview,
+                R.id.fragment_home_list_item_imageview2);
+
+        listView.setAdapter(adapter);
+
+        getLoaderManager().initLoader(0, null, this);
+
+        listView.setOnItemClickListener(this);
+
+        return root;
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(mContext,
+                DiscountEntry.CONTENT_URI_WITH_COMPANY,
+                null,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        adapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Cursor c = adapter.getCursor();
+        c.moveToPosition(i);
+        long id = c.getLong(0);
+
+        Intent intent = new Intent(getContext(), DiscountActivity.class);
+        intent.putExtra(DiscountEntry._ID, id);
+        startActivity(intent);
+    }
+}

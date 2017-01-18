@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 
 import com.bumptech.glide.Glide;
-import com.pop.pricecutz.data.entries.CompanyEntry;
 import com.pop.pricecutz.data.entries.DiscountEntry;
 
 /**

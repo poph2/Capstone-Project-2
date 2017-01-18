@@ -36,6 +36,7 @@ public class OutletEntry implements BaseColumns {
         String createTableSQL = "CREATE TABLE " + TABLE_NAME + " (" +
                 _ID                 + " INTEGER PRIMARY KEY," +
                 COLUMN_COY_ID       + " INTEGER, " +
+                COLUMN_NAME         + " TEXT, " +
                 COLUMN_LATITUDE     + " REAL, " +
                 COLUMN_LONGITUDE    + " REAL, " +
                 COLUMN_CREATED_TIME + " INTEGER, " +
@@ -50,6 +51,7 @@ public class OutletEntry implements BaseColumns {
 
         contentValues.put(_ID,                  o.getId());
         contentValues.put(COLUMN_COY_ID,        o.getCoyId());
+        contentValues.put(COLUMN_NAME,          o.getOutletName());
         contentValues.put(COLUMN_LATITUDE,      o.getOutletLatitude());
         contentValues.put(COLUMN_LONGITUDE,     o.getOutletLongitude());
         contentValues.put(COLUMN_CREATED_TIME,  o.getOutletCreatedTime());

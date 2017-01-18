@@ -38,7 +38,6 @@ import com.pop.pricecutz.activities.main.fragments.CategoryFragment;
 import com.pop.pricecutz.activities.main.fragments.HomeFragment;
 import com.pop.pricecutz.activities.main.fragments.NearMeFragment;
 import com.pop.pricecutz.activities.main.fragments.InventoryFragment;
-import com.pop.pricecutz.data.entries.DiscountEntry;
 import com.pop.pricecutz.data.entries.FBAccountEntry;
 import com.pop.pricecutz.sync.PCSyncAdapter;
 
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity
     private int[] tabIcons = {
             R.drawable.ic_home_white_24dp,
             R.drawable.ic_person_pin_circle_white_24dp,
-            R.drawable.ic_favorite_white_24dp,
+//            R.drawable.ic_favorite_white_24dp,
             R.drawable.ic_view_module_white_24dp,
             R.drawable.ic_list_white_24dp
     };
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity
 
         setupTabIcons();
 
-        viewPager.setCurrentItem(0);
+        viewPager.setCurrentItem(1);
 
         //Request Sync
         PCSyncAdapter.syncImmediately(mContext);
@@ -151,15 +150,13 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_home) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_near_me) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_categories) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_Inventory) {
 
         } else if (id == R.id.nav_log_out) {
             logOut();
@@ -175,7 +172,6 @@ public class MainActivity extends AppCompatActivity
 
         adapter.addFragment(new HomeFragment(), "");
         adapter.addFragment(new NearMeFragment(), "");
-        adapter.addFragment(new Fragment(), "");
 //        adapter.addFragment(new FavoriteFragment(), "");
         adapter.addFragment(new CategoryFragment(), "");
         adapter.addFragment(new InventoryFragment(), "");
@@ -192,7 +188,7 @@ public class MainActivity extends AppCompatActivity
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
-        tabLayout.getTabAt(4).setIcon(tabIcons[4]);
+//        tabLayout.getTabAt(4).setIcon(tabIcons[4]);
     }
 
     @Override

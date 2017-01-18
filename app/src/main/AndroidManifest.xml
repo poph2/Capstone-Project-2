@@ -18,9 +18,9 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <!-- Permission for sync adapter -->
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
 
     <application
         android:allowBackup="true"
@@ -41,8 +41,7 @@
         <activity
             android:name=".activities.SplashScreen2Activity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".activities.login.LoginActivity"
             android:label="@string/app_name"
@@ -102,13 +101,17 @@
             android:name=".activities.other.PreferenceActivity"
             android:label="@string/title_activity_preference"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.company.CompanyActivity"
+            android:label="@string/title_activity_preference"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- SyncAdapter's dummy authentication service -->
-        <service
-            android:name=".sync.PCAutenticatorService">
+        <service android:name=".sync.PCAutenticatorService">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator"/>
+                <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
@@ -126,6 +129,25 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
+
+        <activity
+            android:name=".activities.other.DiscountCategoryActivity"
+            android:label="@string/title_activity_discount_category"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <receiver
+            android:name=".widget.PriceCutzWidgetProvider"
+            android:label="@string/title_widget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
+        </receiver>
+
+        <service android:name=".widget.PriceCutzWidgetIntentService" />
     </application>
 
 </manifest>

@@ -3,6 +3,7 @@ package com.pop.pricecutz.backend;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import com.pop.pricecutz.SharedUtils;
 
 /**
  * Created by Pop H2 on 12/22/2016.
@@ -31,12 +32,10 @@ public class SavedDiscount {
     @Index
     long sdisc_updated_time;
 
-    public static String STATUS_NEW     = "New";
-    public static String STATUS_USED    = "Used";
-    public static String STATUS_Expired = "Expired";
-
     public SavedDiscount() {
         long timeImMillis = System.currentTimeMillis();
+
+        sdisc_status = SharedUtils.SAVED_DISCOUNT_STATUS_NEW;
 
         sdisc_created_time = timeImMillis;
         sdisc_updated_time = timeImMillis;

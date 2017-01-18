@@ -42,9 +42,16 @@
     <string name="tools">Tools</string>
     <string name="slideshow">Slideshow</string>
     <string name="gallery">Gallery</string>
-    <string name="import_">Import</string>
+    <string name="home">Home</string>
+    <string name="near_me">Near Me</string>
+    <string name="categories">Categories</string>
+    <string name="inventory">Inventory</string>
     <string name="finish">Finish</string>
     <string name="cat_pref_title">Select the categories you are interested in</string>
+    <string name="title_activity_discount_category" translatable="false">DiscountCategoryActivity</string>
+
+    <!-- Strings related to Widgets -->
+    <string name="title_widget">Nearby Discounts</string>
 
 
 </resources>

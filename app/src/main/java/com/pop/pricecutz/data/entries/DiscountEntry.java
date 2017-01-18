@@ -21,14 +21,14 @@ public class DiscountEntry implements BaseColumns {
 //    public static final int COUPON_TYPE = 1;
 
 
-    public static final String PATH                     = "discount";
-    public static final String PATH_WITH_COMPANY        = "discount_with_company";
-    public static final String PATH_SAVED_WITH_COMPANY  = "saved_discount_with_company";
-    public static final String TABLE_NAME               = "discount";
+    public static final String PATH                         = "discount";
+    public static final String PATH_WITH_COMPANY            = "discount_with_company";
+    public static final String PATH_SAVED_WITH_COMPANY      = "saved_discount_with_company";
+    public static final String TABLE_NAME                   = "discount";
 
-    public static final Uri CONTENT_URI                     = PriceCutzContract.BASE_CONTENT_URI.buildUpon().appendPath(PATH).build();
-    public static final Uri CONTENT_URI_WITH_COMPANY        = PriceCutzContract.BASE_CONTENT_URI.buildUpon().appendPath(PATH_WITH_COMPANY).build();
-    public static final Uri CONTENT_URI_SAVED_WITH_COMPANY  = PriceCutzContract.BASE_CONTENT_URI.buildUpon().appendPath(PATH_SAVED_WITH_COMPANY).build();
+    public static final Uri CONTENT_URI                         = PriceCutzContract.BASE_CONTENT_URI.buildUpon().appendPath(PATH).build();
+    public static final Uri CONTENT_URI_WITH_COMPANY            = PriceCutzContract.BASE_CONTENT_URI.buildUpon().appendPath(PATH_WITH_COMPANY).build();
+    public static final Uri CONTENT_URI_SAVED_WITH_COMPANY      = PriceCutzContract.BASE_CONTENT_URI.buildUpon().appendPath(PATH_SAVED_WITH_COMPANY).build();
 
     public static final String CONTENT_TYPE         = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
     public static final String CONTENT_ITEM_TYPE    = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + PriceCutzContract.CONTENT_AUTHORITY + "/" + PATH;
@@ -40,6 +40,10 @@ public class DiscountEntry implements BaseColumns {
     public static final String COLUMN_TYPE              = "disc_type";
     public static final String COLUMN_IMAGE_INDEX       = "disc_image_index";
     public static final String COLUMN_STATUS            = "disc_status";
+    public static final String COLUMN_ISSUED_BAL        = "disc_issued_bal";
+    public static final String COLUMN_AVAILABLE_BAL     = "disc_available_bal";
+    public static final String COLUMN_RESERVED_BAL      = "disc_reserved_bal";
+    public static final String COLUMN_USED_BAL          = "disc_used_bal";
     public static final String COLUMN_IMAGE_ID          = "disc_image_id";
     public static final String COLUMN_EXPIRY_TIME       = "disc_expiry_time";
     public static final String COLUMN_EXPIRY_TIMEZONE   = "disc_expiry_time_zone";
@@ -56,6 +60,10 @@ public class DiscountEntry implements BaseColumns {
                 COLUMN_TYPE             + " TEXT, " +
                 COLUMN_IMAGE_INDEX      + " INTEGER, " +
                 COLUMN_STATUS           + " TEXT, " +
+                COLUMN_ISSUED_BAL       + " INTEGER, " +
+                COLUMN_AVAILABLE_BAL    + " INTEGER, " +
+                COLUMN_RESERVED_BAL     + " INTEGER, " +
+                COLUMN_USED_BAL         + " INTEGER, " +
                 COLUMN_IMAGE_ID         + " INTEGER, " +
                 COLUMN_EXPIRY_TIME      + " INTEGER, " +
                 COLUMN_EXPIRY_TIMEZONE  + " TEXT, " +
@@ -75,6 +83,10 @@ public class DiscountEntry implements BaseColumns {
         contentValues.put(COLUMN_DESCRIPTION,       d.getDiscDescription());
         contentValues.put(COLUMN_COY_ID,            d.getCoyId());
         contentValues.put(COLUMN_TYPE,              d.getDiscType());
+        contentValues.put(COLUMN_ISSUED_BAL,        d.getDiscIssuedBal());
+        contentValues.put(COLUMN_AVAILABLE_BAL,     d.getDiscAvailableBal());
+        contentValues.put(COLUMN_RESERVED_BAL,      d.getDiscReservedBal());
+        contentValues.put(COLUMN_USED_BAL,          d.getDiscUsedBal());
         contentValues.put(COLUMN_IMAGE_INDEX,       d.getDiscImageIndex());
         contentValues.put(COLUMN_STATUS,            d.getDiscStatus());
         contentValues.put(COLUMN_IMAGE_ID,          d.getDiscImageId());

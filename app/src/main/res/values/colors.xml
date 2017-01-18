@@ -17,6 +17,8 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
 
+    <!-- the activated state color -->
+    <color name="activated">#E0E0E0</color>
 
     <!-- Google Colors -->
     <color name="google1">#00a1f1</color>

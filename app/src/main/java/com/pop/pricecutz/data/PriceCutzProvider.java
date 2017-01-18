@@ -297,12 +297,8 @@ public class PriceCutzProvider extends ContentProvider {
         //This is an inner join which looks like
         //weather INNER JOIN location ON weather.location_id = location._id
         discountWithCompany.setTables(
-                DiscountEntry.TABLE_NAME + " INNER JOIN " +
-                        CompanyEntry.TABLE_NAME +
-                        " ON " + DiscountEntry.TABLE_NAME +
-                        "." + DiscountEntry.COLUMN_COY_ID +
-                        " = " + CompanyEntry.TABLE_NAME +
-                        "." + CompanyEntry._ID);
+                DiscountEntry.TABLE_NAME + " INNER JOIN " + CompanyEntry.TABLE_NAME +
+                        " ON " + DiscountEntry.TABLE_NAME + "." + DiscountEntry.COLUMN_COY_ID + " = " + CompanyEntry.TABLE_NAME + "." + CompanyEntry._ID);
 
         return discountWithCompany.query(mOpenHelper.getReadableDatabase(),
                 projection,

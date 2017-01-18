@@ -3,6 +3,7 @@ package com.pop.pricecutz.backend;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import com.pop.pricecutz.SharedUtils;
 
 /**
  * Created by Pop H2 on 9/30/2016.
@@ -31,10 +32,14 @@ public class Discount {
     @Index
     String disc_status;
 
-    public static final String STATUS_INACTIVE    = "inactive";
-    public static final String STATUS_ACTIVE      = "active";
-    public static final String STATUS_EXPIRED     = "Expired";
-    public static final String STATUS_CANCELLED   = "Cancelled";
+    @Index
+    int disc_issued_bal;
+    @Index
+    int disc_available_bal;
+    @Index
+    int disc_reserved_bal;
+    @Index
+    int disc_used_bal;
 
     long disc_image_id;
 
@@ -52,6 +57,13 @@ public class Discount {
 
     public Discount() {
         long timeImMillis = System.currentTimeMillis();
+
+        disc_status = SharedUtils.DISCOUNT_STATUS_INACTIVE;
+
+        disc_issued_bal = 0;
+        disc_available_bal = 0;
+        disc_reserved_bal = 0;
+        disc_used_bal = 0;
 
         disc_created_time = timeImMillis;
         disc_updated_time = timeImMillis;
@@ -167,5 +179,38 @@ public class Discount {
 
     public void setImage_id(long disc_image_id) {
         this.disc_image_id = disc_image_id;
+    }
+
+    public int getDisc_issued_bal() {
+        return disc_issued_bal;
+    }
+
+    public void setDisc_issued_bal(int disc_issued_bal) {
+        this.disc_issued_bal = disc_issued_bal;
+        setDisc_available_bal(disc_issued_bal);
+    }
+
+    public int getDisc_available_bal() {
+        return disc_available_bal;
+    }
+
+    public void setDisc_available_bal(int disc_available_bal) {
+        this.disc_available_bal = disc_available_bal;
+    }
+
+    public int getDisc_reserved_bal() {
+        return disc_reserved_bal;
+    }
+
+    public void setDisc_reserved_bal(int disc_reserved_bal) {
+        this.disc_reserved_bal = disc_reserved_bal;
+    }
+
+    public int getDisc_used_bal() {
+        return disc_used_bal;
+    }
+
+    public void setDisc_used_bal(int disc_used_bal) {
+        this.disc_used_bal = disc_used_bal;
     }
 }

@@ -17,10 +17,13 @@
     <string name="communicate">Communiquer</string>
     <string name="finish">Terminer</string>
     <string name="gallery">Galerie</string>
-    <string name="import_">Importer</string>
     <string name="send">Envoyer</string>
     <string name="tools">Outils</string>
     <string name="slideshow">Diaporama</string>
     <string name="share">Partager</string>
     <string name="log_out">Se déconnecter</string>
+    <string name="categories">Catégories</string>
+    <string name="home">Accueil</string>
+    <string name="inventory">Inventaire</string>
+    <string name="near_me">Proche de moi</string>
 </resources>
