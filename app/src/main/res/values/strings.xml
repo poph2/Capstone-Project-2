@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name" translatable="false">Price Cutz</string>
 
+
+    <string name="demo_username" translatable="false">Pop H2</string>
+    <string name="demo_email" translatable="false">Pop@H2.com</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -40,6 +44,8 @@
     <string name="share">Share</string>
     <string name="communicate">Communicate</string>
     <string name="tools">Tools</string>
+    <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
     <string name="slideshow">Slideshow</string>
     <string name="gallery">Gallery</string>
     <string name="home">Home</string>
@@ -52,6 +58,13 @@
 
     <!-- Strings related to Widgets -->
     <string name="title_widget">Nearby Discounts</string>
+
+    <!-- Image Content Description -->
+    <string name="item_image">Item Image</string>
+    <string name="discount_image">Discount Image</string>
+    <string name="company_image">Company Image</string>
+    <string name="widget_image">Widget Image</string>
+    <string name="app_image">Widget Image</string>
 
 
 </resources>

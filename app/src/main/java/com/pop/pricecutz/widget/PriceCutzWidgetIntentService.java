@@ -28,9 +28,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.widget.RemoteViews;
 
+import com.google.gson.Gson;
 import com.pop.pricecutz.R;
 import com.pop.pricecutz.activities.main.MainActivity;
 
@@ -44,23 +46,27 @@ public class PriceCutzWidgetIntentService extends IntentService {
 
     int discountCount;
 
+    private final String LOG_TAG = PriceCutzWidgetIntentService.class.getSimpleName();
+
     public PriceCutzWidgetIntentService() {
         super("PriceCutzWidgetIntentService");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this,
-                PriceCutzWidgetProvider.class));
+        appWidgetManager = AppWidgetManager.getInstance(this);
+        appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, PriceCutzWidgetProvider.class));
+
+        //Log.d(LOG_TAG, Integer.toString(appWidgetIds.length));
+        //Log.d(LOG_TAG, new Gson().toJson(appWidgetManager));
 
         //Get Discounts
         discountCount = 12;
 
-
+        updateUI();
     }
 
-    private void update() {
+    private void updateUI() {
         for (int appWidgetId : appWidgetIds) {
             // Find the correct layout based on the widget's width
             int widgetWidth = getWidgetWidth(appWidgetManager, appWidgetId);
@@ -76,7 +82,8 @@ public class PriceCutzWidgetIntentService extends IntentService {
             }
             RemoteViews views = new RemoteViews(getPackageName(), layoutId);
 
-
+            int logoResourceId = R.mipmap.ic_launcher;
+            views.setImageViewResource(R.id.widget_icon, logoResourceId);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
                 setRemoteContentDescription(views, "Logo");
             }

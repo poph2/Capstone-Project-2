@@ -33,7 +33,8 @@
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
-            tools:src="@mipmap/ic_launcher" />
+            tools:src="@mipmap/ic_launcher"
+            android:contentDescription="@string/widget_image" />
 
         <TextView
             android:id="@+id/widget_high_temperature"

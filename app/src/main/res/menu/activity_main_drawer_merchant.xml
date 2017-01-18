@@ -20,12 +20,12 @@
             android:title="@string/inventory" />
     </group>
 
-    <item android:title="Settings">
+    <item android:title="@string/settings">
         <menu>
             <item
                 android:id="@+id/nav_profile"
                 android:icon="@drawable/ic_account_circle_black_24dp"
-                android:title="Profile" />
+                android:title="@string/profile" />
             <item
                 android:id="@+id/nav_log_out"
                 android:icon="@drawable/ic_power_settings_new_black_24dp"

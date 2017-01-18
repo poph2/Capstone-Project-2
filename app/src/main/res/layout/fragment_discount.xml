@@ -44,8 +44,7 @@
                 android:id="@+id/discountBannerImageView"
                 android:scaleType="centerCrop"
                 app:srcCompat="@color/cardview_shadow_start_color"
-
-                android:contentDescription="Discount Banner"
+                android:contentDescription="@string/discount_image"
                 android:src="@android:mipmap/sym_def_app_icon"
                 android:layout_centerHorizontal="true" />
 
@@ -57,7 +56,8 @@
                 android:id="@+id/companyLogoImageView"
                 android:layout_below="@+id/discountBannerImageView"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:contentDescription="@string/item_image" />
 
             <TextView
                 android:layout_width="match_parent"

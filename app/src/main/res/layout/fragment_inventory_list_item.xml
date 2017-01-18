@@ -12,7 +12,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:src="@drawable/notification_template_icon_bg"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/discount_image" />
 
     <TextView
         android:layout_width="wrap_content"

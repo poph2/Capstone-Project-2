@@ -16,7 +16,8 @@
         android:src="@drawable/notification_template_icon_bg"
         android:layout_margin="3dp"
         android:layout_height="150dp"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitCenter"
+        android:contentDescription="@string/discount_image" />
 
     <TextView
         android:layout_width="match_parent"
@@ -51,7 +52,8 @@
         android:layout_marginRight="11dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
-        android:padding="2dp" />
+        android:padding="2dp"
+        android:contentDescription="@string/company_image" />
 
 
 </RelativeLayout>

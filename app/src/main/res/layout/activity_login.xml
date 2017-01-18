@@ -45,7 +45,8 @@
             android:id="@+id/logoImageView"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="87dp" />
+            android:layout_marginTop="87dp"
+            android:contentDescription="@string/app_image" />
 
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

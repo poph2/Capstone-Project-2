@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "689261501181",
+    "project_id": "price-cutz"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:689261501181:android:aae5c62518990bab",
+        "android_client_info": {
+          "package_name": "com.pop.pricecutz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "689261501181-k90o7ce85a0lrohfoh2jtr2ajv8u6afi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pop.pricecutz",
+            "certificate_hash": "E046791CE86A8A9C10B48BA8D02282942201E351"
+          }
+        },
+        {
+          "client_id": "689261501181-tcc9udikq1h1nrjqvsqlver0jfq1ftho.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7lOtk_Igoc1K5AllSSA5LYiOGKjrJ5bc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
