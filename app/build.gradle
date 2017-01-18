@@ -17,6 +17,14 @@ repositories {
 }
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'pop h2'
+            keyPassword 'PopH2*KeySt0Re4Andr01D'
+            storeFile file('C:/Users/adeniyi.bello/Google Drive/pop.h2.keystore')
+            storePassword 'PopH2*KeySt0Re4Andr01D'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
@@ -32,6 +40,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }
