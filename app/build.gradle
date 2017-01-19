@@ -19,10 +19,10 @@ repositories {
 android {
     signingConfigs {
         config {
-            keyAlias 'pop h2'
-            keyPassword 'PopH2*KeySt0Re4Andr01D'
-            storeFile file('C:/Users/adeniyi.bello/Google Drive/pop.h2.keystore')
-            storePassword 'PopH2*KeySt0Re4Andr01D'
+            keyAlias 'Pop H2'
+            keyPassword 'Upendi123#Fe26Man'
+            storeFile file("$rootDir/Adeniyi Keystore for Udacity.jks")
+            storePassword 'Upendi123#Fe26Man'
         }
     }
     compileSdkVersion 25

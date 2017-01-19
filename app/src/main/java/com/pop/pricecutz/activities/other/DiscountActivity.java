@@ -162,7 +162,7 @@ public class DiscountActivity extends AppCompatActivity implements LoaderManager
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getBaseContext(), "Back clicked", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getBaseContext(), "Back clicked", Toast.LENGTH_LONG).show();
                 onBackPressed();
                 finish();
             }

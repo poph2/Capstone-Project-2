@@ -59,8 +59,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         loginButtonFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Toast.makeText(getBaseContext(), "Facebook Login Success", Toast.LENGTH_LONG).show();
-
                 Intent i = new Intent(getBaseContext(), SplashScreen2Activity.class);
                 startActivity(i);
                 finish();
@@ -68,12 +66,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             @Override
             public void onCancel() {
-                Toast.makeText(getBaseContext(), "Facebook Login Cancelled", Toast.LENGTH_LONG).show();
+
             }
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(getBaseContext(), "Facebook Login Error", Toast.LENGTH_LONG).show();
+
             }
         });
     }

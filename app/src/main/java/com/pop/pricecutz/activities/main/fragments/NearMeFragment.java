@@ -71,6 +71,8 @@ public class NearMeFragment extends SupportMapFragment implements OnMapReadyCall
 
     Context mContext;
 
+    View rootView;
+
     int buildVersion;
 
     private final String LOG_TAG = NearMeFragment.class.getSimpleName();
@@ -83,14 +85,6 @@ public class NearMeFragment extends SupportMapFragment implements OnMapReadyCall
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-    }
-
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View root = inflater.inflate(R.layout.fragment_near_me, null, false);
-
-        buildVersion = Build.VERSION.SDK_INT;
 
         mContext = getContext();
 
@@ -99,12 +93,23 @@ public class NearMeFragment extends SupportMapFragment implements OnMapReadyCall
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+    }
 
-        getLoaderManager().initLoader(0, null, this);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        initilizeMap();
+        if(rootView == null) {
 
-        return root;
+            rootView = inflater.inflate(R.layout.fragment_near_me, null, false);
+
+            buildVersion = Build.VERSION.SDK_INT;
+
+            getLoaderManager().initLoader(0, null, this);
+
+            initilizeMap();
+        }
+
+        return rootView;
     }
 
     private void initilizeMap() {
@@ -243,7 +248,7 @@ public class NearMeFragment extends SupportMapFragment implements OnMapReadyCall
 
         CursorLoader cursorLoader = null;
 
-        Log.d(LOG_TAG, " CursorLoader ID - " + id);
+        //Log.d(LOG_TAG, " CursorLoader ID - " + id);
 
         switch (id) {
             case 0:                 //Get Discounts
@@ -262,7 +267,7 @@ public class NearMeFragment extends SupportMapFragment implements OnMapReadyCall
 
             case 1:             //Get Outlets
 
-                Log.d(LOG_TAG, " 2222 ");
+                //Log.d(LOG_TAG, " 2222 ");
 
                 String condition2 = OutletEntry.TABLE_NAME + "." + OutletEntry.COLUMN_COY_ID + " IN ( ";
 
@@ -274,7 +279,7 @@ public class NearMeFragment extends SupportMapFragment implements OnMapReadyCall
 
                 condition2 = condition2 + " ) ";
 
-                Log.d(LOG_TAG, condition2);
+                //Log.d(LOG_TAG, condition2);
 
                 cursorLoader = new CursorLoader(
                         mContext,
@@ -329,7 +334,7 @@ public class NearMeFragment extends SupportMapFragment implements OnMapReadyCall
 
                 outletArrayList = new ArrayList<>();
 
-                Log.d(LOG_TAG, "Outlet - " + data.getCount());
+                //Log.d(LOG_TAG, "Outlet - " + data.getCount());
 
                 if(data.moveToFirst()) {
                     do {
@@ -340,7 +345,7 @@ public class NearMeFragment extends SupportMapFragment implements OnMapReadyCall
                             Outlet o = new Outlet();
                             o.update(data, OutletEntry._ID);
 
-                            Log.d(LOG_TAG, "Outlet - " + new Gson().toJson(o));
+                            //Log.d(LOG_TAG, "Outlet - " + new Gson().toJson(o));
 
                             outletArrayList.add(o);
                         }

@@ -38,6 +38,7 @@ import com.pop.pricecutz.activities.main.fragments.CategoryFragment;
 import com.pop.pricecutz.activities.main.fragments.HomeFragment;
 import com.pop.pricecutz.activities.main.fragments.NearMeFragment;
 import com.pop.pricecutz.activities.main.fragments.InventoryFragment;
+import com.pop.pricecutz.activities.main.fragments.NearMeFragment2;
 import com.pop.pricecutz.data.entries.FBAccountEntry;
 import com.pop.pricecutz.sync.PCSyncAdapter;
 
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity
         viewPager.setCurrentItem(1);
 
         //Request Sync
-        PCSyncAdapter.syncImmediately(mContext);
+        //PCSyncAdapter.syncImmediately(mContext);
 
         getLoaderManager().initLoader(0, null, this);
     }
@@ -170,16 +171,6 @@ public class MainActivity extends AppCompatActivity
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        adapter.addFragment(new HomeFragment(), "");
-        adapter.addFragment(new NearMeFragment(), "");
-//        adapter.addFragment(new FavoriteFragment(), "");
-        adapter.addFragment(new CategoryFragment(), "");
-        adapter.addFragment(new InventoryFragment(), "");
-
-//        adapter.addFragment(new Fragment(), "ONE");
-//        adapter.addFragment(new Fragment(), "TWO");
-//        adapter.addFragment(new Fragment(), "THREE");
-
         viewPager.setAdapter(adapter);
     }
 
@@ -209,7 +200,7 @@ public class MainActivity extends AppCompatActivity
         if(cursor.getCount() > 0) {
             cursor.moveToFirst();
 
-            Log.d(LOG_TAG, " index " + cursor.getString(cursor.getColumnIndex(FBAccountEntry.COLUMN_NAME)));
+            //Log.d(LOG_TAG, " index " + cursor.getString(cursor.getColumnIndex(FBAccountEntry.COLUMN_NAME)));
 
             usernameTextView.setText(cursor.getString(cursor.getColumnIndex(FBAccountEntry.COLUMN_NAME)));
             emailTextView.setText(cursor.getString(cursor.getColumnIndex(FBAccountEntry.COLUMN_EMAIL)));
@@ -228,8 +219,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+//        private final List<Fragment> mFragmentList = new ArrayList<>();
+//        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        private final int mFragmentCount = 4;
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
@@ -237,17 +230,24 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public Fragment getItem(int position) {
-            return mFragmentList.get(position);
+            Log.d(LOG_TAG, position + " tab selected.");
+            switch (position) {
+                case 0:
+                    return new HomeFragment();
+                case 1:
+                    return new NearMeFragment();
+                case 2:
+                    return new CategoryFragment();
+                case 3:
+                    return new InventoryFragment();
+                default:
+                    return null;
+            }
         }
 
         @Override
         public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
+            return mFragmentCount;
         }
 
         @Override
